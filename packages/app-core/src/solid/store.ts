@@ -42,6 +42,18 @@ export const [onboardingComplete, setOnboardingComplete] = createSignal(false);
 export const [onboardingLoading, setOnboardingLoading] = createSignal(true);
 export const [startupError, setStartupError] = createSignal<string | null>(null);
 
+export type BackendConnectionState = {
+  state: "connected" | "disconnected" | "reconnecting" | "failed";
+  reconnectAttempt: number;
+  maxReconnectAttempts: number;
+  showDisconnectedUI: boolean;
+};
+
+export const [backendConnection, setBackendConnection] =
+  createSignal<BackendConnectionState | null>(null);
+export const [backendDisconnectedBannerDismissed, setBackendDisconnectedBannerDismissed] =
+  createSignal(false);
+
 export const startupStatus = createMemo(() => {
   if (startupError()) return "recoverable-error";
   if (onboardingLoading() || startupPhase() !== "ready") return "loading";
@@ -74,6 +86,30 @@ export const [uiTheme, setUiTheme] = createSignal<string>("dark");
 
 export const [elizaCloudConnected, setElizaCloudConnected] = createSignal(false);
 export const [elizaCloudEnabled, setElizaCloudEnabled] = createSignal(false);
+
+// ── System warnings ──────────────────────────────────────────────────
+
+export const [systemWarnings, setSystemWarnings] = createSignal<string[]>([]);
+
+export function dismissSystemWarning(message: string) {
+  setSystemWarnings((prev) => prev.filter((w) => w !== message));
+}
+
+// ── Restart banner ──────────────────────────────────────────────────
+
+export const [pendingRestart, setPendingRestart] = createSignal(false);
+export const [pendingRestartReasons, setPendingRestartReasons] = createSignal<string[]>([]);
+export const [restartBannerDismissed, setRestartBannerDismissed] = createSignal(false);
+
+export function dismissRestartBanner() {
+  setRestartBannerDismissed(true);
+}
+
+export async function triggerRestart(): Promise<void> {
+  // Lazy import to avoid circular dependency at module load time
+  const { client } = await import("../api/client");
+  await client.restartAgent();
+}
 
 // ── Action notice ───────────────────────────────────────────────────
 
