@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
+import solidPlugin from "vite-plugin-solid";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
 
@@ -100,7 +101,16 @@ export default defineConfig({
     sparkWasmDataUrlPlugin(),
     watchWorkspacePackagesPlugin(),
     tailwindcss(),
-    react(),
+    // SolidJS compiler for *.solid.tsx files — runs before React plugin
+    solidPlugin({
+      include: "**/*.solid.tsx",
+      extensions: [".solid.tsx"],
+    }),
+    // React compiler for everything else
+    react({
+      // Exclude .solid.tsx from React/SWC transform
+      tsDecorators: false,
+    }),
     desktopCorsPlugin(),
   ],
   esbuild: {
