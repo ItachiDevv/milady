@@ -1,8 +1,12 @@
 @import "tailwindcss";
 @import "./base.css";
+@import "./anime.css";
+@import "./onboarding-game.css";
+@import "./xterm.css";
 @import "./electrobun-mac-window-drag.css";
 
 @source "..";
+@source "../../../apps/app/src";
 
 /*
  * Map the existing theme CSS custom properties to Tailwind theme tokens.
