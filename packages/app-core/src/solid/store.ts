@@ -18,6 +18,7 @@ import type {
   ConversationMessage,
   ConversationMode,
   ImageAttachment,
+  PluginInfo,
 } from "../api";
 import type { UiShellMode } from "../state/ui-preferences";
 import type { Tab } from "../navigation";
@@ -82,10 +83,34 @@ export const [selectedVrmIndex, setSelectedVrmIndex] = createSignal(1);
 export const [customVrmUrl, setCustomVrmUrl] = createSignal("");
 export const [uiTheme, setUiTheme] = createSignal<string>("dark");
 
+// ── Plugins ─────────────────────────────────────────────────────────
+
+export const [plugins, setPlugins] = createStore<PluginInfo[]>([]);
+
 // ── Cloud ───────────────────────────────────────────────────────────
 
 export const [elizaCloudConnected, setElizaCloudConnected] = createSignal(false);
 export const [elizaCloudEnabled, setElizaCloudEnabled] = createSignal(false);
+export const [elizaCloudCredits, setElizaCloudCredits] = createSignal<number | null>(null);
+export const [elizaCloudCreditsLow, setElizaCloudCreditsLow] = createSignal(false);
+export const [elizaCloudCreditsCritical, setElizaCloudCreditsCritical] = createSignal(false);
+
+// ── Shell routing helpers ────────────────────────────────────────────
+
+/** Switch the shell UI mode: sets the tab signal accordingly. */
+export function switchUiShellMode(mode: UiShellMode): void {
+  if (mode === "companion") {
+    setTab("companion");
+  } else {
+    // Preserve last non-companion tab or fall back to chat
+    const current = tab();
+    if (current === "companion") setTab("chat");
+  }
+}
+
+// ── Conversations ────────────────────────────────────────────────────
+
+export const [unreadConversations, setUnreadConversations] = createSignal<Set<string>>(new Set());
 
 // ── System warnings ──────────────────────────────────────────────────
 
