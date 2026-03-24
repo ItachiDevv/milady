@@ -167,8 +167,13 @@ WeChat sessions can expire after extended inactivity. The plugin automatically a
 - Verify `features.groups` is enabled if you expect group messages
 - Confirm the proxy service is running and forwarding webhooks
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [WeChat Connector reference](/connectors/wechat).
+
 ## Related
 
+- [WeChat Connector reference](/connectors/wechat) — Full configuration reference
 - [Connectors Overview](/guides/connectors) — All connector options
 - [Telegram Plugin](/plugin-registry/platform/telegram) — Telegram bot integration
 - [WhatsApp Plugin](/plugin-registry/platform/whatsapp) — WhatsApp integration via Baileys

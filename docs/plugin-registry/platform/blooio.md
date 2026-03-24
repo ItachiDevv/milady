@@ -59,8 +59,13 @@ The plugin auto-enables when `apiKey`, `token`, or `botToken` is present in the 
 - Outbound message sending
 - Session management and message routing
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Blooio Connector reference](/connectors/blooio).
+
 ## Related
 
+- [Blooio Connector reference](/connectors/blooio) — Full configuration reference
 - [iMessage Plugin](/plugin-registry/platform/imessage) — Native macOS iMessage (no bridge needed)
 - [BlueBubbles Plugin](/plugin-registry/platform/bluebubbles) — Alternative iMessage bridge
 - [Connectors Guide](/guides/connectors#blooio) — Full configuration reference

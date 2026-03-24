@@ -123,8 +123,13 @@ The webhook endpoint must be accessible over HTTPS.
 
 The plugin auto-enables when `connectors.telegram.botToken` is set.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference — including DM policies, group/topic configuration, streaming, multi-account support, custom commands, reactions, and heartbeat settings — see the [Telegram Connector reference](/connectors/telegram).
+
 ## Related
 
+- [Telegram Connector (full reference)](/connectors/telegram) — Complete configuration reference
 - [Discord Plugin](/plugin-registry/platform/discord) — Discord bot integration
 - [WhatsApp Plugin](/plugin-registry/platform/whatsapp) — WhatsApp integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

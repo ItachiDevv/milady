@@ -55,8 +55,13 @@ The plugin auto-enables when `apiKey`, `token`, or `botToken` is present in the 
 - Profile-based social graph traversal
 - Decentralized content on Polygon
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Lens Connector reference](/connectors/lens).
+
 ## Related
 
+- [Lens Connector reference](/connectors/lens) — Full configuration reference
 - [Farcaster Plugin](/plugin-registry/platform/farcaster) — Another decentralized social connector
 - [Nostr Plugin](/plugin-registry/platform/nostr) — Relay-based decentralized social
 - [Connectors Guide](/guides/connectors#lens) — Full configuration reference

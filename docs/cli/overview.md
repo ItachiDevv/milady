@@ -38,7 +38,9 @@ bunx miladyai
   Start the elizaOS agent runtime in headless server-only mode.
 </Card>
 
-
+<Card title="run" icon="play" href="/cli/start">
+  Alias for `start`. Starts the agent runtime in headless server-only mode.
+</Card>
 
 <Card title="setup" icon="gear" href="/cli/setup">
   Initialize the config file and bootstrap the agent workspace directory.
@@ -73,7 +75,7 @@ bunx miladyai
 </Card>
 
 <Card title="doctor" icon="stethoscope" href="/cli/doctor">
-  Diagnose common issues with your installation and configuration (planned).
+  Check environment health and diagnose common issues. Supports `--fix` for auto-remediation and `--json` for CI-friendly output.
 </Card>
 
 </CardGroup>
@@ -85,7 +87,7 @@ bunx miladyai
 milady
 
 # Start agent in headless server mode
-milady start
+milady start       # or: milady run
 
 # Run setup
 milady setup
@@ -101,6 +103,9 @@ milady models
 
 # Reset local database
 milady db reset
+
+# Check update status across release channels
+milady update status
 ```
 
 ## Environment Variables

@@ -127,8 +127,13 @@ By default, responses are posted as thread replies to keep channels clean. To po
 }
 ```
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Slack Connector reference](/connectors/slack).
+
 ## Related
 
+- [Slack Connector reference](/connectors/slack) — Full configuration reference
 - [Discord Plugin](/plugin-registry/platform/discord) — Discord bot integration
 - [Telegram Plugin](/plugin-registry/platform/telegram) — Telegram bot integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

@@ -67,7 +67,11 @@ Use any Nostr client or key generation tool to create a keypair. You need the pr
 
 The plugin auto-enables when `NOSTR_PRIVATE_KEY` is set and `NOSTR_ENABLED` is not `false`.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Nostr Connector reference](/connectors/nostr).
+
 ## Related
 
-- [Nostr connector setup](/connectors/nostr) — full connector configuration
+- [Nostr Connector reference](/connectors/nostr) — Full configuration reference
 - [Connectors overview](/guides/connectors) — all platform connectors

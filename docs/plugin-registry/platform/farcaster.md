@@ -113,8 +113,13 @@ Casts are limited to 320 characters. Longer responses are split into cast thread
 
 The plugin auto-enables when `connectors.farcaster.apiKey` is set.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Farcaster Connector reference](/connectors/farcaster).
+
 ## Related
 
+- [Farcaster Connector reference](/connectors/farcaster) — Full configuration reference
 - [Twitter Plugin](/plugin-registry/platform/twitter) — Twitter/X integration
 - [Discord Plugin](/plugin-registry/platform/discord) — Discord bot integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

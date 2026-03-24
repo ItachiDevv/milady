@@ -288,6 +288,7 @@ The implementation and proxy runbook lives in [docs/eliza-cloud-deployment.md](d
 ```bash
 milady                    # start (interactive, opens dashboard)
 milady start              # server-only mode (API server, no interactive chat loop)
+milady run                # alias for start
 milady --verbose          # enable informational runtime logs
 milady --debug            # enable debug-level runtime logs
 ```
@@ -298,7 +299,8 @@ milady --debug            # enable debug-level runtime logs
 milady setup              # first-time setup / refresh workspace after update
 milady configure          # interactive config wizard
 milady config get <key>   # read a config value
-milady config set <k> <v> # set a config value
+milady config path        # print resolved config file path
+milady config show        # display full config
 ```
 
 ### Dashboard & UI
@@ -311,9 +313,7 @@ milady dashboard --port 3000  # custom port
 ### Models
 
 ```bash
-milady models             # list configured model providers
-milady models add         # add a new provider
-milady models test        # test if your API keys work
+milady models             # list configured model providers and check API key status
 ```
 
 ### Plugins

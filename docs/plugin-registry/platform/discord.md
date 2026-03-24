@@ -124,8 +124,13 @@ The bot token can also be set via:
 export DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
 ```
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference — including guild/channel configuration, action toggles, PluralKit integration, Exec Approvals, DM policies, streaming, multi-account support, and heartbeat settings — see the [Discord Connector reference](/connectors/discord).
+
 ## Related
 
+- [Discord Connector (full reference)](/connectors/discord) — Complete configuration reference
 - [Telegram Plugin](/plugin-registry/platform/telegram) — Telegram bot integration
 - [Slack Plugin](/plugin-registry/platform/slack) — Slack workspace integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

@@ -41,8 +41,13 @@ All apps share a common connection pattern:
        └────────────┬───────┘────────────────────┘
                     │
               ┌─────▼──────┐
-              │  Agent API  │
-              │  (REST/WS)  │
+              │   Gateway   │  ← WebSocket (port 18789)
+              │  (WS relay) │
+              └─────┬───────┘
+                    │
+              ┌─────▼──────┐
+              │  Agent API  │  ← REST (port 31337 dev / 2138 prod)
+              │   (REST)    │
               └─────┬───────┘
                     │
               ┌─────▼──────┐
@@ -51,9 +56,10 @@ All apps share a common connection pattern:
 ```
 
 - **Desktop** embeds the runtime directly (offline-capable)
-- **Mobile** connects via REST API
-- **Chrome Extension** communicates via WebSocket
+- **Mobile** connects via REST API and Gateway WebSocket
+- **Chrome Extension** communicates via WebSocket through the Gateway
 - **Dashboard** uses REST + WebSocket for real-time updates
+- **Gateway** (port 18789) is the WebSocket relay between clients and the agent runtime
 
 ## Standalone Apps vs. Plugin Apps
 

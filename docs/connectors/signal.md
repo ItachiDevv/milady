@@ -96,7 +96,7 @@ All fields are defined under `connectors.signal` in your character file.
 | `cliPath` | string | — | Path to signal-cli binary for auto-start |
 | `autoStart` | boolean | — | Auto-start signal-cli when the connector loads |
 | `startupTimeoutMs` | integer (1000-120000) | — | Milliseconds to wait for CLI startup (1-120 seconds) |
-| `receiveMode` | `"on-start"` \| `"manual"` | `"on-start"` | When to begin receiving messages |
+| `receiveMode` | `"on-start"` \| `"manual"` | `"on-start"` | When to begin receiving messages. `"on-start"` subscribes to incoming messages immediately when the connector loads. `"manual"` defers subscription — useful when you want to control the timing programmatically via the connector API. |
 | `name` | string | — | Account display name |
 | `enabled` | boolean | — | Explicitly enable/disable |
 | `capabilities` | string[] | — | Capability flags |
@@ -195,6 +195,30 @@ Each account entry accepts all the same fields as the top-level `connectors.sign
 
 - When `dmPolicy` is `"open"`, the `allowFrom` array must include `"*"`.
 - `startupTimeoutMs` must be between 1000 and 120000 (1-120 seconds).
+
+## Troubleshooting
+
+### signal-cli Not Starting
+
+- Ensure [signal-cli](https://github.com/AsamK/signal-cli) is installed and accessible. Requires Java 21+ at runtime.
+- Verify you've registered or linked your Signal account: `signal-cli -a +NUMBER register` then `signal-cli -a +NUMBER verify CODE`
+- Check the `httpUrl` matches the address/port of your running signal-cli daemon
+
+### No Messages Received
+
+- Confirm signal-cli is running in HTTP daemon mode: `signal-cli -a +NUMBER daemon --http localhost:8080`
+- Verify the phone number in `account` matches the registered signal-cli account exactly (E.164 format with `+`)
+- If using `autoStart: true`, check that `cliPath` points to the correct signal-cli binary and `startupTimeoutMs` is sufficient
+
+### Group Messages Not Working
+
+- Check `groupPolicy` is not set to `"disabled"`
+- If using `"allowlist"`, ensure the group IDs are listed in `groupAllowFrom`
+
+### DM Access Denied
+
+- Default `dmPolicy` is `"pairing"` — users must be paired first
+- For testing, temporarily set `dmPolicy: "open"` and add `"*"` to `allowFrom`
 
 ## Related
 

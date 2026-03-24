@@ -87,8 +87,13 @@ The plugin auto-enables when the `connectors.signal` block contains an `account`
 }
 ```
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Signal Connector reference](/connectors/signal).
+
 ## Related
 
+- [Signal Connector reference](/connectors/signal) — Full configuration reference
 - [iMessage Plugin](/plugin-registry/platform/imessage) — iMessage integration
 - [Telegram Plugin](/plugin-registry/platform/telegram) — Telegram bot integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

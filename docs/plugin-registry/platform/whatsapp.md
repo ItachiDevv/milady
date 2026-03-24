@@ -122,8 +122,13 @@ The plugin auto-enables when `connectors.whatsapp` contains an `authDir` or `acc
 
 Session credentials are stored in the `authDir` as multiple JSON files. Back up this directory to avoid needing to re-scan the QR code after a restart.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [WhatsApp Connector reference](/connectors/whatsapp).
+
 ## Related
 
+- [WhatsApp Connector reference](/connectors/whatsapp) — Full configuration reference
 - [Telegram Plugin](/plugin-registry/platform/telegram) — Telegram bot integration (official API)
 - [Connectors Guide](/guides/whatsapp) — WhatsApp setup guide
 - [Connectors Overview](/guides/connectors) — All connector options

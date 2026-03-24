@@ -1,87 +1,103 @@
 ---
 title: "milady doctor"
 sidebarTitle: "doctor"
-description: "Run diagnostics to verify your Milady installation (planned)."
+description: "Run diagnostics to verify your Milady installation, configuration, and environment health."
 ---
 
-<Warning>
-The `doctor` command is **not yet implemented**. This page describes the planned behavior for an upcoming release. Running `milady doctor` will currently produce an "unknown command" error.
-</Warning>
+The `doctor` command runs a suite of diagnostic checks to verify that your Milady installation is healthy and properly configured. It inspects the runtime environment, configuration, model provider keys, storage, and network, then prints a structured report with pass/fail/warn indicators and suggested fixes.
 
-The `doctor` command will run a suite of diagnostic checks to verify that your Milady installation is healthy and properly configured. It will inspect the runtime environment, configuration, API key availability, plugin state, and network connectivity, then print a structured report with pass/fail indicators and suggested fixes.
-
-## Planned Usage
+## Usage
 
 ```bash
 milady doctor
 ```
 
-## Planned Diagnostic Checks
+### Options
 
-### Runtime
+| Flag | Description |
+|------|-------------|
+| `--fix` | Automatically fix issues where possible (runs safe sub-commands) |
+| `--no-ports` | Skip port availability checks |
+| `--json` | Output results as JSON (CI-friendly) |
+
+### Examples
+
+```bash
+# Run all checks
+milady doctor
+
+# Auto-remediate fixable issues
+milady doctor --fix
+
+# CI-friendly JSON output (exits with code 1 if any check fails)
+milady doctor --json
+```
+
+## Diagnostic Checks
+
+Checks are grouped into four categories:
+
+### System
 
 | Check | Pass Condition |
 |-------|---------------|
-| Node.js / Bun version | Runtime meets minimum version requirement |
-| CLI version | Installed version matches the latest on the active channel |
-| Config file readable | `~/.milady/milady.json` exists and is valid JSON |
-| State directory writable | `~/.milady/` can be written to |
+| Runtime | Bun >= 1.0 or Node.js >= 22 detected |
+| Node modules | `node_modules/` directory exists at project root |
+| Build artifacts | `dist/` directory exists at project root |
 
 ### Configuration
 
 | Check | Pass Condition |
 |-------|---------------|
-| Config file valid | File parses without errors and matches the expected schema |
-| Workspace directory | Workspace directory exists and contains bootstrap files |
-| Config path resolution | `MILADY_STATE_DIR` and `MILADY_CONFIG_PATH` resolve to accessible paths |
+| Config file | `~/.milady/milady.json` exists and is valid JSON |
+| Model provider keys | At least one model provider API key is set (Anthropic, OpenAI, Ollama, etc.) |
+| Eliza workspace | Local `../eliza` workspace is detected (when developing with symlinked packages) |
+| Host config | Network and host configuration is valid |
 
-### API Keys
-
-| Check | Pass Condition |
-|-------|---------------|
-| At least one model provider configured | One or more model provider environment variables is set |
-| Anthropic API key | `ANTHROPIC_API_KEY` is set (checked if present) |
-| OpenAI API key | `OPENAI_API_KEY` is set (checked if present) |
-| Other provider keys | Any other provider keys detected |
-
-### Connectivity
+### Storage
 
 | Check | Pass Condition |
 |-------|---------------|
-| API server reachable | Port `2138` (or `MILADY_PORT`) responds to a TCP probe |
-| npm registry reachable | The plugin registry endpoint is accessible |
+| State directory | `~/.milady/` exists and is writable |
+| Database | SQLite database file is accessible |
+| Disk space | Sufficient free disk space available |
 
-### Plugins
+### Network
 
-| Check | Pass Condition |
-|-------|---------------|
-| Custom plugins valid | All plugins in `~/.milady/plugins/custom/` pass the plugin validation test |
-| Plugin registry cache | Registry cache file is present and not stale |
-| Installed plugins | All registry-installed plugins are present on disk |
+Port availability and connectivity checks (skipped with `--no-ports`).
 
-## Workarounds Until `doctor` Exists
+## JSON Output
 
-You can manually verify your installation using existing commands:
+When using `--json`, the output is a JSON object with a `summary` and `checks` array:
 
-```bash
-# Check model providers
-milady models
-
-# Validate custom plugins
-milady plugins test
-
-# Inspect config file location and values
-milady config path
-milady config show
-
-# Verify workspace setup
-milady setup
+```json
+{
+  "summary": {
+    "pass": 8,
+    "warn": 1,
+    "fail": 0,
+    "skip": 0
+  },
+  "checks": [
+    {
+      "label": "Runtime",
+      "status": "pass",
+      "category": "system",
+      "detail": "Bun 1.2.0"
+    }
+  ]
+}
 ```
+
+Exit code is `1` if any check has `"fail"` status, `0` otherwise.
+
+## Auto-Fix
+
+When `--fix` is passed, the command attempts to auto-remediate issues that have an `autoFixable` flag. Only safe sub-commands (prefixed with `eliza `) are executed automatically. Manual fix suggestions are still printed for issues that require user intervention.
 
 ## Related
 
-- [milady setup](/cli/setup) -- initialize the workspace
-- [milady config](/cli/config) -- inspect configuration values
-- [milady models](/cli/models) -- verify model provider key configuration
-- [milady plugins test](/cli/plugins) -- validate custom drop-in plugins
-- [Environment Variables](/cli/environment) -- all environment variables that affect diagnostics
+- [milady setup](/cli/setup) — Initialize the workspace
+- [milady config](/cli/config) — Inspect configuration values
+- [milady models](/cli/models) — Verify model provider key configuration
+- [Environment Variables](/cli/environment) — All environment variables that affect diagnostics

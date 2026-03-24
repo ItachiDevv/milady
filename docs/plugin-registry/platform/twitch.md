@@ -70,3 +70,12 @@ The plugin auto-enables when any of these are present:
 ## Streaming
 
 For live-streaming output to Twitch, use the separate **Twitch Streaming** plugin (`@elizaos/plugin-twitch-streaming`). See [Streaming](/skills/streaming) for setup details.
+
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Twitch Connector reference](/connectors/twitch).
+
+## Related
+
+- [Twitch Connector reference](/connectors/twitch) — Full configuration reference
+- [Connectors Guide](/guides/connectors) — General connector documentation

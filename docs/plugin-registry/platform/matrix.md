@@ -69,7 +69,11 @@ curl -X POST https://matrix.example.com/_matrix/client/v3/login \
 
 The plugin auto-enables when `MATRIX_ACCESS_TOKEN` is set in the environment.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Matrix Connector reference](/connectors/matrix).
+
 ## Related
 
-- [Matrix connector setup](/connectors/matrix) — full connector configuration
+- [Matrix Connector reference](/connectors/matrix) — Full configuration reference
 - [Connectors overview](/guides/connectors) — all platform connectors

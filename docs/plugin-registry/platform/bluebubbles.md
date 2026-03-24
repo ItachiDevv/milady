@@ -88,8 +88,13 @@ Verify the BlueBubbles server is running and the URL is reachable from the Milad
 
 Double-check the server password matches the one configured in BlueBubbles server settings.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [BlueBubbles Connector reference](/connectors/bluebubbles).
+
 ## Related
 
+- [BlueBubbles Connector reference](/connectors/bluebubbles) — Full configuration reference
 - [iMessage Plugin](/plugin-registry/platform/imessage) — Native macOS iMessage integration
 - [Signal Plugin](/plugin-registry/platform/signal) — Signal messaging integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

@@ -124,8 +124,13 @@ Twitter enforces strict rate limits on the v2 API. The plugin manages these auto
 
 Consult [developer.twitter.com/en/docs/twitter-api/rate-limits](https://developer.twitter.com/en/docs/twitter-api/rate-limits) for current limits.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Twitter/X Connector reference](/connectors/twitter).
+
 ## Related
 
+- [Twitter/X Connector reference](/connectors/twitter) — Full configuration reference
 - [Discord Plugin](/plugin-registry/platform/discord) — Discord bot integration
 - [Farcaster Plugin](/plugin-registry/platform/farcaster) — Decentralized social alternative
 - [Connectors Guide](/guides/connectors) — General connector documentation

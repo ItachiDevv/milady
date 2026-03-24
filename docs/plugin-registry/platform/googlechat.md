@@ -105,8 +105,13 @@ Ensure the webhook URL is publicly accessible and matches the URL configured in 
 
 Verify the service account JSON key is valid and the service account has the Chat Bot role assigned.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Google Chat Connector reference](/connectors/googlechat).
+
 ## Related
 
+- [Google Chat Connector reference](/connectors/googlechat) — Full configuration reference
 - [Slack Plugin](/plugin-registry/platform/slack) — Slack workspace integration
 - [MS Teams Plugin](/plugin-registry/platform/msteams) — Microsoft Teams integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

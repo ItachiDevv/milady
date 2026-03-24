@@ -60,7 +60,12 @@ The plugin auto-enables when any of these are present:
 
 Retake also functions as a streaming destination. When configured, agent output can be streamed live to the Retake platform alongside or instead of messaging.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Retake Connector reference](/connectors/retake).
+
 ## Related
 
+- [Retake Connector reference](/connectors/retake) — Full configuration reference
 - [Twitch Plugin](/plugin-registry/platform/twitch) — Another platform with streaming support
 - [Connectors Guide](/guides/connectors#retake) — Full configuration reference

@@ -83,8 +83,13 @@ If message retrieval fails, ensure Full Disk Access is granted:
 
 The default iMessage database is at `~/Library/Messages/chat.db`. If using a non-standard location, set `dbPath` explicitly.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [iMessage Connector reference](/connectors/imessage).
+
 ## Related
 
+- [iMessage Connector reference](/connectors/imessage) — Full configuration reference
 - [BlueBubbles Plugin](/plugin-registry/platform/bluebubbles) — iMessage bridge via BlueBubbles
 - [Signal Plugin](/plugin-registry/platform/signal) — Signal messaging integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

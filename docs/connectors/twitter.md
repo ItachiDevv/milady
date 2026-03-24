@@ -132,6 +132,33 @@ The posting interval is calculated as a random value between `postIntervalMin` a
 }
 ```
 
+## Troubleshooting
+
+### Rate Limits
+
+Twitter/X enforces strict rate limits on API calls. If you see `429` errors:
+
+- Increase `pollInterval` (default `120` seconds) to reduce polling frequency
+- Increase `postIntervalMin` / `postIntervalMax` to space out automated posts
+- Check your API tier — Free tier has very limited read/write quotas
+
+### Authentication Errors
+
+- Verify all four OAuth credentials (`apiKey`, `apiSecretKey`, `accessToken`, `accessTokenSecret`) are set
+- Ensure your app has **Read and Write** permissions in the Twitter Developer Portal
+- Regenerate tokens if you recently changed app permissions (old tokens retain old scopes)
+
+### Posts Not Appearing
+
+- Check that `postEnable` is `true` (default)
+- If `dryRun` is `true`, posts are generated but not published — set to `false` for production
+- Verify `maxTweetLength` isn't truncating content unexpectedly
+
+### Agent Not Responding to Mentions
+
+- Ensure `autoRespondMentions` is `true` (default)
+- Check that `pollInterval` isn't set too high — mentions are picked up during polling cycles
+
 ## Related
 
 - [Twitter plugin reference](/plugin-registry/platform/twitter)

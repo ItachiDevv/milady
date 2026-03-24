@@ -96,8 +96,13 @@ Verify the messaging endpoint URL is publicly accessible and points to your Mila
 
 Ensure the App Password has not expired. Azure Bot client secrets have configurable expiry periods.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [MS Teams Connector reference](/connectors/msteams).
+
 ## Related
 
+- [MS Teams Connector reference](/connectors/msteams) — Full configuration reference
 - [Slack Plugin](/plugin-registry/platform/slack) — Slack workspace integration
 - [Google Chat Plugin](/plugin-registry/platform/googlechat) — Google Chat integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

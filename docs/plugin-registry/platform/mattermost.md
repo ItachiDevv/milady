@@ -95,8 +95,13 @@ Verify the `baseUrl` is correct and the Mattermost server is reachable from the 
 
 Bot tokens can be regenerated from **System Console → Integrations → Bot Accounts**. Update the token in your Milady configuration after regeneration.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Mattermost Connector reference](/connectors/mattermost).
+
 ## Related
 
+- [Mattermost Connector reference](/connectors/mattermost) — Full configuration reference
 - [Slack Plugin](/plugin-registry/platform/slack) — Slack workspace integration
 - [Discord Plugin](/plugin-registry/platform/discord) — Discord bot integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

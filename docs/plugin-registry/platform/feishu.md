@@ -62,7 +62,11 @@ Under your app settings, enable the **Bot** capability and configure event subsc
 
 The plugin auto-enables when both `FEISHU_APP_ID` and `FEISHU_APP_SECRET` are set.
 
+## Advanced Configuration
+
+This page covers basic setup. For the full configuration reference, see the [Feishu Connector reference](/connectors/feishu).
+
 ## Related
 
-- [Feishu connector setup](/connectors/feishu) — full connector configuration
+- [Feishu Connector reference](/connectors/feishu) — Full configuration reference
 - [Connectors overview](/guides/connectors) — all platform connectors
