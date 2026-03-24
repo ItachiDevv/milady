@@ -1,7 +1,7 @@
 ---
 title: "Platform Connectors"
 sidebarTitle: "Connectors"
-description: "Platform bridges for 30+ messaging platforms including Discord, Telegram, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Twitter, Farcaster, Bluesky, Instagram, Twitch, Mattermost, WeChat, Matrix, Feishu, Nostr, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon, Lens, and Retake."
+description: "Platform bridges for 20+ messaging platforms — 20 built-in connectors (Discord, Telegram, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Twitter, Farcaster, Twitch, Mattermost, WeChat, Matrix, Feishu, Nostr, Lens, Retake) plus registry-installable connectors (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon)."
 ---
 
 Connectors are platform bridges that allow your agent to communicate across messaging platforms and social networks. Each connector handles authentication, message routing, session management, and platform-specific features.
@@ -47,6 +47,10 @@ Connectors are platform bridges that allow your agent to communicate across mess
 
 ## Supported Platforms
 
+### Built-in Connectors
+
+These connectors ship with Milady and are auto-enabled when their configuration is detected. No additional installation is required.
+
 | Platform | Auth Method | DM Support | Group Support | Multi-Account |
 |----------|------------|------------|---------------|---------------|
 | Discord | Bot token | Yes | Yes (guilds/channels) | Yes |
@@ -61,23 +65,30 @@ Connectors are platform bridges that allow your agent to communicate across mess
 | Google Chat | Service account | Yes | Yes (spaces) | Yes |
 | Twitter | API keys + tokens | DMs | N/A | No |
 | Farcaster | Neynar API key + signer | Casts | Yes (channels) | No |
-| Bluesky | Account credentials | Posts | N/A | No |
-| Instagram | Username + password | DMs | N/A | No |
 | Twitch | Client ID + access token | Yes (chat) | Yes (channels) | No |
 | Mattermost | Bot token | Yes | Yes (channels) | No |
 | WeChat | Proxy API key + QR code | Yes | Yes | Yes |
 | Matrix | Access token | Yes | Yes (rooms) | No |
 | Feishu / Lark | App ID + secret | Yes | Yes (group chats) | No |
 | Nostr | Private key (nsec/hex) | Yes (NIP-04) | N/A | No |
-| LINE | Channel access token + secret | Yes | Yes | No |
-| Zalo | Access token | Yes | Yes | No |
-| Twilio | Account SID + auth token | SMS/Voice | N/A | No |
-| GitHub | API token | Issues/PRs | Yes (repos) | No |
-| Gmail Watch | Service account / OAuth | N/A | N/A | No |
-| Nextcloud Talk | Server credentials | Yes | Yes (rooms) | No |
-| Tlon | Ship credentials | Yes | Yes (Urbit chats) | No |
 | Lens | API key | Yes | N/A | No |
 | Retake | Access token | Yes | Yes | No |
+
+### Registry Connectors
+
+These connectors are available from the elizaOS plugin registry. Install them with `milady plugins install <package>`.
+
+| Platform | Package | Auth Method | DM Support | Group Support |
+|----------|---------|------------|------------|---------------|
+| Bluesky | `@elizaos/plugin-bluesky` | Account credentials | Posts | N/A |
+| Instagram | `@elizaos/plugin-instagram` | Username + password | DMs | N/A |
+| LINE | `@elizaos/plugin-line` | Channel access token + secret | Yes | Yes |
+| Zalo | `@elizaos/plugin-zalo` | Access token | Yes | Yes |
+| Twilio | `@elizaos/plugin-twilio` | Account SID + auth token | SMS/Voice | N/A |
+| GitHub | `@elizaos/plugin-github` | API token | Issues/PRs | Yes (repos) |
+| Gmail Watch | `@elizaos/plugin-gmail-watch` | Service account / OAuth | N/A | N/A |
+| Nextcloud Talk | `@elizaos/plugin-nextcloud-talk` | Server credentials | Yes | Yes (rooms) |
+| Tlon | `@elizaos/plugin-tlon` | Ship credentials | Yes | Yes (Urbit chats) |
 
 ---
 

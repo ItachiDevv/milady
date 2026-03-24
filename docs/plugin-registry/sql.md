@@ -1,7 +1,7 @@
 ---
 title: "SQL Plugin"
 sidebarTitle: "SQL"
-description: "Database layer — SQLite adapter, schema, migrations, query interface, and memory persistence."
+description: "Database layer — PGLite (default) or PostgreSQL adapter, schema, migrations, query interface, and memory persistence."
 ---
 
 The SQL plugin is the database layer for Milady agents. It provides persistent storage for conversation memory, entity data, knowledge embeddings, and agent state.
@@ -10,17 +10,17 @@ The SQL plugin is the database layer for Milady agents. It provides persistent s
 
 ## Overview
 
-The SQL plugin implements the `IDatabaseAdapter` interface from elizaOS core, backed by SQLite via Drizzle ORM. It is the first core plugin loaded because all other plugins depend on persistent storage.
+The SQL plugin implements the `IDatabaseAdapter` interface from elizaOS core, backed by PGLite (an embedded PostgreSQL engine running in-process via WASM) by default. It is the first core plugin loaded because all other plugins depend on persistent storage.
 
 ## Database Location
 
-The SQLite database file is stored at:
+By default, PGLite stores data in the agent's workspace directory:
 
 ```
-~/.milady/agents/{agentId}/agent.db
+~/.milady/workspace/{agentId}/
 ```
 
-For multi-agent setups, each agent has its own isolated database.
+You can override this with the `database.pglite.dataDir` config setting or the `PGLITE_DATA_DIR` environment variable. For multi-agent setups, each agent has its own isolated database.
 
 ## Schema
 
@@ -63,7 +63,7 @@ const results = await runtime.searchMemories({
 });
 ```
 
-SQLite does not have a native vector extension, so similarity search is performed in-process using JavaScript. For large knowledge bases (>100k documents), consider a PostgreSQL backend.
+PGLite includes pgvector support for efficient in-process similarity search. For large knowledge bases (>100k documents) or production deployments, consider a standalone PostgreSQL backend with pgvector.
 
 ## PostgreSQL Support
 
@@ -72,13 +72,13 @@ For production deployments, the SQL plugin supports PostgreSQL via the `pg` driv
 ```json
 {
   "database": {
-    "type": "postgres",
+    "provider": "postgres",
     "url": "postgresql://user:password@host:5432/milady"
   }
 }
 ```
 
-PostgreSQL deployments use `pgvector` for efficient similarity search.
+PostgreSQL deployments use `pgvector` for efficient similarity search at scale.
 
 ## Migrations
 
@@ -138,9 +138,9 @@ await runtime.setComponent(userId, "userPreferences", {
 
 | Setting | Description | Default |
 |---------|-------------|---------|
-| `database.type` | `sqlite` or `postgres` | `sqlite` |
-| `database.url` | PostgreSQL connection URL | — |
-| `database.path` | Custom SQLite file path | Auto-resolved |
+| `database.provider` | `pglite` or `postgres` | `pglite` |
+| `database.url` | PostgreSQL connection URL (for `postgres` provider) | — |
+| `database.pglite.dataDir` | Custom PGLite data directory | Auto-resolved to agent workspace |
 | `database.vectorDimensions` | Embedding vector size | `768` |
 
 ## Related
