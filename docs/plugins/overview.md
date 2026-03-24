@@ -24,15 +24,19 @@ A plugin is a self-contained module that registers one or more of:
 </Card>
 
 <Card title="Model Providers" icon="brain" href="/plugin-registry/llm/openai">
-  LLM integrations for OpenAI, Anthropic, Google Gemini, Google Antigravity, Groq, Ollama, OpenRouter, DeepSeek, xAI, Mistral, Cohere, Together, Qwen, Minimax, Pi AI, Perplexity, Zai, Vercel AI Gateway, and Eliza Cloud.
+  LLM integrations for 19 providers: Anthropic, OpenAI, Google Gemini, Google Antigravity, Groq, Ollama, OpenRouter, DeepSeek, xAI, Mistral, Cohere, Together, Qwen, MiniMax, Pi AI, Perplexity, Zai, Vercel AI Gateway, and elizaOS Cloud.
 </Card>
 
 <Card title="Platform Connectors" icon="plug" href="/plugin-registry/platform/discord">
-  Bridges to 19 messaging platforms — Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, WeChat, Feishu, Matrix, Nostr, Lens, and Retake.
+  Bridges to 30+ messaging platforms — Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, WeChat, Feishu, Matrix, Nostr, Lens, Retake, Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon, and more.
 </Card>
 
 <Card title="DeFi & Blockchain" icon="wallet" href="/plugin-registry/defi/evm">
   On-chain interactions for EVM chains and Solana — token transfers, swaps, and DeFi protocols.
+</Card>
+
+<Card title="Streaming Plugins" icon="video" href="/skills/streaming">
+  Live streaming destinations — Twitch, YouTube, X (Twitter), PumpFun, custom RTMP, and Retake.
 </Card>
 
 <Card title="Feature Plugins" icon="wand-magic-sparkles" href="/plugin-registry/browser">
