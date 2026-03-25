@@ -24,11 +24,11 @@ A plugin is a self-contained module that registers one or more of:
 </Card>
 
 <Card title="Model Providers" icon="brain" href="/plugin-registry/llm/openai">
-  LLM integrations for OpenAI, Anthropic, Google Gemini, Google Antigravity, Groq, Ollama, OpenRouter, DeepSeek, xAI, Mistral, Cohere, Together, Qwen, Minimax, Pi AI, Perplexity, Zai, Vercel AI Gateway, and Eliza Cloud.
+  LLM integrations for 18+ providers: [OpenAI](/plugin-registry/llm/openai), [Anthropic](/plugin-registry/llm/anthropic), [Google Gemini](/plugin-registry/llm/google-genai), [Google Antigravity](/plugin-registry/llm/google-antigravity), [Groq](/plugin-registry/llm/groq), [Ollama](/plugin-registry/llm/ollama), [OpenRouter](/plugin-registry/llm/openrouter), [DeepSeek](/plugin-registry/llm/deepseek), [xAI](/plugin-registry/llm/xai), [Mistral](/plugin-registry/llm/mistral), [Cohere](/plugin-registry/llm/cohere), [Together](/plugin-registry/llm/together), [Qwen](/plugin-registry/llm/qwen), [Minimax](/plugin-registry/llm/minimax), [Pi AI](/plugin-registry/llm/pi-ai), [Perplexity](/plugin-registry/llm/perplexity), [z.ai](/plugin-registry/llm/zai), [Vercel AI Gateway](/plugin-registry/llm/vercel-ai-gateway), and Eliza Cloud.
 </Card>
 
 <Card title="Platform Connectors" icon="plug" href="/plugin-registry/platform/discord">
-  Bridges to 18+ messaging platforms via auto-enable (Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, WeChat, Feishu, Matrix, Nostr). Additional connectors (Bluesky, Instagram, Lens, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon, Retake) are available in the elizaOS registry.
+  Bridges to 20+ messaging platforms via auto-enable (Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, WeChat, Feishu, Matrix, Nostr, Lens, Retake). Additional connectors (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon) are available in the elizaOS registry.
 </Card>
 
 <Card title="DeFi & Blockchain" icon="wallet" href="/plugin-registry/defi/evm">

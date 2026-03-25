@@ -418,6 +418,7 @@ Logs go to `stdout/stderr`. Daemonize with your favorite process manager.
 | Gateway (API + WebSocket) | `18789` | `MILADY_GATEWAY_PORT` |
 | Dashboard (Web UI) | `2138` | `MILADY_PORT` |
 | Home Dashboard | `2142` | `MILADY_HOME_PORT` |
+| WeChat Webhook | `18790` | `MILADY_WECHAT_WEBHOOK_PORT` |
 
 **If a default port is already in use:** `bun run dev` / `dev-server.ts` can bind to a different port and then **sync `MILADY_API_PORT` / `ELIZA_PORT`** to match. **`dev:desktop` / `dev:desktop:watch`** resolve **free** loopback ports **before** spawning Vite + API + Electrobun so proxy, `MILADY_RENDERER_URL`, and `MILADY_DESKTOP_API_BASE` stay aligned—**why:** Vite reads `vite.config.ts` once; guessing the API port only inside the API process would desync the UI proxy. The **packaged Electrobun** shell picks the next free port from `MILADY_PORT` for the embedded child instead of `lsof`+SIGKILL by default—**why:** two Milady installs (separate state dirs) should coexist. Opt-in old reclaim: **`MILADY_AGENT_RECLAIM_STALE_PORT=1`**. See [Desktop local development](docs/apps/desktop-local-development.md#when-default-ports-are-busy) and [Desktop — Port configuration](docs/apps/desktop.md#port-configuration).
 
@@ -465,6 +466,8 @@ Or use `~/.milady/.env` for secrets.
 | [Cohere](https://cohere.com) | `COHERE_API_KEY` | command R+ and embed |
 | [Perplexity](https://perplexity.ai) | `PERPLEXITY_API_KEY` | search-augmented gen |
 | [Vercel AI Gateway](https://sdk.vercel.ai) | `AI_GATEWAY_API_KEY` | unified gateway |
+| [Google Antigravity](https://cloud.google.com) | `GOOGLE_CLOUD_API_KEY` | google cloud models |
+| [Zai](https://github.com/homunculuslabs) | `ZAI_API_KEY` | homunculus labs provider |
 
 See [Model Providers](/docs/model-providers.mdx) for provider details. The `milady models` command checks which providers are configured.
 
