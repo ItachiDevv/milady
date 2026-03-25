@@ -6,7 +6,7 @@ description: "Your personal AI assistant that runs on YOUR machine. Local-first,
 
 **Milady** is a local-first AI assistant built on [elizaOS](https://github.com/elizaOS). It runs entirely on your machine -- not in a datacenter, not in the cloud. It manages your sessions, tools, and agent personality through a Gateway control plane, connects to Telegram, Discord, and other platforms, and ships with a web dashboard for real-time interaction.
 
-It supports 17 model providers out of the box (including fully local inference via Ollama), has a growing plugin ecosystem powered by elizaOS, a skills marketplace via [ClawHub](https://clawhub.ai), and runs on every major platform: desktop, mobile, web, CLI, and Chrome extension.
+It supports 19 model providers out of the box (including fully local inference via Ollama), has a growing plugin ecosystem powered by elizaOS, a skills marketplace via [ClawHub](https://clawhub.ai), and runs on every major platform: desktop, mobile, web, CLI, and Chrome extension.
 
 <CardGroup cols={2}>
   <Card title="Installation" icon="download" href="/installation">
@@ -37,33 +37,35 @@ Milady runs on your hardware. Your conversations, memory, and wallet keys stay i
 
 ### Multi-Model, Multi-Provider
 
-Connect to any of 17 supported AI providers -- or run fully offline with Ollama:
+Connect to any of 19 supported AI providers -- or run fully offline with Ollama:
 
 | Provider | What You Get |
 |----------|-------------|
 | **Anthropic** | Claude (recommended) |
 | **OpenAI** | GPT-4o, o1, and friends |
+| **Google Gemini** | Gemini Pro, Flash, and Ultra |
+| **Google Antigravity** | Google Cloud / Vertex AI models |
 | **OpenRouter** | 100+ models through one API |
-| **Google Gemini** | Gemini Pro and Ultra |
+| **Groq** | Ultra-fast inference (LPU) |
 | **xAI** | Grok |
-| **Groq** | Ultra-fast inference |
-| **DeepSeek** | Reasoning models |
-| **Mistral** | Open-weight European models |
-| **Together AI** | Open-source model hosting |
-| **Cohere** | Command R and embeddings |
-| **Perplexity** | Search-augmented generation |
-| **zAI** | Custom inference endpoints |
-| **Hyperbolic** | Decentralized GPU inference |
-| **Fireworks AI** | Fast open-model hosting |
-| **Cerebras** | Ultra-low-latency inference |
-| **Vercel AI Gateway** | Unified gateway access |
+| **DeepSeek** | Reasoning and code models |
 | **Ollama** | Fully local, free, no API key |
+| **Qwen** | Alibaba's Qwen models |
+| **MiniMax** | MiniMax language models |
+| **Together AI** | Open-source model hosting |
+| **Mistral** | Mistral and Mixtral models |
+| **Cohere** | Command R+ and embeddings |
+| **Perplexity** | Search-augmented generation |
+| **zAI** | Homunculus Labs Zai models |
+| **Pi AI** | Inflection Pi conversational models |
+| **Vercel AI Gateway** | Unified gateway to multiple providers |
+| **Eliza Cloud** | Managed cloud inference |
 
 Switch providers mid-conversation with `/model <id>`. No lock-in.
 
 ### Plugin Ecosystem
 
-Milady ships with 25+ first-party elizaOS plugins covering knowledge management, browser automation, computer use, Discord, Telegram, TTS (Edge TTS and ElevenLabs), PDF processing, shell access, cron scheduling, trust scoring, and more. Third-party plugins install with a single command through the plugin manager.
+Milady ships with 30+ first-party elizaOS plugins covering knowledge management, browser automation, computer use, Discord, Telegram, TTS (Edge TTS and ElevenLabs), PDF processing, shell access, cron scheduling, trust scoring, image generation, FAL media, Suno music, vision, webhooks, and more. Third-party plugins install with a single command through the plugin manager.
 
 ### Skills Marketplace
 
@@ -129,7 +131,7 @@ Milady is structured as a layered system:
 - **Milady Plugin** -- a first-party elizaOS plugin that provides workspace context, session keys, personality presets, autonomous state, and wallet integration.
 - **Gateway** -- a WebSocket + HTTP multiplexed server that bridges the runtime to all connected clients and connectors.
 - **Plugin System** -- standard elizaOS plugins that add capabilities (knowledge, browser, TTS, etc.).
-- **Connector Layer** -- platform-specific adapters for Telegram, Discord, Slack, WhatsApp, Signal, iMessage, BlueBubbles, MS Teams, Google Chat, Twitter, Farcaster, Mattermost, WeChat, Matrix, Feishu/Lark, Nostr, and the web chat UI.
+- **Connector Layer** -- platform-specific adapters for Telegram, Discord, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Twitter, Farcaster, Twitch, Mattermost, WeChat, Matrix, Feishu/Lark, Nostr, Lens, Retake, and the web chat UI.
 
 All configuration lives in `~/.milady/milady.json`. Secrets can go in `~/.milady/.env`.
 
