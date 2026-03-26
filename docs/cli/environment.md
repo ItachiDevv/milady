@@ -24,6 +24,10 @@ These variables control where Milady stores its state, config, and credentials.
 
 When a `--profile <name>` flag or `MILADY_PROFILE` is set, the state directory becomes `~/.milady-<name>/` and all path defaults shift accordingly.
 
+<Warning>
+The `MILADY_STATE_DIR`, `MILADY_CONFIG_PATH`, and `MILADY_OAUTH_DIR` variables are recognized by the API server and dev mode. For CLI commands (`milady setup`, `milady db`, `milady config path`, etc.), the underlying variables `ELIZA_STATE_DIR`, `ELIZA_CONFIG_PATH`, and `ELIZA_OAUTH_DIR` are used. When overriding paths, set both variants or use the `ELIZA_*` prefix for full compatibility.
+</Warning>
+
 ---
 
 ## Server Configuration
