@@ -27,7 +27,7 @@ The skills API covers three areas: **local skills** (agent-specific TypeScript a
 |--------|------|-------------|
 | GET | `/api/skills/catalog` | List the skills catalog with pagination |
 | GET | `/api/skills/catalog/search` | Search the catalog by query |
-| GET | `/api/skills/catalog/:id` | Get details for a single catalog entry |
+| GET | `/api/skills/catalog/:slug` | Get details for a single catalog entry |
 | POST | `/api/skills/catalog/refresh` | Refresh the catalog from the remote registry |
 | POST | `/api/skills/catalog/install` | Install a catalog skill |
 | POST | `/api/skills/catalog/uninstall` | Uninstall a catalog skill |
@@ -269,7 +269,7 @@ Search the catalog by text query.
 
 ---
 
-### GET /api/skills/catalog/:id
+### GET /api/skills/catalog/:slug
 
 Get full details for a single catalog skill entry.
 
