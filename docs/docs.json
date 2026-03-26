@@ -155,7 +155,16 @@
               "connectors/feishu",
               "connectors/nostr",
               "connectors/lens",
-              "connectors/retake"
+              "connectors/retake",
+              "connectors/bluesky",
+              "connectors/instagram",
+              "connectors/line",
+              "connectors/zalo",
+              "connectors/twilio",
+              "connectors/github",
+              "connectors/gmail-watch",
+              "connectors/nextcloud-talk",
+              "connectors/tlon"
             ]
           },
           {

@@ -1,7 +1,7 @@
 ---
 title: "Platform Connectors"
 sidebarTitle: "Connectors"
-description: "Platform bridges for 30+ messaging platforms including Discord, Telegram, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Twitter, Farcaster, Bluesky, Instagram, Twitch, Mattermost, WeChat, Matrix, Feishu, Nostr, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon, Lens, and Retake."
+description: "Platform bridges for 29 messaging platforms — 20 auto-enabled (Discord, Telegram, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Twitter, Farcaster, Twitch, Mattermost, WeChat, Matrix, Feishu, Nostr, Lens, Retake) plus 9 registry-installable connectors (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon)."
 ---
 
 Connectors are platform bridges that allow your agent to communicate across messaging platforms and social networks. Each connector handles authentication, message routing, session management, and platform-specific features.
