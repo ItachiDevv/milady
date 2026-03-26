@@ -44,28 +44,28 @@ Connect to any of 19 supported AI providers -- or run fully offline with Ollama:
 | **Anthropic** | Claude (recommended) |
 | **OpenAI** | GPT-4o, o1, and friends |
 | **OpenRouter** | 100+ models through one API |
-| **Google Gemini** | Gemini Pro and Ultra |
-| **Google Antigravity** | Google Cloud AI models |
+| **Google Gemini** | Gemini Pro, Flash, and Ultra |
+| **Google Antigravity** | Vertex AI / Google Cloud models |
 | **xAI** | Grok |
-| **Groq** | Ultra-fast inference |
-| **DeepSeek** | Reasoning models |
-| **Mistral** | Open-weight European models |
+| **Groq** | Ultra-fast inference (LPU) |
+| **DeepSeek** | Reasoning and code models |
+| **Mistral** | Mistral and Mixtral models |
 | **Together AI** | Open-source model hosting |
-| **Cohere** | Command R and embeddings |
+| **Cohere** | Command R+ and embeddings |
 | **Perplexity** | Search-augmented generation |
-| **zAI** | Custom inference endpoints |
-| **Pi AI** | Inflection AI models |
-| **Qwen** | Alibaba Cloud models |
-| **Minimax** | Minimax model family |
+| **Qwen** | Alibaba's Qwen models |
+| **MiniMax** | MiniMax language models |
+| **Pi AI** | Inflection Pi conversational models |
+| **zAI** | Homunculus Labs inference |
 | **Vercel AI Gateway** | Unified gateway access |
-| **elizaOS Cloud** | Cloud-hosted inference via elizaOS |
+| **elizaOS Cloud** | Managed cloud inference |
 | **Ollama** | Fully local, free, no API key |
 
 Switch providers mid-conversation with `/model <id>`. No lock-in.
 
 ### Plugin Ecosystem
 
-Milady ships with 25+ first-party elizaOS plugins covering knowledge management, browser automation, computer use, Discord, Telegram, TTS (Edge TTS and ElevenLabs), PDF processing, shell access, cron scheduling, trust scoring, and more. Third-party plugins install with a single command through the plugin manager.
+Milady ships with 30+ first-party elizaOS plugins covering knowledge management, browser automation, computer use, Discord, Telegram, TTS (Edge TTS and ElevenLabs), PDF processing, shell access, cron scheduling, image generation, vision, webhooks, media generation (FAL, Suno), and more. Third-party plugins install with a single command through the plugin manager.
 
 ### Skills Marketplace
 
@@ -124,14 +124,15 @@ Milady is structured as a layered system:
                     |
               Connector Layer
          (Discord, Telegram, Slack, WhatsApp, Twitter,
-          Signal, Farcaster, WeChat, Matrix, Nostr, ...)
+          Signal, Farcaster, WeChat, Matrix, Nostr,
+          Bluesky, Instagram, Twitch, LINE, ...)
 ```
 
 - **elizaOS Runtime** -- the core agent framework that handles memory, message processing, action dispatch, and provider abstraction.
 - **Milady Plugin** -- a first-party elizaOS plugin that provides workspace context, session keys, personality presets, autonomous state, and wallet integration.
 - **Gateway** -- a WebSocket + HTTP multiplexed server that bridges the runtime to all connected clients and connectors.
 - **Plugin System** -- standard elizaOS plugins that add capabilities (knowledge, browser, TTS, etc.).
-- **Connector Layer** -- platform-specific adapters for Telegram, Discord, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Twitter, Farcaster, Twitch, Mattermost, WeChat, Matrix, Feishu/Lark, Nostr, Lens, Retake, and the web chat UI. Additional connectors (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Nextcloud Talk, Tlon) are available from the plugin registry.
+- **Connector Layer** -- platform-specific adapters for Telegram, Discord, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Twitter, Farcaster, Twitch, Mattermost, WeChat, Matrix, Feishu/Lark, Nostr, Lens, Retake, and the web chat UI. Additional connectors (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon) are available from the plugin registry.
 
 All configuration lives in `~/.milady/milady.json`. Secrets can go in `~/.milady/.env`.
 
