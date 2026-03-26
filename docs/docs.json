@@ -261,7 +261,12 @@
               "plugin-registry/llm/cohere",
               "plugin-registry/llm/together",
               "plugin-registry/llm/perplexity",
-              "plugin-registry/llm/vercel-ai-gateway"
+              "plugin-registry/llm/vercel-ai-gateway",
+              "plugin-registry/llm/google-antigravity",
+              "plugin-registry/llm/pi-ai",
+              "plugin-registry/llm/qwen",
+              "plugin-registry/llm/minimax",
+              "plugin-registry/llm/zai"
             ]
           },
           {
