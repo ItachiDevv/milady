@@ -63,7 +63,7 @@ Response:
 When `enabled` is `true`, the service calls `enableAutonomy()` on the Autonomy Service. When `false`, it calls `disableAutonomy()`.
 
 <Info>
-The autonomy routes are implemented in `src/api/autonomy-routes.ts`. The `getAutonomyState()` helper determines the canonical enabled/thinking state by checking the service status first, then falling back to runtime flags.
+The autonomy routes are implemented in `agent-lifecycle-routes.ts` (under `packages/agent/src/api/`), handling `GET /api/agent/autonomy` and `POST /api/agent/autonomy`. The `getAutonomyState()` helper determines the canonical enabled/thinking state by checking the service status first, then falling back to runtime flags.
 </Info>
 
 ### Dashboard Toggle
