@@ -409,8 +409,8 @@ Milady automatically enables plugins based on your configuration. You do not nee
 | `slack` | `@elizaos/plugin-slack` | `connectors.slack.botToken` |
 | `twitter` | `@elizaos/plugin-twitter` | `connectors.twitter.apiKey` |
 | `whatsapp` | `@elizaos/plugin-whatsapp` | `connectors.whatsapp.authDir` (or `authState`, `sessionPath`, or `accounts` with `authDir`) |
-| `signal` | `@elizaos/plugin-signal` | `connectors.signal.account` (or `httpUrl`, `httpHost`, `httpPort`, `cliPath`, or `accounts` with enabled entries) |
-| `farcaster` | `@elizaos/plugin-farcaster` | `connectors.farcaster.token` |
+| `signal` | `@elizaos/plugin-signal` | `connectors.signal.authDir`, `account`, `httpUrl`, `httpHost`, `httpPort`, `cliPath` (any one), or `accounts` with enabled entries |
+| `farcaster` | `@elizaos/plugin-farcaster` | `connectors.farcaster.apiKey` (or `token`, `botToken`) |
 | `matrix` | `@elizaos/plugin-matrix` | `connectors.matrix.token` |
 | `nostr` | `@elizaos/plugin-nostr` | `connectors.nostr.token` |
 | `msteams` | `@elizaos/plugin-msteams` | `connectors.msteams.token` |
@@ -418,11 +418,12 @@ Milady automatically enables plugins based on your configuration. You do not nee
 | `bluebubbles` | `@elizaos/plugin-bluebubbles` | `connectors.bluebubbles.serverUrl` + `password` |
 | `imessage` | `@elizaos/plugin-imessage` | `connectors.imessage.cliPath` |
 | `lens` | `@elizaos/plugin-lens` | `connectors.lens.token` |
-| `mattermost` | `@elizaos/plugin-mattermost` | `connectors.mattermost.token` |
+| `mattermost` | `@elizaos/plugin-mattermost` | `connectors.mattermost.botToken` (or `token`, `apiKey`) |
 | `feishu` | `@elizaos/plugin-feishu` | `connectors.feishu.token` |
 | `retake` | `@elizaos/plugin-retake` | `connectors.retake.accessToken` or `enabled: true` |
 | `blooio` | `@elizaos/plugin-blooio` | `connectors.blooio.token` |
 | `twitch` | `@elizaos/plugin-twitch` | `connectors.twitch.accessToken` or `clientId` or `enabled: true` |
+| `wechat` | `@miladyai/plugin-wechat` | `connectors.wechat.apiKey` or `accounts` with `apiKey` (Milady-specific) |
 
 **Provider plugins** are auto-enabled when the corresponding API key environment variable is set:
 

@@ -16,7 +16,7 @@ The Mattermost connector is an external elizaOS plugin that bridges your agent t
 |-------|-------|
 | Package | `@elizaos/plugin-mattermost` |
 | Config key | `connectors.mattermost` |
-| Auto-enable trigger | `botToken` is truthy in connector config |
+| Auto-enable trigger | `botToken`, `token`, or `apiKey` is truthy in connector config |
 
 ## Minimal Configuration
 
@@ -51,7 +51,7 @@ To explicitly disable the connector even when a token is present:
 
 ## Auto-Enable Mechanism
 
-The `plugin-auto-enable.ts` module checks `connectors.mattermost` in your character config. If the `botToken` field is truthy (and `enabled` is not explicitly `false`), the runtime automatically loads `@elizaos/plugin-mattermost`.
+The `plugin-auto-enable.ts` module checks `connectors.mattermost` in your character config. If the `botToken`, `token`, or `apiKey` field is truthy (and `enabled` is not explicitly `false`), the runtime automatically loads `@elizaos/plugin-mattermost`.
 
 No environment variable is required to trigger auto-enable — it is driven entirely by the connector config object.
 

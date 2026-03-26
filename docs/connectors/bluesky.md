@@ -17,6 +17,7 @@ The Bluesky connector is an elizaOS plugin that bridges your agent to Bluesky vi
 | Package | `@elizaos/plugin-bluesky` |
 | Config key | `connectors.bluesky` |
 | Install | `milady plugins install bluesky` |
+| Auto-enable | **No** — must be manually installed (not in the auto-enable connector map) |
 
 ## Setup Requirements
 

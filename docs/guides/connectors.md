@@ -971,6 +971,8 @@ A personal-account variant is also available as `@elizaos/plugin-zalouser` for o
 
 ## Gmail Watch
 
+> **Note:** Gmail Watch is a **feature plugin**, not a connector. It is included here for completeness since it provides platform integration, but it is configured via `features.gmailWatch` rather than the `connectors` section.
+
 ### Setup Requirements
 
 - Google Cloud service account or OAuth credentials with Gmail API access
@@ -985,7 +987,7 @@ Gmail Watch is enabled via the `features.gmailWatch` flag or environment variabl
 - Auto-renewal of watch subscriptions
 - Inbound email event handling
 
-**Note:** This connector is available from the plugin registry. Install it with `milady plugins install @elizaos/plugin-gmail-watch`.
+Install with `milady plugins install @elizaos/plugin-gmail-watch`.
 
 ---
 

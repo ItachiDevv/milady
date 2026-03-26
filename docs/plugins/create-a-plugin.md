@@ -397,10 +397,9 @@ When Milady starts, it discovers plugins from multiple sources in priority order
 2. **Core plugins** — Always loaded (`@elizaos/plugin-sql`, `@elizaos/plugin-local-embedding`, etc.)
 3. **Connector plugins** — Auto-enabled when channel config exists (e.g., `telegram` config → `@elizaos/plugin-telegram`)
 4. **Provider plugins** — Auto-enabled when API key env var is set (e.g., `ANTHROPIC_API_KEY` → `@elizaos/plugin-anthropic`)
-5. **Feature plugins** — Enabled via feature flags in `milady.json` (e.g., `features.browser: true` → `@elizaos/plugin-browser`)
-6. **User-installed plugins** — Installed via `milady plugins install`
-7. **Custom plugins** — Dropped into `~/.milady/plugins/custom/`
-8. **Ejected plugins** — Git-cloned upstream plugins in `~/.milady/plugins/ejected/`
+5. **Ejected plugins** — Local overrides from `~/.milady/plugins/ejected/` (takes priority over npm versions)
+6. **User-installed plugins** — Installed via `milady plugins install` (tracked in `plugins.installs`)
+7. **Custom/drop-in plugins** — Dropped into `~/.milady/plugins/custom/` or paths in `plugins.load.paths`
 
 ### Auto-Enable by Environment Variable
 
@@ -408,11 +407,25 @@ Set an API key and the corresponding plugin loads automatically:
 
 | Environment Variable | Plugin |
 |---------------------|--------|
-| `ANTHROPIC_API_KEY` | `@elizaos/plugin-anthropic` |
+| `ANTHROPIC_API_KEY` / `CLAUDE_API_KEY` | `@elizaos/plugin-anthropic` |
 | `OPENAI_API_KEY` | `@elizaos/plugin-openai` |
-| `GOOGLE_API_KEY` | `@elizaos/plugin-google-genai` |
+| `GOOGLE_API_KEY` / `GOOGLE_GENERATIVE_AI_API_KEY` | `@elizaos/plugin-google-genai` |
+| `GOOGLE_CLOUD_API_KEY` | `@elizaos/plugin-google-antigravity` |
 | `GROQ_API_KEY` | `@elizaos/plugin-groq` |
+| `XAI_API_KEY` / `GROK_API_KEY` | `@elizaos/plugin-xai` |
 | `OPENROUTER_API_KEY` | `@elizaos/plugin-openrouter` |
+| `OLLAMA_BASE_URL` | `@elizaos/plugin-ollama` |
+| `DEEPSEEK_API_KEY` | `@elizaos/plugin-deepseek` |
+| `TOGETHER_API_KEY` | `@elizaos/plugin-together` |
+| `MISTRAL_API_KEY` | `@elizaos/plugin-mistral` |
+| `COHERE_API_KEY` | `@elizaos/plugin-cohere` |
+| `PERPLEXITY_API_KEY` | `@elizaos/plugin-perplexity` |
+| `ELIZAOS_CLOUD_API_KEY` / `ELIZAOS_CLOUD_ENABLED` | `@elizaos/plugin-elizacloud` |
+| `ELIZA_USE_PI_AI` | `@elizaos/plugin-pi-ai` |
+| `CUA_API_KEY` / `CUA_HOST` | `@elizaos/plugin-cua` |
+| `OBSIDIAN_VAULT_PATH` | `@elizaos/plugin-obsidian` |
+| `REPOPROMPT_CLI_PATH` | `@elizaos/plugin-repoprompt` |
+| `CLAUDE_CODE_WORKBENCH_ENABLED` | `@elizaos/plugin-claude-code-workbench` |
 
 ### Auto-Enable by Connector Config
 
@@ -431,12 +444,14 @@ This auto-loads `@elizaos/plugin-telegram` and `@elizaos/plugin-discord`.
 
 ### Disabling Auto-Enabled Plugins
 
-Override in `milady.json`:
+Override in `milady.json` using the short plugin ID under `plugins.entries`:
 
 ```json
 {
   "plugins": {
-    "@elizaos/plugin-telegram": { "enabled": false }
+    "entries": {
+      "telegram": { "enabled": false }
+    }
   }
 }
 ```

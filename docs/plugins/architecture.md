@@ -60,7 +60,7 @@ export const OPTIONAL_CORE_PLUGINS: readonly string[] = [
 ];
 ```
 
-Plugins such as `@elizaos/plugin-directives`, `@elizaos/plugin-commands`, `@elizaos/plugin-mcp`, and `@elizaos/plugin-scheduling` are commented out in the source and may be activated in future releases.
+Plugins such as `@elizaos/plugin-directives`, `@elizaos/plugin-commands`, `@elizaos/plugin-mcp`, `@elizaos/plugin-scheduling`, and `@elizaos/plugin-scratchpad` are commented out in the source and may be activated in future releases.
 
 ## Plugin Hook Points
 

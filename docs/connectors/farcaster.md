@@ -16,7 +16,7 @@ The Farcaster connector is an external elizaOS plugin that bridges your agent to
 |-------|-------|
 | Package | `@elizaos/plugin-farcaster` |
 | Config key | `connectors.farcaster` |
-| Auto-enable trigger | `apiKey` is truthy in connector config |
+| Auto-enable trigger | `apiKey`, `token`, or `botToken` is truthy in connector config |
 
 ## Minimal Configuration
 
@@ -53,7 +53,7 @@ To explicitly disable the connector even when an API key is present:
 
 ## Auto-Enable Mechanism
 
-The `plugin-auto-enable.ts` module checks `connectors.farcaster` in your character config. If the `apiKey` field is truthy (and `enabled` is not explicitly `false`), the runtime automatically loads `@elizaos/plugin-farcaster`.
+The `plugin-auto-enable.ts` module checks `connectors.farcaster` in your character config. If `apiKey`, `token`, or `botToken` is truthy (and `enabled` is not explicitly `false`), the runtime automatically loads `@elizaos/plugin-farcaster`. The canonical field is `apiKey` (your Neynar API key).
 
 No environment variable is required to trigger auto-enable — it is driven entirely by the connector config object.
 

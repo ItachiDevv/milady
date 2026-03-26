@@ -32,9 +32,12 @@ These variables control the API server and network behavior.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `MILADY_PORT` | API server port when running `milady start`. | `2138` |
+| `MILADY_PORT` | Dashboard UI + API server port when running `milady start`. | `2138` |
+| `MILADY_API_PORT` | API + WebSocket port in dev mode (`bun run dev`). | `31337` |
 | `MILADY_API_BIND` | Bind address for the API server. Set to `0.0.0.0` to accept external connections (requires `MILADY_API_TOKEN` for security). | `127.0.0.1` |
-| `MILADY_GATEWAY_PORT` | Gateway port. Automatically set to `19001` when the `--dev` flag is used. | (unset) |
+| `MILADY_GATEWAY_PORT` | Gateway port. Automatically set to `19001` when the `--dev` flag is used. | `18789` |
+| `MILADY_HOME_PORT` | Home dashboard port. | `2142` |
+| `MILADY_WECHAT_WEBHOOK_PORT` | WeChat webhook listener port. | `18790` |
 | `MILADY_API_TOKEN` | Static API token for authenticating requests to the agent API server. When set, all API requests must include this token. Auto-generated if unset and bind is non-loopback. | (unset) |
 | `MILADY_ALLOW_WS_QUERY_TOKEN` | When set to `1`, allows the API token to be passed as a WebSocket query parameter (less secure; useful for some clients). | (unset) |
 | `MILADY_PAIRING_DISABLED` | When set to `1`, disables the pairing endpoint on the API server (requires `MILADY_API_TOKEN` to be set). | (unset) |
@@ -99,6 +102,8 @@ These variables configure access to AI model providers. Set at least one to enab
 | `ELIZAOS_CLOUD_API_KEY` | elizaOS Cloud | Cloud-hosted model inference via elizaOS |
 | `ELIZAOS_CLOUD_ENABLED` | elizaOS Cloud | Set to `1` to enable elizaOS Cloud (requires API key) |
 | `ELIZAOS_CLOUD_BASE_URL` | elizaOS Cloud | Override the elizaOS Cloud endpoint URL. Set automatically from config when cloud is enabled. |
+| `ELIZA_USE_PI_AI` | Pi AI | Set to enable Inflection Pi conversational models |
+| `GOOGLE_CLOUD_API_KEY` | Google Antigravity (Vertex AI) | Google Cloud / Vertex AI models |
 
 Use `milady models` to check which providers are currently configured.
 

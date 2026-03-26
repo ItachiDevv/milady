@@ -17,7 +17,7 @@ Milady uses the Discord plugin to interact with Discord servers. This guide assu
 Before starting, ensure you have:
 - A Discord account with a server where you have admin permissions
 - Milady installed on your system (see [Getting Started](/getting-started))
-- Node.js 18+ installed
+- Node.js 22+ installed
 - A code editor for modifying configuration files
 
 ## Step-by-Step Setup
@@ -56,12 +56,9 @@ If your token is ever exposed, regenerate it immediately by clicking **Regenerat
 ```json5
 {
   // ... existing config ...
-  "plugins": {
+  "connectors": {
     "discord": {
-      "enabled": true,
-      "token": "YOUR_BOT_TOKEN_HERE",
-      "intents": ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "MESSAGE_CONTENT"],
-      "prefix": "!"
+      "token": "YOUR_BOT_TOKEN_HERE"
     }
   }
 }
@@ -71,7 +68,7 @@ If your token is ever exposed, regenerate it immediately by clicking **Regenerat
 4. Save the file
 
 <Info>
-The `intents` field tells Discord which events your bot should receive. `MESSAGE_CONTENT` is required to read message text.
+The connector auto-enables when `token`, `botToken`, or `apiKey` is set in `connectors.discord`. Make sure the `MESSAGE_CONTENT` intent is enabled in the Discord Developer Portal.
 </Info>
 
 </Step>
@@ -81,11 +78,11 @@ The `intents` field tells Discord which events your bot should receive. `MESSAGE
 2. Run the following command to verify the plugin is recognized:
 
 ```bash
-bun run milady --plugins
+milady plugins list
 ```
 
-3. Confirm that `discord` appears in the list of available plugins
-4. Check `milady.json` to ensure `"enabled": true` is set for the Discord plugin
+3. Confirm that `discord` appears in the list of loaded plugins
+4. Check `milady.json` to ensure the `connectors.discord` section is configured
 
 </Step>
 
@@ -219,7 +216,7 @@ Visit the [Discord Developer Portal](https://discord.com/developers/applications
 See the [Configuration Guide](/configuration) for detailed options in `milady.json`.
 </Tab>
 <Tab title="elizaOS Documentation">
-Learn more about elizaOS at the [elizaOS GitHub](https://github.com/ai16z/eliza).
+Learn more about elizaOS at the [elizaOS GitHub](https://github.com/elizaOS/eliza).
 </Tab>
 </Tabs>
 
@@ -230,4 +227,4 @@ If you encounter issues:
 1. Check the troubleshooting section above
 2. Review Milady's console output for error messages
 3. Visit the [Milady Community Discord](https://discord.gg/milady)
-4. Open an issue on the [Milady GitHub repository](https://github.com/milady/milady)
+4. Open an issue on the [Milady GitHub repository](https://github.com/milady-ai/milady)
