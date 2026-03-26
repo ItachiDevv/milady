@@ -32,7 +32,9 @@ These variables control the API server and network behavior.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `MILADY_PORT` | API server port when running `milady start`. | `2138` |
+| `MILADY_PORT` | Server port when running `milady start` (combined API + UI). In dev mode, this is the dashboard UI port (Vite dev server). | `2138` |
+| `MILADY_API_PORT` | API + WebSocket server port in dev mode (separate from the UI). Not used in production `milady start` mode. | `31337` |
+| `MILADY_HOME_PORT` | Home dashboard UI port in dev mode. | `2142` |
 | `MILADY_API_BIND` | Bind address for the API server. Set to `0.0.0.0` to accept external connections (requires `MILADY_API_TOKEN` for security). | `127.0.0.1` |
 | `MILADY_GATEWAY_PORT` | Gateway port. Automatically set to `19001` when the `--dev` flag is used. | (unset) |
 | `MILADY_API_TOKEN` | Static API token for authenticating requests to the agent API server. When set, all API requests must include this token. Auto-generated if unset and bind is non-loopback. | (unset) |
@@ -232,6 +234,36 @@ These variables configure blockchain wallet keys used by wallet plugins.
 |----------|-------------|---------|
 | `EVM_PRIVATE_KEY` | Private key for EVM-compatible chains (Ethereum, Polygon, etc.). | (unset) |
 | `SOLANA_PRIVATE_KEY` | Private key for the Solana blockchain. | (unset) |
+
+---
+
+## Install and Build
+
+These variables affect the install and build process.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MILADY_NO_VISION_DEPS` | Skip optional vision dependency install (camera/fswebcam). Set to `1` on systems without native build tools. | `0` |
+| `SKIP_AVATAR_CLONE` | Skip VRM avatar download during `bun install`. Set to `1` on restricted networks and manually copy avatars to `apps/app/public/vrms/`. | `0` |
+| `ELIZA_SKIP_LOCAL_ELIZA` | Use npm-published `@elizaos/*` packages instead of symlinked packages from `../eliza` workspace. | `0` |
+| `MILADY_VITE_FORCE` | When set to `1`, forces Vite dependency pre-bundling (bypasses cache). Useful after patching deps. | (unset) |
+
+---
+
+## Development and Debugging
+
+These variables control development-mode behavior, prompt tracing, and desktop dev tooling.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MILADY_PROMPT_TRACE` | Log prompt compaction stats to console. | `0` |
+| `MILADY_CAPTURE_PROMPTS` | Dump raw prompts to `.tmp/prompt-captures/` (dev-only, contains user messages). | `0` |
+| `MILADY_ACTION_COMPACTION` | Enable context-aware action param stripping. | `1` (enabled) |
+| `MILADY_PROMPT_OPT_MODE` | Prompt optimization mode. | `baseline` |
+| `MILADY_DESKTOP_SCREENSHOT_SERVER` | Set to `0` to disable the desktop screenshot proxy endpoint (`GET /api/dev/cursor-screenshot`). | (enabled by default) |
+| `MILADY_DESKTOP_DEV_LOG` | Set to `0` to disable the aggregated desktop dev console log at `.milady/desktop-dev-console.log`. | (enabled by default) |
+| `MILADY_DESKTOP_VITE_BUILD_WATCH` | Set to `1` to enable Rollup watch mode for desktop Vite builds. | (unset) |
+| `MILADY_DISABLE_AUTO_API_TOKEN` | Skip auto-generation of connection key when binding to non-loopback addresses. | (unset) |
 
 ---
 

@@ -500,6 +500,31 @@ The `vision`, `fal`, and `suno` plugins are also auto-enabled when their respect
 You can always force-disable any auto-enabled plugin by setting `plugins.entries.<id>.enabled: false`. The denylist takes priority over all auto-enable logic.
 </Tip>
 
+**Streaming plugins** are auto-enabled when a streaming destination is configured:
+
+```json5
+{
+  streaming: {
+    activeDestination: "twitch",   // Which destination is currently active
+    retake: { accessToken: "..." },
+    twitch: { streamKey: "live_..." },
+    youtube: { streamKey: "..." },
+    customRtmp: { rtmpUrl: "rtmp://...", rtmpKey: "..." },
+    pumpfun: { streamKey: "...", rtmpUrl: "rtmp://..." },
+    x: { streamKey: "...", rtmpUrl: "rtmp://..." },
+  },
+}
+```
+
+| Destination | Plugin | Auto-Enable Trigger |
+|-------------|--------|---------------------|
+| `retake` | `@elizaos/plugin-retake` | `accessToken` or `enabled: true` |
+| `twitch` | `@elizaos/plugin-twitch-streaming` | `streamKey` or `enabled: true` |
+| `youtube` | `@elizaos/plugin-youtube-streaming` | `streamKey` or `enabled: true` |
+| `customRtmp` | `@elizaos/plugin-custom-rtmp` | `rtmpUrl` + `rtmpKey` |
+| `pumpfun` | `@elizaos/plugin-pumpfun-streaming` | `streamKey` + `rtmpUrl` |
+| `x` | `@elizaos/plugin-x-streaming` | `streamKey` + `rtmpUrl` |
+
 ## Connectors (Messaging Channels)
 
 Connectors integrate Milady with messaging platforms. Configure them under `connectors`:
@@ -1214,7 +1239,9 @@ Key environment variables that affect Milady behavior:
 | Variable | Default | Purpose |
 |----------|---------|---------|
 | `MILADY_GATEWAY_PORT` | `18789` | Gateway (API + WebSocket) port |
-| `MILADY_PORT` | `2138` | Dashboard (Web UI) port |
+| `MILADY_PORT` | `2138` | Server port (`milady start`). In dev mode, dashboard UI port. |
+| `MILADY_API_PORT` | `31337` | API + WebSocket port in dev mode (separate from UI). |
+| `MILADY_HOME_PORT` | `2142` | Home dashboard UI port in dev mode. |
 
 ```bash
 # Custom ports
