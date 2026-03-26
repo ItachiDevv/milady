@@ -157,14 +157,16 @@
               "connectors/feishu",
               "connectors/nostr",
               "connectors/lens",
+              "connectors/retake",
+              "connectors/bluesky",
+              "connectors/instagram",
               "connectors/line",
               "connectors/zalo",
               "connectors/twilio",
               "connectors/github",
               "connectors/gmail-watch",
               "connectors/nextcloud-talk",
-              "connectors/tlon",
-              "connectors/retake"
+              "connectors/tlon"
             ]
           },
           {
@@ -295,14 +297,16 @@
               "plugin-registry/platform/feishu",
               "plugin-registry/platform/nostr",
               "plugin-registry/platform/lens",
+              "plugin-registry/platform/retake",
+              "plugin-registry/platform/bluesky",
+              "plugin-registry/platform/instagram",
               "plugin-registry/platform/line",
               "plugin-registry/platform/zalo",
               "plugin-registry/platform/twilio",
               "plugin-registry/platform/github",
               "plugin-registry/platform/gmail-watch",
               "plugin-registry/platform/nextcloud-talk",
-              "plugin-registry/platform/tlon",
-              "plugin-registry/platform/retake"
+              "plugin-registry/platform/tlon"
             ]
           },
           {
