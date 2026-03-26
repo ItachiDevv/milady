@@ -126,7 +126,7 @@ The `docker-compose.yml` defines two services:
           - ${MILADY_WORKSPACE_DIR}:/home/node/.milady/workspace
         ports:
           - "${MILADY_GATEWAY_PORT:-18789}:18789"
-          - "${MILADY_BRIDGE_PORT:-18790}:18790"
+          - "${MILADY_WECHAT_WEBHOOK_PORT:-18790}:18790"
         init: true
         restart: unless-stopped
         command:
@@ -196,7 +196,7 @@ When extra mounts or a home volume are specified, the setup script generates a `
 |------|---------|---------|---------------------|
 | 2138 | API Server + Dashboard UI | Always exposed inside container | `PORT` |
 | 18789 | Gateway (WebSocket + HTTP) | Host-mapped | `MILADY_GATEWAY_PORT` |
-| 18790 | Bridge (inter-service communication) | Host-mapped | `MILADY_BRIDGE_PORT` |
+| 18790 | WeChat webhook callback server | Host-mapped | `MILADY_WECHAT_WEBHOOK_PORT` |
 
 ## Environment Variables
 
@@ -214,7 +214,7 @@ When extra mounts or a home volume are specified, the setup script generates a `
 | `MILADY_CONFIG_DIR` | `$HOME/.milady` | Host path for configuration storage |
 | `MILADY_WORKSPACE_DIR` | `$HOME/.milady/workspace` | Host path for workspace storage |
 | `MILADY_GATEWAY_PORT` | `18789` | Host port for the gateway |
-| `MILADY_BRIDGE_PORT` | `18790` | Host port for the bridge |
+| `MILADY_WECHAT_WEBHOOK_PORT` | `18790` | Host port for the WeChat webhook callback server |
 | `MILADY_GATEWAY_BIND` | `lan` | Gateway bind mode (`lan`, `localhost`, `0.0.0.0`) |
 | `MILADY_API_BIND` | `0.0.0.0` | API server bind address |
 | `MILADY_API_TOKEN` | (none) | Token-based auth for the API server. Set in production. |

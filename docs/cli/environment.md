@@ -41,6 +41,9 @@ These variables control the API server and network behavior.
 | `MILADY_ALLOWED_ORIGINS` | Comma-separated list of additional CORS origins allowed by the API server. | (unset) |
 | `MILADY_ALLOW_NULL_ORIGIN` | When set to `1`, allows the `null` origin in CORS (useful for file:// or desktop clients). | (unset) |
 | `MILADY_WALLET_EXPORT_TOKEN` | Auth token for the wallet export API endpoint. When unset, wallet exports are disabled. | (unset) |
+| `MILADY_WECHAT_WEBHOOK_PORT` | Port for the WeChat webhook callback server. | `18790` |
+| `MILADY_HOME_PORT` | Home dashboard port. | `2142` |
+| `MILADY_API_PORT` | API server port in dev mode (used by `bun run dev`). | `31337` |
 | `API_PORT` / `SERVER_PORT` | Alternative port overrides used by some runtime actions. Prefer `MILADY_PORT`. | (unset) |
 
 ---
