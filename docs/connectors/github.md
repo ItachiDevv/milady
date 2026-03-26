@@ -6,6 +6,10 @@ description: Connect your agent to GitHub using the @elizaos/plugin-github packa
 
 Connect your agent to GitHub for repository management, issue tracking, and pull request workflows.
 
+:::info Registry-only connector
+This connector is **not auto-enabled** by Milady. Install it manually with `milady plugins install github`, then set `enabled: true` in your config.
+:::
+
 ## Overview
 
 The GitHub connector is an elizaOS plugin that bridges your agent to the GitHub API. It supports repository management, issue tracking, pull request creation and review, and code search. This connector is available from the plugin registry.

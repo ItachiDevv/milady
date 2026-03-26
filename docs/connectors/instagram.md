@@ -6,6 +6,10 @@ description: Connect your agent to Instagram using the @elizaos/plugin-instagram
 
 Connect your agent to Instagram for media posting, comment monitoring, and DM handling.
 
+:::info Registry-only connector
+This connector is **not auto-enabled** by Milady. Install it manually with `milady plugins install instagram`, then set `enabled: true` in your config.
+:::
+
 ## Overview
 
 The Instagram connector is an elizaOS plugin that bridges your agent to Instagram. It supports media posting with caption generation, comment response, and direct message handling. This connector is available from the plugin registry.

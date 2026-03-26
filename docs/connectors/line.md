@@ -6,6 +6,10 @@ description: Connect your agent to LINE using the @elizaos/plugin-line package.
 
 Connect your agent to LINE for bot messaging and customer conversations.
 
+:::info Registry-only connector
+This connector is **not auto-enabled** by Milady. Install it manually with `milady plugins install line`, then set `enabled: true` in your config.
+:::
+
 ## Overview
 
 The LINE connector is an elizaOS plugin that bridges your agent to LINE Messaging API. It supports rich message types, group chat, and webhook-based event handling. This connector is available from the plugin registry.

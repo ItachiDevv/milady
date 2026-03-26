@@ -6,6 +6,10 @@ description: Connect your agent to Bluesky using the @elizaos/plugin-bluesky pac
 
 Connect your agent to Bluesky for social posting and engagement on the AT Protocol network.
 
+:::info Registry-only connector
+This connector is **not auto-enabled** by Milady. Install it manually with `milady plugins install bluesky`, then set `enabled: true` in your config.
+:::
+
 ## Overview
 
 The Bluesky connector is an elizaOS plugin that bridges your agent to Bluesky via the AT Protocol. It supports automated posting, mention monitoring, and reply handling. This connector is available from the plugin registry.

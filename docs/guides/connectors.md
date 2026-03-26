@@ -47,37 +47,39 @@ Connectors are platform bridges that allow your agent to communicate across mess
 
 ## Supported Platforms
 
-| Platform | Auth Method | DM Support | Group Support | Multi-Account |
-|----------|------------|------------|---------------|---------------|
-| Discord | Bot token | Yes | Yes (guilds/channels) | Yes |
-| Telegram | Bot token | Yes | Yes (groups/topics) | Yes |
-| Slack | Bot + App tokens | Yes | Yes (channels/threads) | Yes |
-| WhatsApp | QR code (Baileys) or Cloud API | Yes | Yes | Yes |
-| Signal | signal-cli HTTP API | Yes | Yes | Yes |
-| iMessage | Native CLI (macOS) | Yes | Yes | Yes |
-| BlueBubbles | Server URL + password | Yes | Yes | Yes |
-| Blooio | API key + webhook | Yes | Yes | No |
-| Microsoft Teams | App ID + password | Yes | Yes (teams/channels) | No |
-| Google Chat | Service account | Yes | Yes (spaces) | Yes |
-| Twitter | API keys + tokens | DMs | N/A | No |
-| Farcaster | Neynar API key + signer | Casts | Yes (channels) | No |
-| Bluesky | Account credentials | Posts | N/A | No |
-| Instagram | Username + password | DMs | N/A | No |
-| Twitch | Client ID + access token | Yes (chat) | Yes (channels) | No |
-| Mattermost | Bot token | Yes | Yes (channels) | No |
-| WeChat | Proxy API key + QR code | Yes | Yes | Yes |
-| Matrix | Access token | Yes | Yes (rooms) | No |
-| Feishu / Lark | App ID + secret | Yes | Yes (group chats) | No |
-| Nostr | Private key (nsec/hex) | Yes (NIP-04) | N/A | No |
-| LINE | Channel access token + secret | Yes | Yes | No |
-| Zalo | Access token | Yes | Yes | No |
-| Twilio | Account SID + auth token | SMS/Voice | N/A | No |
-| GitHub | API token | Issues/PRs | Yes (repos) | No |
-| Gmail Watch | Service account / OAuth | N/A | N/A | No |
-| Nextcloud Talk | Server credentials | Yes | Yes (rooms) | No |
-| Tlon | Ship credentials | Yes | Yes (Urbit chats) | No |
-| Lens | API key | Yes | N/A | No |
-| Retake | Access token | Yes | Yes | No |
+Connectors marked **Auto** are auto-enabled when their credentials are present in config or environment. **Registry-only** connectors require manual installation via `milady plugins install <name>` and explicit `enabled: true` in config.
+
+| Platform | Auth Method | DM Support | Group Support | Auto-Enable |
+|----------|------------|------------|---------------|-------------|
+| Discord | Bot token | Yes | Yes (guilds/channels) | Auto |
+| Telegram | Bot token | Yes | Yes (groups/topics) | Auto |
+| Slack | Bot + App tokens | Yes | Yes (channels/threads) | Auto |
+| WhatsApp | QR code (Baileys) or Cloud API | Yes | Yes | Auto |
+| Signal | signal-cli HTTP API | Yes | Yes | Auto |
+| iMessage | Native CLI (macOS) | Yes | Yes | Auto |
+| BlueBubbles | Server URL + password | Yes | Yes | Auto |
+| Blooio | API key + webhook | Yes | Yes | Auto |
+| Microsoft Teams | App ID + password | Yes | Yes (teams/channels) | Auto |
+| Google Chat | Service account | Yes | Yes (spaces) | Auto |
+| Twitter | API keys + tokens | DMs | N/A | Auto |
+| Farcaster | Neynar API key + signer | Casts | Yes (channels) | Auto |
+| Twitch | Client ID + access token | Yes (chat) | Yes (channels) | Auto |
+| Mattermost | Bot token | Yes | Yes (channels) | Auto |
+| WeChat | Proxy API key + QR code | Yes | Yes | Auto |
+| Matrix | Access token | Yes | Yes (rooms) | Auto |
+| Feishu / Lark | App ID + secret | Yes | Yes (group chats) | Auto |
+| Nostr | Private key (nsec/hex) | Yes (NIP-04) | N/A | Auto |
+| Lens | API key | Yes | N/A | Auto |
+| Retake | Access token | Yes | Yes | Auto |
+| Bluesky | Account credentials | Posts | N/A | Registry-only |
+| Instagram | Username + password | DMs | N/A | Registry-only |
+| LINE | Channel access token + secret | Yes | Yes | Registry-only |
+| Zalo | Access token | Yes | Yes | Registry-only |
+| Twilio | Account SID + auth token | SMS/Voice | N/A | Registry-only |
+| GitHub | API token | Issues/PRs | Yes (repos) | Registry-only |
+| Nextcloud Talk | Server credentials | Yes | Yes (rooms) | Registry-only |
+| Tlon | Ship credentials | Yes | Yes (Urbit chats) | Registry-only |
+| Gmail Watch | Service account / OAuth | N/A | N/A | Feature plugin |
 
 ---
 
