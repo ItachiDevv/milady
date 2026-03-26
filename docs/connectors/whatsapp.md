@@ -95,14 +95,18 @@ The WhatsApp Business Cloud API is Meta's official API. Requires a WhatsApp Busi
 
 For Cloud API authentication, the following environment variables are used:
 
-| Variable | Description |
-|----------|-------------|
-| `WHATSAPP_ACCESS_TOKEN` | WhatsApp Business API access token |
-| `WHATSAPP_PHONE_NUMBER_ID` | Phone number ID from Meta Developer Dashboard |
-| `WHATSAPP_WEBHOOK_VERIFY_TOKEN` | Webhook verification token |
-| `WHATSAPP_BUSINESS_ACCOUNT_ID` | WhatsApp Business Account ID |
+| Variable | Mode | Description |
+|----------|------|-------------|
+| `WHATSAPP_ACCESS_TOKEN` | Cloud API | WhatsApp Business API access token |
+| `WHATSAPP_PHONE_NUMBER_ID` | Cloud API | Phone number ID from Meta Developer Dashboard |
+| `WHATSAPP_WEBHOOK_VERIFY_TOKEN` | Cloud API | Webhook verification token |
+| `WHATSAPP_BUSINESS_ACCOUNT_ID` | Cloud API | WhatsApp Business Account ID |
+| `WHATSAPP_AUTH_DIR` | Baileys | Directory for Baileys session files (alternative to config `authDir`) |
+| `WHATSAPP_API_VERSION` | Cloud API | WhatsApp Business API version override |
+| `WHATSAPP_DM_POLICY` | Both | DM access policy (`pairing`, `open`, `closed`) |
+| `WHATSAPP_GROUP_POLICY` | Both | Group message policy (`open`, `disabled`, `allowlist`) |
 
-These can also be placed in the `env` section of your config file. Baileys mode does not require any environment variables.
+These can also be placed in the `env` section of your config file. Baileys mode can be configured entirely via the character config without environment variables — set `authDir` in the config instead of `WHATSAPP_AUTH_DIR`.
 
 ## Full Configuration Reference
 

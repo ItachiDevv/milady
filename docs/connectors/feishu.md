@@ -20,21 +20,24 @@ The Feishu connector is an external elizaOS plugin that integrates your agent wi
 
 ## Minimal Configuration
 
-The connector auto-enables when one of the generic trigger fields (`token`, `botToken`, or `apiKey`) is present in the connector config. Environment variables alone do not trigger auto-enable.
+The connector auto-enables when one of the generic trigger fields (`token`, `botToken`, or `apiKey`) is present in the connector config. Set `apiKey` to any truthy value to trigger auto-enable, then provide the actual credentials via environment variables.
+
+```bash
+export FEISHU_APP_ID=cli_your_app_id
+export FEISHU_APP_SECRET=your_app_secret
+```
 
 ```json
 {
-  "env": {
-    "FEISHU_APP_ID": "cli_your_app_id",
-    "FEISHU_APP_SECRET": "your_app_secret"
-  },
   "connectors": {
     "feishu": {
-      "apiKey": "your_app_secret"
+      "apiKey": "enabled"
     }
   }
 }
 ```
+
+> **Note:** The `apiKey` field in the connector config is used only to trigger auto-enable. The actual authentication uses `FEISHU_APP_ID` and `FEISHU_APP_SECRET` environment variables.
 
 ## Disabling
 

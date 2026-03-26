@@ -4,7 +4,7 @@ sidebarTitle: "Bluesky"
 description: "Bluesky connector for Milady — post, reply, and interact on the AT Protocol network."
 ---
 
-The Bluesky plugin connects Milady agents to the Bluesky social network via the AT Protocol, enabling posting, replying, and social interactions.
+The Bluesky plugin connects Milady agents to the Bluesky social network via the AT Protocol, enabling posting, replying, DM handling, and social interactions.
 
 **Package:** `@elizaos/plugin-bluesky`
 
@@ -20,7 +20,9 @@ milady plugins install bluesky
 
 1. Go to [bsky.app](https://bsky.app) and create an account (or use an existing one)
 2. Note your handle (e.g., `yourname.bsky.social`)
-3. Use your account username and password (or generate an app password in Settings → App Passwords)
+3. Generate an app password at [Settings → App Passwords](https://bsky.app/settings/app-passwords)
+
+> Never use your main login password. Always generate an app password.
 
 ### 2. Configure Milady
 
@@ -28,9 +30,8 @@ milady plugins install bluesky
 {
   "connectors": {
     "bluesky": {
-      "username": "YOUR_USERNAME",
-      "password": "YOUR_PASSWORD",
-      "handle": "YOUR_HANDLE"
+      "handle": "yourname.bsky.social",
+      "password": "your-app-password"
     }
   }
 }
@@ -39,28 +40,41 @@ milady plugins install bluesky
 Or via environment variables:
 
 ```bash
-export BLUESKY_USERNAME=YOUR_USERNAME
-export BLUESKY_PASSWORD=YOUR_PASSWORD
-export BLUESKY_HANDLE=YOUR_HANDLE
+export BLUESKY_HANDLE=yourname.bsky.social
+export BLUESKY_PASSWORD=your-app-password
 ```
 
 ## Configuration
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `username` | Yes | Bluesky account username |
-| `password` | Yes | Bluesky account password or app password |
-| `handle` | Yes | Bluesky handle (e.g., `yourname.bsky.social`) |
-| `enabled` | No | Set `false` to disable (default: `true`) |
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `handle` | string | Yes | — | Bluesky handle (e.g., `yourname.bsky.social`) |
+| `password` | string | Yes | — | App password |
+| `enabled` | boolean | No | `true` | Enable/disable the connector |
+| `enablePosting` | boolean | No | `true` | Enable automated posting |
+| `postIntervalMin` | integer | No | `1800` | Minimum seconds between posts |
+| `postIntervalMax` | integer | No | `3600` | Maximum seconds between posts |
+| `maxPostLength` | integer | No | `300` | Maximum characters per post |
+| `pollInterval` | integer | No | `60` | Seconds between polling for mentions |
+| `enableDms` | boolean | No | `false` | Respond to direct messages |
+| `dryRun` | boolean | No | `false` | Generate posts without publishing |
+| `service` | string | No | `https://bsky.social` | PDS endpoint |
 
 ## Environment Variables
 
 ```bash
-export BLUESKY_USERNAME=YOUR_USERNAME
-export BLUESKY_PASSWORD=YOUR_PASSWORD
-export BLUESKY_HANDLE=YOUR_HANDLE
+export BLUESKY_HANDLE=yourname.bsky.social
+export BLUESKY_PASSWORD=your-app-password
+# Optional
+export BLUESKY_ENABLED=true
+export BLUESKY_DRY_RUN=false
+export BLUESKY_SERVICE=https://bsky.social
+export BLUESKY_ENABLE_POSTING=true
+export BLUESKY_POLL_INTERVAL=60
+export BLUESKY_ENABLE_DMS=false
 ```
 
 ## Related
 
+- [Bluesky connector reference](/connectors/bluesky) — Full configuration details
 - [Connectors Guide](/guides/connectors) — General connector documentation
