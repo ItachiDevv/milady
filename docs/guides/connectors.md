@@ -977,7 +977,7 @@ A personal-account variant is also available as `@elizaos/plugin-zalouser` for o
 
 ### Key Configuration
 
-Gmail Watch is enabled via the `features.gmailWatch` flag or environment variables rather than the `connectors` section.
+Gmail Watch is enabled via the `features.gmailWatch` flag or the `hooks.gmail.account` config rather than the `connectors` section. When either `features.gmailWatch` is truthy or `hooks.gmail.account` contains a non-empty string, the plugin is auto-enabled.
 
 ### Features
 
