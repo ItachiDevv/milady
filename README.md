@@ -303,9 +303,10 @@ milady --debug            # enable debug-level runtime logs
 
 ```bash
 milady setup              # first-time setup / refresh workspace after update
-milady configure          # interactive config wizard
+milady configure          # print config guidance and common env vars
 milady config get <key>   # read a config value
-milady config set <k> <v> # set a config value
+milady config show        # display all configuration values
+milady config path        # print resolved config file path
 ```
 
 ### Dashboard & UI
@@ -318,9 +319,7 @@ milady dashboard --port 3000  # custom port
 ### Models
 
 ```bash
-milady models             # list configured model providers
-milady models add         # add a new provider
-milady models test        # test if your API keys work
+milady models             # show configured model providers (local check, no API calls)
 ```
 
 ### Plugins

@@ -122,28 +122,34 @@ milady plugins install @elizaos/plugin-openai
 milady plugins list
 ```
 
-<div id="enable-disable">
+<div id="search-and-inspect">
 
-### Habilitar/Deshabilitar
-
-</div>
-
-```bash
-milady plugins enable plugin-name
-milady plugins disable plugin-name
-```
-
-<div id="eject-copy-to-local">
-
-### Expulsar (Copiar a local)
+### Buscar e inspeccionar
 
 </div>
 
 ```bash
-milady plugins eject plugin-name
+milady plugins search twitter  # buscar por palabra clave
+milady plugins info twitter    # mostrar detalles del plugin
 ```
 
-Consulta [Expulsar Plugin](/es/plugins/plugin-eject) para detalles sobre cómo personalizar plugins expulsados.
+<div id="uninstall">
+
+### Desinstalar
+
+</div>
+
+```bash
+milady plugins uninstall plugin-name
+```
+
+<div id="custom-plugins">
+
+### Plugins personalizados
+
+</div>
+
+Coloca directorios de plugins en `~/.milady/plugins/custom/` y se cargarán automáticamente al iniciar. Usa `milady plugins test` para validar plugins personalizados. Los plugins expulsados en `~/.milady/plugins/ejected/` tienen prioridad sobre las versiones npm. Consulta [Expulsar Plugin](/es/plugins/plugin-eject) para más detalles.
 
 <div id="related">
 

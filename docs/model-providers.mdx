@@ -145,10 +145,9 @@ When using the config file approach, your API keys are stored in plaintext in `m
 ## CLI Commands
 
 ```bash
-milady models             # list configured model providers and their status
-milady models add         # add a new provider interactively
-milady models test        # test if your API keys are valid
-milady configure          # interactive config wizard (includes provider setup)
+milady models             # show configured model providers and their status (local check, no API calls)
+milady configure          # print config guidance and common env vars
+milady setup              # first-time setup (includes provider wizard)
 ```
 
 ### Setting the default model

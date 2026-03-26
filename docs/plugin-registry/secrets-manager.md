@@ -25,8 +25,10 @@ Navigate to **Agent → Settings → Secrets** and add key-value pairs.
 
 ### Via the CLI
 
+Edit `~/.milady/milady.json` directly or use the setup wizard:
+
 ```bash
-milady config set secrets.OPENAI_API_KEY sk-...
+milady setup --provider openai --key "sk-..."
 ```
 
 ### Via Configuration File

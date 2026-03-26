@@ -354,8 +354,8 @@ To pin Milady to a specific version and prevent automatic updates:
 # Install a specific version
 npm install -g miladyai@2.0.0-alpha.26
 
-# Disable automatic update checks
-milady config set update.checkOnStart false
+# Disable automatic update checks (edit milady.json directly)
+# Set "update": { "checkOnStart": false } in ~/.milady/milady.json
 ```
 
 For package-manager-specific pinning:
@@ -438,10 +438,10 @@ For fully air-gapped deployments, disable the update check entirely:
 }
 ```
 
-Or set via the CLI:
+Or inspect the current value:
 
 ```bash
-milady config set update.checkOnStart false
+milady config get update.checkOnStart
 ```
 
 To perform offline updates, download the package tarball on a connected machine and install it locally:

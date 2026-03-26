@@ -122,28 +122,34 @@ milady plugins install @elizaos/plugin-openai
 milady plugins list
 ```
 
-<div id="enable-disable">
+<div id="search-and-inspect">
 
-### 启用/禁用
-
-</div>
-
-```bash
-milady plugins enable plugin-name
-milady plugins disable plugin-name
-```
-
-<div id="eject-copy-to-local">
-
-### 弹出（复制到本地）
+### 搜索和查看
 
 </div>
 
 ```bash
-milady plugins eject plugin-name
+milady plugins search twitter  # 按关键字搜索
+milady plugins info twitter    # 显示插件详情
 ```
 
-参见[插件弹出](/zh/plugins/plugin-eject)了解自定义弹出插件的详细信息。
+<div id="uninstall">
+
+### 卸载
+
+</div>
+
+```bash
+milady plugins uninstall plugin-name
+```
+
+<div id="custom-plugins">
+
+### 自定义插件
+
+</div>
+
+将插件目录放在 `~/.milady/plugins/custom/` 中，启动时会自动加载。使用 `milady plugins test` 验证自定义插件。`~/.milady/plugins/ejected/` 中的弹出插件优先于 npm 版本。参见[插件弹出](/zh/plugins/plugin-eject)了解详情。
 
 <div id="related">
 
