@@ -32,16 +32,51 @@ These variables control the API server and network behavior.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `MILADY_PORT` | API server port when running `milady start`. | `2138` |
+| `MILADY_PORT` | Dashboard UI / API server port when running `milady start`. | `2138` |
+| `MILADY_API_PORT` | Separate API + WebSocket port used in dev mode (`bun run dev`). In production the API shares `MILADY_PORT`. | `31337` |
 | `MILADY_API_BIND` | Bind address for the API server. Set to `0.0.0.0` to accept external connections (requires `MILADY_API_TOKEN` for security). | `127.0.0.1` |
-| `MILADY_GATEWAY_PORT` | Gateway port. Automatically set to `19001` when the `--dev` flag is used. | (unset) |
+| `MILADY_GATEWAY_PORT` | Gateway port. Automatically set to `19001` when the `--dev` flag is used. | `18789` |
+| `MILADY_HOME_PORT` | Home dashboard port. | `2142` |
+| `MILADY_WECHAT_WEBHOOK_PORT` | WeChat connector webhook listener port. | `18790` |
 | `MILADY_API_TOKEN` | Static API token for authenticating requests to the agent API server. When set, all API requests must include this token. Auto-generated if unset and bind is non-loopback. | (unset) |
 | `MILADY_ALLOW_WS_QUERY_TOKEN` | When set to `1`, allows the API token to be passed as a WebSocket query parameter (less secure; useful for some clients). | (unset) |
 | `MILADY_PAIRING_DISABLED` | When set to `1`, disables the pairing endpoint on the API server (requires `MILADY_API_TOKEN` to be set). | (unset) |
 | `MILADY_ALLOWED_ORIGINS` | Comma-separated list of additional CORS origins allowed by the API server. | (unset) |
 | `MILADY_ALLOW_NULL_ORIGIN` | When set to `1`, allows the `null` origin in CORS (useful for file:// or desktop clients). | (unset) |
 | `MILADY_WALLET_EXPORT_TOKEN` | Auth token for the wallet export API endpoint. When unset, wallet exports are disabled. | (unset) |
+| `MILADY_DISABLE_AUTO_API_TOKEN` | When set to `1`, disables automatic API token generation when the server binds to a non-loopback address. | (unset) |
 | `API_PORT` / `SERVER_PORT` | Alternative port overrides used by some runtime actions. Prefer `MILADY_PORT`. | (unset) |
+
+---
+
+## Desktop and Dev
+
+These variables configure the desktop shell (Electrobun) and development tooling.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MILADY_RENDERER_URL` | URL the Electrobun shell loads in its webview. Set automatically by `dev:desktop:watch` to the Vite dev server for HMR. | (unset — uses built assets) |
+| `MILADY_DESKTOP_API_BASE` | Override the API base URL the desktop shell connects to. Useful for connecting to a remote backend. | (unset — auto-detected) |
+| `MILADY_DESKTOP_VITE_BUILD_WATCH` | When set to `1`, enables Rollup watch mode alongside `dev:desktop:watch` for continuous rebuilds. | (unset) |
+| `MILADY_DESKTOP_SCREENSHOT_SERVER` | When set to `0`, disables the loopback screenshot proxy (`GET /api/dev/cursor-screenshot`). | (enabled by default) |
+| `MILADY_DESKTOP_DEV_LOG` | When set to `0`, disables the aggregated desktop dev console log (`.milady/desktop-dev-console.log`). | (enabled by default) |
+| `MILADY_AGENT_RECLAIM_STALE_PORT` | When set to `1`, the packaged desktop shell reclaims a stale default port instead of picking the next free one. | (unset — picks next free port) |
+| `MILADY_VITE_FORCE` | When set to `1`, forces Vite dependency pre-bundling to re-run (equivalent to `--force`). Useful after patching deps. | (unset) |
+| `MILADY_NO_VISION_DEPS` | When set to `1`, skips installation of optional vision dependencies (camera/fswebcam) during postinstall. | `0` |
+| `SKIP_AVATAR_CLONE` | When set to `1`, skips VRM avatar download during install. | `0` |
+
+---
+
+## Prompt and Debug
+
+These variables control prompt optimization and debug tracing.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MILADY_PROMPT_TRACE` | When set to `1`, logs prompt compaction statistics to the console. | `0` |
+| `MILADY_CAPTURE_PROMPTS` | When set to `1`, dumps raw prompts to `.tmp/prompt-captures/` (dev-only, contains user messages). | `0` |
+| `MILADY_ACTION_COMPACTION` | Enable context-aware action parameter stripping. | `1` (enabled) |
+| `MILADY_PROMPT_OPT_MODE` | Prompt optimization mode: `baseline` or `compact`. | `baseline` |
 
 ---
 
@@ -146,6 +181,20 @@ These variables override the default model selections used by the runtime.
 
 ---
 
+## Cloud Feature Toggles
+
+These variables selectively disable cloud-backed features. Useful in air-gapped or privacy-sensitive deployments.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MILADY_DISABLE_LOCAL_EMBEDDINGS` | When set to `1`, disables local embeddings and falls back to cloud. Alias: `ELIZA_DISABLE_LOCAL_EMBEDDINGS`. | (unset) |
+| `MILADY_CLOUD_EMBEDDINGS_DISABLED` | When set to `1`, disables cloud-backed embeddings. Alias: `ELIZA_CLOUD_EMBEDDINGS_DISABLED`. | (unset) |
+| `MILADY_CLOUD_TTS_DISABLED` | When set to `1`, disables cloud TTS. Alias: `ELIZA_CLOUD_TTS_DISABLED`. | (unset) |
+| `MILADY_CLOUD_MEDIA_DISABLED` | When set to `1`, disables cloud media generation. Alias: `ELIZA_CLOUD_MEDIA_DISABLED`. | (unset) |
+| `MILADY_CLOUD_RPC_DISABLED` | When set to `1`, disables cloud RPC calls. Alias: `ELIZA_CLOUD_RPC_DISABLED`. | (unset) |
+
+---
+
 ## Local Embedding
 
 These variables configure local embedding model inference. Only relevant when using local embeddings instead of a cloud provider.
@@ -170,7 +219,9 @@ These variables control elizaOS runtime initialization behavior.
 | `ELIZA_ALLOW_DESTRUCTIVE_MIGRATIONS` | Allow destructive database migrations on startup. Automatically set to `true` by Milady. | `true` (set by Milady) |
 | `ELIZA_CONFIG_PATH` | **Deprecated.** Legacy alias for `MILADY_CONFIG_PATH`. Recognized as a fallback when `MILADY_CONFIG_PATH` is not set. Prefer `MILADY_CONFIG_PATH`. | `~/.milady/milady.json` |
 | `MILADY_DISABLE_WORKSPACE_PLUGIN_OVERRIDES` | When set to `1`, disables loading plugin overrides from workspace directories. | (unset) |
+| `MILADY_DISABLE_PLUGIN_MANAGER_AUTO_ENABLE` | When set to `1`, disables auto-enable of the plugin manager plugin. | (unset) |
 | `MILADY_BUNDLED_VERSION` | Override the bundled version string returned by the version resolver. Used in special packaging scenarios. | (unset) |
+| `ELIZA_SKIP_LOCAL_ELIZA` | When set to `1`, skips local Eliza workspace linking and uses only npm-published `@elizaos/*` packages. | `0` |
 | `MILADY_DISABLE_EDGE_TTS` | When set to `1`, `true`, or `yes`, Milady does **not** auto-load `@elizaos/plugin-edge-tts` when `@elizaos/plugin-agent-orchestrator` is enabled (orchestrator-driven flows use `TEXT_TO_SPEECH`). Without this, the bundled `node-edge-tts` client **contacts Microsoft’s Edge TTS cloud service** even though no API key is required—there is still an outbound network call to Microsoft. To opt out while keeping other plugins: set this variable, or set `plugins.entries["edge-tts"].enabled` to `false` in `milady.json`. Alias: `ELIZA_DISABLE_EDGE_TTS`. | (unset — Edge TTS is auto-loaded with the agent orchestrator) |
 
 ---
@@ -230,8 +281,10 @@ These variables configure blockchain wallet keys used by wallet plugins.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `EVM_PRIVATE_KEY` | Private key for EVM-compatible chains (Ethereum, Polygon, etc.). | (unset) |
+| `EVM_PRIVATE_KEY` | Private key for EVM-compatible chains (Ethereum, BSC, Polygon, etc.). | (unset) |
 | `SOLANA_PRIVATE_KEY` | Private key for the Solana blockchain. | (unset) |
+| `STEWARD_API_URL` | Steward wallet service API URL. When set, auto-enables the `@stwd/eliza-plugin` wallet plugin. | (unset) |
+| `ELIZA_TRADE_PERMISSION_MODE` | Trade permission mode: `agent` (autonomous) or `user` (manual confirm). | (unset) |
 
 ---
 
