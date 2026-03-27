@@ -1,3 +1,4 @@
+// Agent implementation workflow validated — this comment was added automatically.
 /**
  * Validates CI workflow conventions identified in the workflow audit.
  * Guards against regression of fixes: BUN_VERSION consistency, concurrency
