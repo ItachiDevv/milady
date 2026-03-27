@@ -50,6 +50,7 @@ vi.mock("@miladyai/app-core/state", () => ({
   useApp: () => mockUseApp(),
 }));
 
+import * as electrobunRpc from "../../src/bridge/electrobun-rpc";
 import {
   AppsView,
   shouldShowAppInAppsView,
@@ -461,14 +462,19 @@ describe("AppsView", () => {
         viewer: null,
       }),
     );
-    Object.defineProperty(window, "__MILADY_ELECTROBUN_RPC__", {
-      configurable: true,
-      writable: true,
-      value: {
-        request: { desktopOpenExternal: request },
-        onMessage: vi.fn(),
-        offMessage: vi.fn(),
+    vi.spyOn(electrobunRpc, "invokeDesktopBridgeRequest").mockImplementation(
+      async (opts: any) => {
+        if (opts.rpcMethod === "desktopOpenExternal") {
+          request(opts.params);
+          return undefined as any;
+        }
+        return null;
       },
+    );
+    vi.spyOn(electrobunRpc, "getElectrobunRendererRpc").mockReturnValue({
+      request: { desktopOpenExternal: request },
+      onMessage: vi.fn(),
+      offMessage: vi.fn(),
     });
     const popupSpy = vi.spyOn(window, "open");
 
