@@ -98,7 +98,7 @@ export function SourceBar() {
         <button
           type="button"
           onClick={() => setShowAddRemote(true)}
-          className="font-mono text-[11px] text-text-subtle hover:text-text-light transition-colors"
+          className="px-2.5 py-1 font-mono text-[11px] text-text-light border border-border hover:border-brand/40 hover:text-brand transition-colors"
         >
           + connect
         </button>
