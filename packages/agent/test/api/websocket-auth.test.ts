@@ -30,6 +30,29 @@ describe("resolveWebSocketUpgradeRejection", () => {
     expect(result).toEqual({ status: 401, reason: "Unauthorized" });
   });
 
+  it("rejects websocket upgrades for steward-managed cloud containers without a configured token", () => {
+    process.env.MILADY_CLOUD_PROVISIONED = "1";
+    process.env.STEWARD_AGENT_TOKEN = "steward-token";
+
+    const request = { headers: {} } as http.IncomingMessage;
+    const result = resolveWebSocketUpgradeRejection(
+      request,
+      new URL("ws://127.0.0.1/ws"),
+    );
+
+    expect(result).toEqual({ status: 401, reason: "Unauthorized" });
+  });
+
+  it("preserves anonymous websocket upgrades for non-cloud sessions without a configured token", () => {
+    const request = { headers: {} } as http.IncomingMessage;
+    const result = resolveWebSocketUpgradeRejection(
+      request,
+      new URL("ws://127.0.0.1/ws"),
+    );
+
+    expect(result).toBeNull();
+  });
+
   it("does not bypass websocket auth for steward-managed cloud containers", () => {
     process.env.MILADY_CLOUD_PROVISIONED = "1";
     process.env.STEWARD_AGENT_TOKEN = "steward-token";
