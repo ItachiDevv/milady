@@ -307,9 +307,9 @@ describe("AgentDetail", () => {
         connectionId="local-default"
       />,
     );
-    // New design uses uppercase labels: STATUS, MODEL
-    expect(container.textContent).toContain("STATUS");
-    expect(container.textContent).toContain("MODEL");
+    // Overview shows runtime section with model, uptime, etc.
+    expect(container.textContent).toContain("model");
+    expect(container.textContent).toContain("uptime");
   });
 
   it("shows agent name in header", () => {

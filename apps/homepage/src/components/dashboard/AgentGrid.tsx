@@ -37,16 +37,16 @@ export function AgentGrid() {
       if (!agent) return;
       const verb =
         action === "play"
-          ? "Starting"
+          ? "starting"
           : action === "resume"
-            ? "Resuming"
+            ? "resuming"
             : action === "pause"
-              ? "Pausing"
-              : "Stopping";
+              ? "pausing"
+              : "stopping";
       setActionBusyId(agentId);
       setActionNotice({
         tone: "info",
-        text: `${verb} ${agent.name}...`,
+        text: `${verb} ${agent.name}\u2026`,
         busy: true,
       });
       try {
@@ -69,13 +69,13 @@ export function AgentGrid() {
         await refresh();
         setActionNotice({
           tone: "success",
-          text: `${agent.name} ${action === "pause" ? "paused" : action === "stop" ? "stopped" : "updated"} successfully.`,
+          text: `${agent.name} ${action === "pause" ? "paused" : action === "stop" ? "stopped" : "started"}`,
         });
       } catch (err) {
         console.error(`Failed to ${action} agent:`, err);
         setActionNotice({
           tone: "error",
-          text: `${agent.name}: ${err instanceof Error ? err.message : `Failed to ${action} agent.`}`,
+          text: `${agent.name}: ${err instanceof Error ? err.message : `failed to ${action}`}`,
         });
       } finally {
         setActionBusyId((current) => (current === agentId ? null : current));
@@ -95,21 +95,18 @@ export function AgentGrid() {
     return agent.sourceUrl;
   }, []);
 
-  // Loading skeleton
+  // Loading skeleton — minimal shimmer blocks
   if (loading) {
     return (
       <div className="space-y-6 animate-[fade-up_0.4s_ease-out_both]">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <div className="h-6 w-28 bg-surface animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%]" />
-            <div className="h-4 w-44 bg-surface animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%] mt-2" />
-          </div>
-          <div className="h-10 w-28 bg-surface animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%]" />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="h-5 w-32 bg-surface animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%]" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {[1, 2, 3].map((i) => (
-            <AgentCardSkeleton key={i} delay={i * 60} />
+            <div
+              key={i}
+              className="h-32 border-l-2 border-l-text-muted/20 border border-border border-l-0 bg-surface animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%] animate-[fade-up_0.4s_ease-out_both]"
+              style={{ animationDelay: `${i * 60}ms` }}
+            />
           ))}
         </div>
       </div>
@@ -117,145 +114,108 @@ export function AgentGrid() {
   }
 
   const selected = selectedId ? agents.find((a) => a.id === selectedId) : null;
+  const liveCount = agents.filter(
+    (a) => a.status === "running" || a.status === "provisioning",
+  ).length;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="font-mono text-lg font-medium text-text-light tracking-wide">
-            AGENTS
-          </h2>
-          <p className="font-mono text-xs text-text-muted mt-1 tracking-wide">
-            {agents.length === 0
-              ? "No agents discovered"
-              : `${agents.length} agent${agents.length !== 1 ? "s" : ""} across all sources`}
-          </p>
+    <div className="space-y-5">
+      {/* Header — operational, inline counts */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-baseline gap-2">
+          {agents.length > 0 ? (
+            <h2 className="text-sm text-text-light">
+              <span className="font-mono tabular-nums">{agents.length}</span>
+              {" agent"}
+              {agents.length !== 1 ? "s" : ""}
+              {liveCount > 0 && (
+                <span className="text-text-muted">
+                  {" \u00B7 "}
+                  <span className="font-mono tabular-nums text-emerald-400">
+                    {liveCount}
+                  </span>
+                  {" live"}
+                </span>
+              )}
+            </h2>
+          ) : (
+            <h2 className="text-sm text-text-muted">agents</h2>
+          )}
+          {(isRefreshing || isCreating) && agents.length > 0 && (
+            <span className="text-[10px] font-mono text-text-subtle animate-pulse">
+              {isCreating ? "creating\u2026" : "syncing\u2026"}
+            </span>
+          )}
         </div>
         {!showCreate && (
           <Button
             type="button"
             onClick={() => setShowCreate(true)}
-            className="h-11 w-full rounded-xl border-brand/70 bg-brand text-dark font-mono text-xs font-semibold uppercase tracking-[0.18em] shadow-[0_16px_40px_rgba(240,185,11,0.16)] hover:border-brand hover:bg-brand-hover sm:w-auto"
+            className="h-9 px-4 bg-brand text-dark font-mono text-[11px] font-semibold tracking-wide
+              hover:bg-brand-hover transition-colors sm:w-auto"
           >
-            + New Agent
+            + new agent
           </Button>
         )}
       </div>
 
-      {/* Error banner */}
+      {/* Inline status notices */}
       {error && (
         <div
-          className="flex items-center justify-between gap-4 px-4 py-3 
-          border border-red-500/30 bg-red-500/5 animate-[fade-up_0.4s_ease-out_both]"
+          className="flex items-center gap-3 text-xs font-mono"
           role="alert"
           aria-live="assertive"
         >
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-red-500" />
-            <span className="font-mono text-xs text-red-400">{error}</span>
-          </div>
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+          <span className="text-red-400 truncate">{error}</span>
           <button
             type="button"
             onClick={clearError}
-            className="text-red-400/60 hover:text-red-400 transition-colors p-1"
+            className="text-red-400/50 hover:text-red-400 transition-colors ml-auto flex-shrink-0"
             aria-label="Dismiss error"
           >
-            <svg
-              aria-hidden="true"
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            \u00D7
           </button>
         </div>
       )}
 
       {actionNotice && (
         <div
-          className={`flex items-start justify-between gap-4 px-4 py-3 border animate-[fade-up_0.4s_ease-out_both] ${
-            actionNotice.tone === "error"
-              ? "border-red-500/30 bg-red-500/5 text-red-300"
-              : actionNotice.tone === "success"
-                ? "border-emerald-500/30 bg-emerald-500/5 text-emerald-300"
-                : "border-brand/30 bg-brand/8 text-text-light"
-          }`}
+          className="flex items-center gap-3 text-xs font-mono"
           role={actionNotice.tone === "error" ? "alert" : "status"}
           aria-live={actionNotice.tone === "error" ? "assertive" : "polite"}
           aria-busy={actionNotice.busy ? true : undefined}
         >
-          <div className="flex items-center gap-3">
-            <span
-              className={`mt-1 h-2 w-2 shrink-0 rounded-full ${
-                actionNotice.tone === "error"
-                  ? "bg-red-400"
-                  : actionNotice.tone === "success"
-                    ? "bg-emerald-400"
-                    : "bg-brand"
-              }`}
-            />
-            <span className="font-mono text-xs leading-relaxed">
-              {actionNotice.text}
-            </span>
-          </div>
-          {!actionNotice.busy ? (
+          <span
+            className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+              actionNotice.tone === "error"
+                ? "bg-red-400"
+                : actionNotice.tone === "success"
+                  ? "bg-emerald-400"
+                  : "bg-brand animate-pulse"
+            }`}
+          />
+          <span
+            className={
+              actionNotice.tone === "error"
+                ? "text-red-400"
+                : actionNotice.tone === "success"
+                  ? "text-emerald-400"
+                  : "text-text-light"
+            }
+          >
+            {actionNotice.text}
+          </span>
+          {!actionNotice.busy && (
             <button
               type="button"
               onClick={() => setActionNotice(null)}
-              className="rounded-md p-1 text-current/70 transition-colors hover:text-current"
+              className="text-text-subtle hover:text-text-light transition-colors ml-auto"
               aria-label="Dismiss action notice"
             >
-              <svg
-                aria-hidden="true"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              \u00D7
             </button>
-          ) : null}
-        </div>
-      )}
-
-      {/* Refreshing indicator */}
-      {(isRefreshing || isCreating) && agents.length > 0 && (
-        <div className="flex items-center gap-2 font-mono text-[10px] text-text-subtle animate-[fade-up_0.4s_ease-out_both]">
-          <svg
-            aria-hidden="true"
-            className="w-3 h-3 animate-spin"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
-          {isCreating ? "CREATING AGENT..." : "SYNCING..."}
+          )}
         </div>
       )}
 
@@ -277,7 +237,7 @@ export function AgentGrid() {
       {agents.length === 0 && !showCreate ? (
         <EmptyState onCreateClick={() => setShowCreate(true)} />
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {agents.map((agent, i) => (
             <div
               key={agent.id}
@@ -288,18 +248,21 @@ export function AgentGrid() {
                 agent={{
                   agentName: agent.name,
                   state: agent.status,
-                  model: agent.model ?? "—",
+                  model: agent.model ?? "\u2014",
                   uptime: agent.uptime,
                   memories: agent.memories,
                 }}
                 source={agent.source}
+                connectorHealth={agent.connectorHealth}
                 sourceUrl={agent.sourceUrl}
                 webUiUrl={getWebUIUrl(agent)}
                 nodeId={agent.nodeId}
                 lastHeartbeat={agent.lastHeartbeat}
                 billing={agent.billing}
                 createdAt={agent.createdAt}
+                updatedAt={agent.updatedAt}
                 region={agent.region}
+                tokens={agent.tokens}
                 onPlay={() => handleAction(agent.id, "play")}
                 onResume={() => handleAction(agent.id, "resume")}
                 onPause={() => handleAction(agent.id, "pause")}
@@ -332,7 +295,7 @@ export function AgentGrid() {
             agent={{
               agentName: selected.name,
               state: selected.status,
-              model: selected.model ?? "—",
+              model: selected.model ?? "\u2014",
               uptime: selected.uptime,
               memories: selected.memories,
             }}
@@ -346,155 +309,61 @@ export function AgentGrid() {
   );
 }
 
-/** Skeleton matching AgentCard layout */
-function AgentCardSkeleton({ delay = 0 }: { delay?: number }) {
-  return (
-    <div
-      className="border border-border bg-surface animate-[fade-up_0.4s_ease-out_both]"
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      {/* Left accent */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-text-muted/20" />
-
-      <div className="p-4 pb-0">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-surface-elevated animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%]" />
-          <div className="flex-1">
-            <div className="h-4 w-28 bg-surface-elevated animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%]" />
-            <div className="h-3 w-20 bg-surface-elevated animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%] mt-1.5" />
-          </div>
-          <div className="h-7 w-16 bg-surface-elevated animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%]" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-4 gap-px mt-4 bg-border-subtle">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-surface px-3 py-2.5">
-            <div className="h-2 w-8 bg-surface-elevated animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%] mb-1" />
-            <div className="h-4 w-10 bg-surface-elevated animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%]" />
-          </div>
-        ))}
-      </div>
-
-      <div className="flex items-center justify-between gap-2 p-3 bg-dark-secondary/50">
-        <div className="h-7 w-16 bg-surface-elevated animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%]" />
-        <div className="h-7 w-20 bg-surface-elevated animate-[shimmer_1.8s_ease-in-out_infinite] bg-[linear-gradient(90deg,var(--color-surface)_0%,var(--color-surface-elevated)_40%,var(--color-surface)_80%)] bg-[length:200%_100%]" />
-      </div>
-    </div>
-  );
-}
-
 function EmptyState({ onCreateClick }: { onCreateClick: () => void }) {
   const { isAuthenticated: authed } = useAuth();
 
   return (
-    <div className="border border-border bg-surface animate-[fade-up_0.4s_ease-out_both]">
-      {/* Terminal header */}
-      <div className="px-4 py-2.5 bg-dark-secondary border-b border-border">
-        <span className="font-mono text-xs text-text-muted">
-          $ milady agents --list
+    <div className="py-12 animate-[fade-up_0.4s_ease-out_both]">
+      <h3 className="font-mono text-sm text-text-light mb-2">
+        NO AGENTS FOUND
+      </h3>
+      <p className="text-xs text-text-muted max-w-md leading-relaxed mb-6">
+        {authed
+          ? "start milady locally or deploy a cloud agent."
+          : "start milady locally to see agents here, or sign in for cloud hosting."}
+      </p>
+
+      {/* Pricing — single inline row, not a grid */}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8 text-xs font-mono">
+        <span>
+          <span className="text-text-subtle">RUNNING</span>{" "}
+          <span className="text-brand tabular-nums">
+            {PRICE_RUNNING_PER_HR}/hr
+          </span>
+        </span>
+        <span>
+          <span className="text-text-subtle">IDLE</span>{" "}
+          <span className="text-text-light tabular-nums">
+            {PRICE_IDLE_PER_HR}/hr
+          </span>
+        </span>
+        <span>
+          <span className="text-text-subtle">MIN. DEPOSIT</span>{" "}
+          <span className="text-text-light tabular-nums">
+            {MIN_DEPOSIT_DISPLAY}
+          </span>
         </span>
       </div>
 
-      <div className="p-8 text-center">
-        {/* Decorative agent preview */}
-        <div className="max-w-sm mx-auto mb-8">
-          <div className="border border-border-subtle bg-dark-secondary/30 p-4">
-            <div className="flex items-start gap-4 opacity-30">
-              <div className="w-12 h-12 border border-text-muted/20 bg-surface flex items-center justify-center">
-                <span className="font-mono text-sm text-text-muted">??</span>
-              </div>
-              <div className="flex-1 text-left">
-                <div className="h-4 w-24 bg-text-muted/10 mb-2" />
-                <div className="h-3 w-16 bg-text-muted/10" />
-              </div>
-              <div className="h-6 w-16 bg-text-muted/10" />
-            </div>
-            <div className="grid grid-cols-4 gap-2 mt-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-surface/50 p-2">
-                  <div className="h-2 w-6 bg-text-muted/10 mb-1" />
-                  <div className="h-3 w-8 bg-text-muted/10" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <h3 className="font-mono text-sm text-text-light mb-2">
-          NO AGENTS FOUND
-        </h3>
-        <p className="font-mono text-xs text-text-muted max-w-sm mx-auto leading-relaxed mb-4">
-          Start Milady locally to see your agents here.
-          <br />
-          {authed ? (
-            "Or create a cloud agent for hosted infrastructure."
-          ) : (
-            <>
-              Start Milady locally to see your agents here.
-              <br />
-              Sign in to Eliza Cloud for hosted options.
-            </>
-          )}
-        </p>
-
-        {/* Pricing preview */}
-        <div className="max-w-xs mx-auto mb-6">
-          <div className="grid grid-cols-3 gap-px bg-border-subtle text-center">
-            <div className="bg-dark-secondary/50 px-3 py-2.5">
-              <p className="font-mono text-[9px] tracking-wider text-text-subtle mb-1">
-                RUNNING
-              </p>
-              <p className="font-mono text-xs font-semibold text-brand tabular-nums">
-                {PRICE_RUNNING_PER_HR}/hr
-              </p>
-            </div>
-            <div className="bg-dark-secondary/50 px-3 py-2.5">
-              <p className="font-mono text-[9px] tracking-wider text-text-subtle mb-1">
-                IDLE
-              </p>
-              <p className="font-mono text-xs font-semibold text-text-light tabular-nums">
-                {PRICE_IDLE_PER_HR}/hr
-              </p>
-            </div>
-            <div className="bg-dark-secondary/50 px-3 py-2.5">
-              <p className="font-mono text-[9px] tracking-wider text-text-subtle mb-1">
-                MIN. DEPOSIT
-              </p>
-              <p className="font-mono text-xs font-semibold text-text-light tabular-nums">
-                {MIN_DEPOSIT_DISPLAY}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <a
-            href="/#install"
-            className="flex items-center justify-center gap-2 px-5 py-2.5 
-              bg-brand text-dark font-mono text-xs font-semibold tracking-wide
-              hover:bg-brand-hover transition-all duration-150"
-          >
-            DOWNLOAD APP
-          </a>
-          <button
-            type="button"
-            onClick={onCreateClick}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 
-              border border-border text-text-muted font-mono text-xs tracking-wide
-              hover:text-text-light hover:border-text-muted hover:bg-surface 
-              transition-all duration-150"
-          >
-            + CREATE CLOUD AGENT
-          </button>
-        </div>
-      </div>
-
-      {/* Bottom hint */}
-      <div className="px-4 py-2 bg-dark-secondary border-t border-border">
-        <span className="font-mono text-[10px] text-text-subtle">
-          TIP: Use the Connect button to add a remote agent URL
-        </span>
+      <div className="flex flex-wrap items-center gap-3">
+        <a
+          href="/#install"
+          className="inline-flex items-center px-4 py-2
+            bg-brand text-dark font-mono text-[11px] font-semibold tracking-wide
+            hover:bg-brand-hover transition-colors"
+        >
+          DOWNLOAD APP
+        </a>
+        <button
+          type="button"
+          onClick={onCreateClick}
+          className="inline-flex items-center px-4 py-2
+            text-text-muted font-mono text-[11px] tracking-wide
+            border border-border hover:text-text-light hover:border-text-muted
+            transition-colors"
+        >
+          + CREATE CLOUD AGENT
+        </button>
       </div>
     </div>
   );

@@ -8,6 +8,8 @@ const SECTIONS = [
   { id: "metrics", label: "Metrics", shortcut: "2", requiresAgents: true },
   { id: "logs", label: "Logs", shortcut: "3", requiresAgents: true },
   { id: "credits", label: "Credits", shortcut: "4", requiresAuth: true },
+  { id: "wallet", label: "Wallet", shortcut: "5", requiresAgents: true },
+  { id: "connectors", label: "Connectors", shortcut: "6", requiresAgents: true },
 ] as const;
 
 export type DashboardSection = (typeof SECTIONS)[number]["id"] | "billing";
@@ -41,41 +43,45 @@ export function Sidebar({ active, onChange }: SidebarProps) {
       .catch(() => setCredits(null));
   }, [authed, token]);
 
+  const fleetLabel =
+    agents.length === 0
+      ? "no agents"
+      : `${agents.length} agent${agents.length !== 1 ? "s" : ""}`;
+
+  const connectionLabel = authed ? "cloud connected" : "local only";
+
   return (
     <>
       {/* Desktop sidebar */}
       <aside className="hidden md:flex flex-col w-52 border-r border-border flex-shrink-0 bg-dark-secondary">
-        {/* Brand header */}
+        {/* Identity block */}
         <div className="px-4 py-4 border-b border-border">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-brand/10 border border-brand/20 flex items-center justify-center">
-              <span className="font-mono text-brand text-sm font-bold">M</span>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-baseline gap-2">
+              <span className="font-mono text-sm font-medium text-text-light">
+                milady
+              </span>
+              <span className="font-mono text-[11px] text-text-subtle tabular-nums">
+                {fleetLabel}
+              </span>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="font-mono text-xs font-medium text-text-light tracking-wide">
-                MILADY
-              </p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    authed
-                      ? "bg-emerald-400 animate-[status-pulse_2s_ease-in-out_infinite]"
-                      : "bg-text-muted/40"
-                  }`}
-                />
-                <span className="font-mono text-[10px] text-text-subtle tracking-wide">
-                  {authed ? "CLOUD CONNECTED" : "LOCAL MODE"}
-                </span>
-              </div>
+            <div className="flex items-center gap-1.5">
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  authed
+                    ? "bg-emerald-400"
+                    : "bg-text-muted/40"
+                }`}
+              />
+              <span className="font-mono text-[10px] text-text-subtle">
+                {connectionLabel}
+              </span>
             </div>
           </div>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 py-4 px-2">
-          <p className="px-2 mb-3 font-mono text-[9px] font-medium text-text-subtle tracking-[0.15em]">
-            WORKSPACE
-          </p>
           <div className="space-y-0.5">
             {visibleSections.map((s) => (
               <button
@@ -105,38 +111,20 @@ export function Sidebar({ active, onChange }: SidebarProps) {
           </div>
         </nav>
 
-        {/* Footer: Credits + Sign out */}
+        {/* Footer */}
         <div className="border-t border-border">
-          {/* Credit balance */}
+          {/* Credit balance — compact, glanceable */}
           {authed && (
             <button
               type="button"
               onClick={() => onChange("credits")}
-              className="w-full flex items-center gap-3 px-4 py-3 
+              className="w-full flex items-center gap-2 px-4 py-2.5 
                 hover:bg-surface/50 transition-all duration-150"
             >
-              <div className="flex-1 text-left">
-                <p className="font-mono text-[9px] tracking-[0.15em] text-text-subtle mb-0.5">
-                  BALANCE
-                </p>
-                <p className="font-mono text-lg font-semibold text-brand tabular-nums">
-                  {credits?.balance?.toLocaleString() ?? "—"}
-                </p>
-              </div>
-              <svg
-                aria-hidden="true"
-                className="w-3.5 h-3.5 text-text-subtle"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              <span className="font-mono text-[10px] text-text-subtle">bal</span>
+              <span className="font-mono text-sm text-text-light tabular-nums">
+                {credits?.balance?.toLocaleString() ?? "—"}
+              </span>
             </button>
           )}
 
@@ -145,25 +133,11 @@ export function Sidebar({ active, onChange }: SidebarProps) {
             <button
               type="button"
               onClick={() => signOut()}
-              className="w-full flex items-center gap-2 px-4 py-3 
-                font-mono text-[11px] text-text-subtle hover:text-red-400 
+              className="w-full flex items-center gap-2 px-4 py-2.5 
+                font-mono text-[10px] text-text-subtle hover:text-red-400 
                 border-t border-border-subtle transition-colors"
             >
-              <svg
-                aria-hidden="true"
-                className="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
-              SIGN OUT
+              sign out
             </button>
           )}
         </div>
@@ -188,7 +162,7 @@ export function Sidebar({ active, onChange }: SidebarProps) {
             </button>
           ))}
           {authed && credits && (
-            <span className="flex-shrink-0 ml-auto px-2.5 py-1.5 font-mono text-xs text-brand tabular-nums">
+            <span className="flex-shrink-0 ml-auto px-2.5 py-1.5 font-mono text-xs text-text-subtle tabular-nums">
               {credits.balance?.toLocaleString()}
             </span>
           )}
@@ -196,9 +170,9 @@ export function Sidebar({ active, onChange }: SidebarProps) {
             <button
               type="button"
               onClick={() => signOut()}
-              className="flex-shrink-0 px-3 py-2 font-mono text-[11px] text-text-subtle hover:text-red-400 transition-colors"
+              className="flex-shrink-0 px-3 py-2 font-mono text-[10px] text-text-subtle hover:text-red-400 transition-colors"
             >
-              EXIT
+              exit
             </button>
           )}
         </div>

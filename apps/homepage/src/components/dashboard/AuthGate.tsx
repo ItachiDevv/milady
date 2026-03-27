@@ -4,6 +4,10 @@ interface CloudLoginBannerProps {
   onAuthenticated?: () => void;
 }
 
+/**
+ * Inline auth prompt — single-line banner, not a bordered box.
+ * Renders as a subtle strip below the SourceBar when unauthenticated.
+ */
 export function CloudLoginBanner({ onAuthenticated }: CloudLoginBannerProps) {
   const { state, error, manualLoginUrl, signIn } = useCloudLogin({
     onAuthenticated,
@@ -12,35 +16,31 @@ export function CloudLoginBanner({ onAuthenticated }: CloudLoginBannerProps) {
   if (state === "authenticated") return null;
 
   return (
-    <div className="mx-4 sm:mx-5 md:mx-8 mt-4 rounded-sm border border-border bg-surface p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-text-light">
-          Sign in to Eliza Cloud
-        </p>
-        <p className="text-xs text-text-muted mt-0.5">
-          Connect your cloud account to manage remote agents and access premium
-          features.
-        </p>
-        {error && <p className="text-xs text-red-400 mt-1">{error}</p>}
-        {manualLoginUrl && (
-          <a
-            href={manualLoginUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-brand hover:underline mt-1 inline-block"
-          >
-            Open sign-in page manually
-          </a>
-        )}
-      </div>
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 sm:px-5 md:px-8 py-1.5 border-b border-border-subtle text-[11px] font-mono">
+      <span className="text-text-subtle">
+        sign in for cloud agents
+      </span>
       <button
         type="button"
         onClick={() => void signIn()}
         disabled={state === "polling" || state === "checking"}
-        className="shrink-0 px-4 py-2 text-sm font-medium rounded-sm bg-brand text-text-dark hover:bg-brand-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
+        className="text-brand hover:text-brand-hover disabled:text-text-muted disabled:cursor-not-allowed transition-colors"
       >
-        {state === "polling" ? "Waiting..." : "Sign In"}
+        {state === "polling" ? "waiting…" : "sign in →"}
       </button>
+      {error && (
+        <span className="text-red-400">{error}</span>
+      )}
+      {manualLoginUrl && (
+        <a
+          href={manualLoginUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-text-subtle hover:text-text-light underline underline-offset-2"
+        >
+          open manually
+        </a>
+      )}
     </div>
   );
 }

@@ -2,9 +2,14 @@ import type { AgentSource } from "../../lib/AgentProvider";
 import type { AgentStatus } from "../../lib/cloud-api";
 import { formatUptime } from "../../lib/format";
 
+interface ConnectorHealth {
+  [key: string]: string;
+}
+
 interface AgentCardProps {
   agent: AgentStatus;
   source: AgentSource;
+  connectorHealth?: ConnectorHealth;
   detailsId?: string;
   sourceUrl?: string;
   webUiUrl?: string;
@@ -17,7 +22,9 @@ interface AgentCardProps {
     currency?: string;
   };
   createdAt?: string;
+  updatedAt?: string;
   region?: string;
+  tokens?: { used: number; limit: number };
   onPlay: () => void;
   onResume: () => void;
   onPause: () => void;
@@ -30,53 +37,56 @@ interface AgentCardProps {
 
 const STATE_CONFIG: Record<
   string,
-  { color: string; bg: string; bgLight: string; label: string; border: string }
+  {
+    dot: string;
+    color: string;
+    label: string;
+    accent: string;
+    muted: boolean;
+    pulse: boolean;
+  }
 > = {
   running: {
+    dot: "bg-emerald-500",
     color: "text-emerald-400",
-    bg: "bg-emerald-500",
-    bgLight: "bg-emerald-500/10",
-    border: "border-emerald-500/20",
-    label: "LIVE",
+    label: "live",
+    accent: "border-l-emerald-500",
+    muted: false,
+    pulse: true,
   },
   paused: {
+    dot: "bg-brand",
     color: "text-brand",
-    bg: "bg-brand",
-    bgLight: "bg-brand/10",
-    border: "border-brand/20",
-    label: "PAUSED",
+    label: "paused",
+    accent: "border-l-brand",
+    muted: false,
+    pulse: false,
   },
   stopped: {
-    color: "text-red-400",
-    bg: "bg-red-500",
-    bgLight: "bg-red-500/10",
-    border: "border-red-500/20",
-    label: "STOPPED",
+    dot: "bg-text-muted/50",
+    color: "text-text-subtle",
+    label: "stopped",
+    accent: "border-l-text-muted/30",
+    muted: true,
+    pulse: false,
   },
   provisioning: {
+    dot: "bg-brand",
     color: "text-brand",
-    bg: "bg-brand",
-    bgLight: "bg-brand/10",
-    border: "border-brand/20",
-    label: "STARTING",
+    label: "provisioning\u2026",
+    accent: "border-l-brand",
+    muted: false,
+    pulse: true,
   },
   unknown: {
+    dot: "bg-text-muted/40",
     color: "text-text-muted",
-    bg: "bg-text-muted",
-    bgLight: "bg-text-muted/10",
-    border: "border-text-muted/20",
-    label: "OFFLINE",
+    label: "offline",
+    accent: "border-l-text-muted/20",
+    muted: true,
+    pulse: false,
   },
 };
-
-/** Generate initials from agent name */
-function getInitials(name: string): string {
-  const words = name.trim().split(/[\s_-]+/);
-  if (words.length === 1) {
-    return words[0].slice(0, 2).toUpperCase();
-  }
-  return (words[0][0] + words[1][0]).toUpperCase();
-}
 
 const SOURCE_ICON: Record<string, string> = {
   cloud: "\u2601",
@@ -84,16 +94,22 @@ const SOURCE_ICON: Record<string, string> = {
   remote: "\u2B21",
 };
 
+const SOURCE_LABEL: Record<string, string> = {
+  cloud: "cloud",
+  local: "local",
+  remote: "remote",
+};
+
 function formatRelativeTime(isoString?: string): string {
   if (!isoString) return "";
   const diff = Date.now() - new Date(isoString).getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return "now";
-  if (mins < 60) return `${mins}m`;
+  if (mins < 60) return `${mins}m ago`;
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h`;
+  if (hours < 24) return `${hours}h ago`;
   const days = Math.floor(hours / 24);
-  return `${days}d`;
+  return `${days}d ago`;
 }
 
 function stopProp(handler: () => void) {
@@ -145,6 +161,7 @@ function StopIcon() {
 export function AgentCard({
   agent,
   source,
+  connectorHealth,
   detailsId,
   sourceUrl,
   webUiUrl,
@@ -152,7 +169,9 @@ export function AgentCard({
   lastHeartbeat,
   billing,
   createdAt,
+  updatedAt,
   region,
+  tokens,
   onPlay,
   onResume,
   onPause,
@@ -162,182 +181,109 @@ export function AgentCard({
   selected,
   busy = false,
 }: AgentCardProps) {
-  const stateConfig = STATE_CONFIG[agent.state] ?? STATE_CONFIG.unknown;
+  const cfg = STATE_CONFIG[agent.state] ?? STATE_CONFIG.unknown;
   const canOpenUI = agent.state === "running" || source === "cloud";
   const uiUrl = webUiUrl || sourceUrl;
-  const initials = getInitials(agent.agentName);
   const isLive = agent.state === "running";
-  const isProvisioning = agent.state === "provisioning";
+  const isStopped = agent.state === "stopped" || agent.state === "unknown";
+
+  // Hero datum: uptime when running, state label otherwise
+  const heroValue = isLive ? (agent.uptime ? formatUptime(agent.uptime) : "\u2014") : cfg.label;
+  const heroLabel = isLive ? "uptime" : "status";
+
+  // Build supporting facts — what matters operationally
+  const facts: string[] = [];
+  if (agent.model && agent.model !== "\u2014") facts.push(agent.model);
+  if (billing?.costPerHour !== undefined)
+    facts.push(`$${billing.costPerHour.toFixed(2)}/hr`);
+  const hb = formatRelativeTime(lastHeartbeat);
+  if (hb) facts.push(`heartbeat ${hb}`);
+  if (agent.memories !== undefined) facts.push(`${agent.memories} memories`);
+  if (createdAt && !isLive) facts.push(`created ${formatRelativeTime(createdAt)}`);
 
   return (
     <article
-      className={`group relative transition-[box-shadow,border-color,transform] duration-200
-        ${
-          selected ? "ring-1 ring-brand/50" : "hover:ring-1 hover:ring-border"
-        }`}
+      className={`group relative border-l-2 transition-all duration-200
+        ${cfg.accent}
+        ${isStopped ? "opacity-60 hover:opacity-80" : "opacity-100"}
+        ${selected ? "ring-1 ring-brand/50" : "hover:ring-1 hover:ring-border"}`}
     >
-      {/* Status accent bar - left edge */}
       <div
-        className={`absolute left-0 top-0 bottom-0 w-1 transition-all duration-300
-          ${stateConfig.bg} ${isLive || isProvisioning ? "animate-[status-pulse_2s_ease-in-out_infinite]" : ""}`}
-      />
-
-      {/* Card body */}
-      <div
-        className={`bg-surface border border-border ${selected ? "border-brand/30" : ""}`}
+        className={`border border-border border-l-0 ${selected ? "border-brand/30 bg-surface" : "bg-surface"}`}
       >
+        {/* Clickable identity area */}
         <button
           type="button"
           aria-expanded={selected}
           aria-controls={detailsId}
           aria-label={`Open details for ${agent.agentName}`}
           onClick={onSelect}
-          className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
+          className="block w-full text-left p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
         >
-          {/* Header row */}
-          <div className="flex items-start gap-4 p-4 pb-0">
-            {/* Agent avatar - prominent */}
-            <div
-              className={`w-12 h-12 flex items-center justify-center flex-shrink-0
-              ${stateConfig.bgLight} ${stateConfig.border} border`}
+          {/* Identity row: status dot + name + source tag */}
+          <div className="flex items-center gap-2.5 mb-3">
+            <span
+              className={`w-2 h-2 rounded-full flex-shrink-0 ${cfg.dot}
+                ${cfg.pulse ? "animate-[status-pulse_2s_ease-in-out_infinite]" : ""}`}
+            />
+            <h3 className="text-[15px] font-medium text-text-light truncate leading-tight">
+              {agent.agentName}
+            </h3>
+            <span
+              className="text-[10px] font-mono text-text-subtle tracking-wide flex-shrink-0"
+              title={source}
             >
-              <span
-                className={`font-mono text-sm font-semibold ${stateConfig.color}`}
-              >
-                {initials}
-              </span>
-            </div>
-
-            {/* Agent identity */}
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <h3 className="text-[15px] font-medium text-text-light truncate leading-tight">
-                  {agent.agentName}
-                </h3>
-                <span className="text-text-subtle text-xs" title={source}>
-                  {SOURCE_ICON[source]}
-                </span>
-              </div>
-              {agent.model && (
-                <p className="text-xs text-text-muted mt-0.5 font-mono truncate">
-                  {agent.model}
-                </p>
-              )}
-            </div>
-
-            {/* Status badge - prominent */}
-            <div
-              className={`flex items-center gap-2 px-3 py-1.5 flex-shrink-0
-              ${stateConfig.bgLight} ${stateConfig.border} border`}
-            >
-              <span
-                className={`w-2 h-2 rounded-full ${stateConfig.bg}
-                ${isLive || isProvisioning ? "animate-[status-pulse_2s_ease-in-out_infinite]" : ""}`}
-              />
-              <span
-                className={`font-mono text-[11px] font-medium tracking-wide ${stateConfig.color}`}
-              >
-                {stateConfig.label}
-              </span>
-            </div>
+              {SOURCE_ICON[source]} {SOURCE_LABEL[source]}
+            </span>
           </div>
 
-          {/* Stats grid - only show cells with real data */}
-          {(() => {
-            const stats: { label: string; value: string; accent?: boolean }[] =
-              [
-                { label: "UPTIME", value: formatUptime(agent.uptime) },
-                {
-                  label: "MEMORY",
-                  value:
-                    agent.memories !== undefined
-                      ? String(agent.memories)
-                      : "\u2014",
-                },
-              ];
-            const hb = formatRelativeTime(lastHeartbeat);
-            if (hb) {
-              stats.push({ label: "HEARTBEAT", value: hb });
-            }
-            if (billing?.costPerHour !== undefined) {
-              stats.push({
-                label: "COST",
-                value: `$${billing.costPerHour.toFixed(2)}`,
-                accent: true,
-              });
-            }
-            const cols =
-              stats.length <= 2
-                ? "grid-cols-2"
-                : stats.length === 3
-                  ? "grid-cols-3"
-                  : "grid-cols-4";
-            return (
-              <div className={`grid ${cols} gap-px mt-4 bg-border-subtle`}>
-                {stats.map((s) => (
-                  <StatCell
-                    key={s.label}
-                    label={s.label}
-                    value={s.value}
-                    accent={s.accent}
+          {/* Hero datum */}
+          <div className="mb-2">
+            <span
+              className={`text-2xl font-mono tabular-nums tracking-tight ${isLive ? "text-text-light" : cfg.color}`}
+            >
+              {heroValue}
+            </span>
+            <span className="text-[10px] font-mono text-text-subtle ml-2 tracking-wide">
+              {heroLabel}
+            </span>
+          </div>
+
+          {/* Supporting facts — inline, not boxes */}
+          {facts.length > 0 && (
+            <p className="text-xs text-text-muted font-mono truncate">
+              {facts.join(" \u00B7 ")}
+            </p>
+          )}
+
+          {/* Connector health dots */}
+          {connectorHealth && Object.keys(connectorHealth).length > 0 && (
+            <div className="flex items-center gap-3 mt-2">
+              {Object.entries(connectorHealth).map(([name, status]) => (
+                <span
+                  key={name}
+                  className="flex items-center gap-1 font-mono text-[10px] text-text-muted"
+                >
+                  {name}
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      status === "ok"
+                        ? "bg-emerald-500"
+                        : status === "configured"
+                          ? "bg-amber-500"
+                          : "bg-text-muted/40"
+                    }`}
                   />
-                ))}
-              </div>
-            );
-          })()}
+                </span>
+              ))}
+            </div>
+          )}
         </button>
 
-        {/* Actions row */}
-        <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-dark-secondary/50">
-          {/* Control actions */}
-          <div className="flex flex-wrap items-center gap-1">
-            {agent.state === "stopped" && (
-              <ActionBtn
-                onClick={stopProp(onPlay)}
-                variant="success"
-                icon={<PlayIcon />}
-                label="Start"
-                disabled={busy}
-              />
-            )}
-            {agent.state === "paused" && (
-              <ActionBtn
-                onClick={stopProp(onResume)}
-                variant="success"
-                icon={<PlayIcon />}
-                label="Resume"
-                disabled={busy}
-              />
-            )}
-            {agent.state === "running" && (
-              <ActionBtn
-                onClick={stopProp(onPause)}
-                variant="warn"
-                icon={<PauseIcon />}
-                label="Pause"
-                disabled={busy}
-              />
-            )}
-            {agent.state !== "stopped" &&
-              agent.state !== "provisioning" &&
-              agent.state !== "unknown" && (
-                <ActionBtn
-                  onClick={stopProp(onStop)}
-                  variant="danger"
-                  icon={<StopIcon />}
-                  label="Stop"
-                  disabled={busy}
-                />
-              )}
-            {(agent.state === "provisioning" || busy) && (
-              <span className="text-[11px] font-mono text-brand animate-pulse px-2">
-                {busy ? "Working\u2026" : "Starting\u2026"}
-              </span>
-            )}
-          </div>
-
-          {/* Open UI - primary when available */}
-          {canOpenUI && uiUrl && (
+        {/* Actions — tight row, primary + text secondaries */}
+        <div className="flex items-center gap-3 px-4 pb-3 pt-0">
+          {/* Primary action */}
+          {agent.state === "running" && canOpenUI && uiUrl ? (
             <button
               type="button"
               onClick={stopProp(() => {
@@ -349,12 +295,13 @@ export function AgentCard({
               })}
               aria-label={`Open ${agent.agentName} UI`}
               disabled={busy}
-              className="flex items-center gap-1.5 px-3 py-1.5
-                min-h-[40px] rounded-md bg-brand text-dark font-mono text-[11px] font-semibold tracking-wide
-                transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark
-                hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5
+                bg-brand text-dark font-mono text-[11px] font-semibold tracking-wide
+                transition-colors hover:bg-brand-hover
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand
+                disabled:cursor-not-allowed disabled:opacity-60"
             >
-              OPEN UI
+              open ui
               <svg
                 aria-hidden="true"
                 className="w-3 h-3"
@@ -370,83 +317,89 @@ export function AgentCard({
                 />
               </svg>
             </button>
-          )}
+          ) : agent.state === "stopped" ? (
+            <button
+              type="button"
+              onClick={stopProp(onPlay)}
+              disabled={busy}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5
+                bg-emerald-500/10 text-emerald-400 font-mono text-[11px] font-medium
+                transition-colors hover:bg-emerald-500/20
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500
+                disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <PlayIcon />
+              Start
+            </button>
+          ) : agent.state === "paused" ? (
+            <button
+              type="button"
+              onClick={stopProp(onResume)}
+              disabled={busy}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5
+                bg-emerald-500/10 text-emerald-400 font-mono text-[11px] font-medium
+                transition-colors hover:bg-emerald-500/20
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500
+                disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <PlayIcon />
+              Resume
+            </button>
+          ) : null}
+
+          {/* Secondary text actions */}
+          <div className="flex items-center gap-2 ml-auto">
+            {agent.state === "running" && (
+              <button
+                type="button"
+                onClick={stopProp(onPause)}
+                disabled={busy}
+                className="inline-flex items-center gap-1 text-[11px] font-mono text-text-muted
+                  hover:text-brand transition-colors
+                  focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand
+                  disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <PauseIcon />
+                Pause
+              </button>
+            )}
+            {agent.state !== "stopped" &&
+              agent.state !== "provisioning" &&
+              agent.state !== "unknown" && (
+                <button
+                  type="button"
+                  onClick={stopProp(onStop)}
+                  disabled={busy}
+                  className="inline-flex items-center gap-1 text-[11px] font-mono text-text-muted
+                    hover:text-red-400 transition-colors
+                    focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-400
+                    disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <StopIcon />
+                  Stop
+                </button>
+              )}
+            {(agent.state === "provisioning" || busy) && (
+              <span className="text-[11px] font-mono text-brand animate-pulse">
+                {busy ? "working\u2026" : "starting\u2026"}
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Extended info when selected */}
+        {/* Collapsed details when selected */}
         {selected && (nodeId || region || createdAt) && (
-          <div className="px-4 py-3 border-t border-border-subtle bg-dark-secondary/30">
+          <div className="px-4 py-2.5 border-t border-border-subtle">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] font-mono text-text-subtle">
-              {nodeId && <span>NODE: {nodeId}</span>}
-              {region && <span>REGION: {region.toUpperCase()}</span>}
+              {nodeId && <span>node: {nodeId}</span>}
+              {region && <span>region: {region.toLowerCase()}</span>}
               {createdAt && (
-                <span>CREATED: {formatRelativeTime(createdAt)}</span>
+                <span>created: {formatRelativeTime(createdAt)}</span>
               )}
             </div>
           </div>
         )}
       </div>
     </article>
-  );
-}
-
-function StatCell({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: string;
-  accent?: boolean;
-}) {
-  return (
-    <div className="bg-surface px-3 py-2.5">
-      <p className="text-[9px] font-mono font-medium text-text-subtle tracking-wider mb-0.5">
-        {label}
-      </p>
-      <p
-        className={`text-sm font-mono font-medium tabular-nums
-        ${accent ? "text-brand" : "text-text-light"}`}
-      >
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function ActionBtn({
-  onClick,
-  variant,
-  icon,
-  label,
-  disabled = false,
-}: {
-  onClick: (e: React.MouseEvent) => void;
-  variant: "success" | "warn" | "danger";
-  icon: React.ReactNode;
-  label: string;
-  disabled?: boolean;
-}) {
-  const colors = {
-    success: "text-emerald-400 hover:bg-emerald-500/10 border-emerald-500/20",
-    warn: "text-brand hover:bg-brand/10 border-brand/20",
-    danger: "text-red-400 hover:bg-red-500/10 border-red-500/20",
-  };
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      title={label}
-      disabled={disabled}
-      className={`flex items-center gap-1.5 px-2.5 py-1.5
-        min-h-[40px] rounded-md font-mono text-[11px] font-medium border transition-colors duration-150
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-dark disabled:cursor-not-allowed disabled:opacity-50
-        ${colors[variant]}`}
-    >
-      <span className="inline-flex items-center justify-center">{icon}</span>
-      {label}
-    </button>
   );
 }

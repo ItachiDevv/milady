@@ -183,16 +183,13 @@ export class CloudClient {
     );
     const raw = unwrapListResponse<CloudAgentDetail>(data, "agents");
     // Backend returns agentName; normalize to name for the rest of the app.
-    // The backend does not return an uptime field — derive it client-side from
-    // createdAt so the AgentCard can show a meaningful value instead of "—".
+    // Only use real uptime from the backend. Do NOT derive from createdAt —
+    // that gives "time since creation" not actual runtime, which is misleading
+    // (e.g. 95d when the agent was restarted 8h ago). Real uptime comes from
+    // the sandbox health probe in AgentProvider phase 2.
     return raw.map((a) => ({
       ...a,
       name: a.agentName || a.name || a.id,
-      uptime:
-        a.uptime ??
-        (a.createdAt
-          ? Math.floor((Date.now() - new Date(a.createdAt).getTime()) / 1000)
-          : undefined),
     }));
   }
 
@@ -452,6 +449,13 @@ function makeUnauthenticatedAgentStatus(): AgentStatus {
   };
 }
 
+export interface WalletBalancesResponse {
+  evm: { address: string; chains: Array<{ chain: string; nativeBalance: string; nativeSymbol: string; nativeValueUsd: string }> } | null;
+  solana: { address: string; solBalance: string; solValueUsd: string } | null;
+}
+
+export type ConnectorHealthMap = Record<string, "ok" | "missing" | "configured" | "unknown">;
+
 export class CloudApiClient {
   private baseUrl: string;
   private authToken?: string;
@@ -493,6 +497,8 @@ export class CloudApiClient {
     uptime: number;
     memoryUsage?: object;
     agentState?: string;
+    connectors?: ConnectorHealthMap;
+    plugins?: { loaded: number; failed: number };
     /** True if this is a synthetic response (agent is auth-gated but alive). */
     _synthetic?: boolean;
   }> {
@@ -544,11 +550,19 @@ export class CloudApiClient {
           model?: string;
         };
         if (data.state) {
+          // /api/status returns uptime in milliseconds, normalize to seconds
+          // to match what formatUptime() and the rest of the UI expects.
+          const uptimeSec =
+            typeof data.uptime === "number" && data.uptime > 0
+              ? data.uptime > 1_000_000
+                ? Math.floor(data.uptime / 1000) // clearly milliseconds
+                : data.uptime // already seconds (from /api/health or similar)
+              : undefined;
           return {
             state: data.state as AgentStatus["state"],
             agentName: data.agentName ?? "Agent",
             model: data.model ?? "—",
-            uptime: data.uptime,
+            uptime: uptimeSec,
             memories: data.memories,
           };
         }
@@ -640,5 +654,175 @@ export class CloudApiClient {
 
   async getBilling(): Promise<object> {
     return this.request("/api/billing", { method: "GET" });
+  }
+
+  // Wallet
+  async getWalletAddresses(): Promise<{ evmAddress: string | null; solanaAddress: string | null }> {
+    return this.request("/api/wallet/addresses", { method: "GET" });
+  }
+
+  async getWalletBalances(): Promise<WalletBalancesResponse> {
+    return this.request("/api/wallet/balances", { method: "GET" });
+  }
+
+  async generateWallet(
+    chain: "evm" | "solana" | "both",
+  ): Promise<{ evmAddress?: string; solanaAddress?: string }> {
+    return this.request("/api/wallet/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chain }),
+    });
+  }
+
+  async importWallet(
+    privateKey: string,
+  ): Promise<{ chain: string; address: string }> {
+    return this.request("/api/wallet/import", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ privateKey }),
+    });
+  }
+
+  async transferExecute(params: {
+    chain: string;
+    to: string;
+    amount: string;
+    token?: string;
+  }): Promise<{ txHash?: string; error?: string }> {
+    return this.request("/api/wallet/transfer/execute", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    });
+  }
+
+  // Agent full status (rich /api/status response)
+  async getAgentFullStatus(): Promise<{
+    state?: string;
+    agentName?: string;
+    model?: string;
+    startedAt?: number;
+    uptime?: number;
+    startup?: { phase?: string; attempt?: number; lastError?: string };
+    pendingRestart?: boolean;
+    pendingRestartReasons?: string[];
+  }> {
+    return this.request("/api/status", { method: "GET" });
+  }
+
+  // Agent character/persona
+  async getAgentCharacter(): Promise<Record<string, unknown>> {
+    return this.request("/api/character", { method: "GET" });
+  }
+
+  // Plugins list
+  async getPlugins(): Promise<
+    Array<{
+      id: string;
+      name: string;
+      description?: string;
+      enabled: boolean;
+      isActive?: boolean;
+      category?: string;
+      parameters?: Array<{
+        key: string;
+        type?: string;
+        description?: string;
+        required?: boolean;
+        sensitive?: boolean;
+        isSet?: boolean;
+        currentValue?: unknown;
+        default?: unknown;
+        options?: string[];
+      }>;
+      setupGuideUrl?: string;
+      homepage?: string;
+      tags?: string[];
+    }>
+  > {
+    return this.request("/api/plugins", { method: "GET" });
+  }
+
+  async togglePlugin(pluginId: string, enabled: boolean): Promise<unknown> {
+    const res = await this.rawFetch(
+      `/api/plugins/${encodeURIComponent(pluginId)}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enabled }),
+      },
+    );
+    if (!res.ok) throw new Error(`API ${res.status}`);
+    return res.json();
+  }
+
+  async savePluginConfig(
+    pluginId: string,
+    config: Record<string, string>,
+  ): Promise<unknown> {
+    const res = await this.rawFetch(
+      `/api/plugins/${encodeURIComponent(pluginId)}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ config }),
+      },
+    );
+    if (!res.ok) throw new Error(`API ${res.status}`);
+    return res.json();
+  }
+
+  // Connectors
+  async getConnectors(): Promise<{ connectors: Record<string, unknown> }> {
+    return this.request("/api/connectors", { method: "GET" });
+  }
+
+  async addConnector(name: string, config: Record<string, unknown>): Promise<{ connectors: Record<string, unknown> }> {
+    const res = await this.rawFetch("/api/connectors", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, config }),
+    });
+    if (!res.ok) throw new Error(`API ${res.status}: /api/connectors`);
+    return res.json();
+  }
+
+  async removeConnector(name: string): Promise<{ connectors: Record<string, unknown> }> {
+    const path = `/api/connectors/${encodeURIComponent(name)}`;
+    const res = await this.rawFetch(path, { method: "DELETE" });
+    if (!res.ok) throw new Error(`API ${res.status}: ${path}`);
+    return res.json();
+  }
+
+  async testPlugin(
+    pluginId: string,
+  ): Promise<{
+    success: boolean;
+    error?: string;
+    message?: string;
+    durationMs?: number;
+  }> {
+    const t0 = Date.now();
+    const res = await this.rawFetch(
+      `/api/plugins/${encodeURIComponent(pluginId)}/test`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      },
+    );
+    const elapsed = Date.now() - t0;
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      return {
+        success: false,
+        error: text || `HTTP ${res.status}`,
+        durationMs: elapsed,
+      };
+    }
+    const data = await res.json();
+    return { ...data, durationMs: data.durationMs ?? elapsed };
   }
 }

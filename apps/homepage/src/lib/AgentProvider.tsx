@@ -81,10 +81,17 @@ export interface ManagedAgent {
   };
   region?: string;
   createdAt?: string;
+  updatedAt?: string;
   nodeId?: string;
   lastHeartbeat?: string;
+  /** Token usage stats from cloud API. */
+  tokens?: { used: number; limit: number };
   /** API token for direct agent access (from sandbox discovery or manual config). */
   apiToken?: string;
+  /** Connector health from /api/health — e.g. { discord: "ok", telegram: "missing" } */
+  connectorHealth?: Record<string, string>;
+  /** Wallet addresses — fetched from /api/wallet/addresses */
+  walletAddresses?: { evmAddress: string | null; solanaAddress: string | null };
 }
 
 export type SourceFilter = "all" | "local" | "cloud" | "remote";
@@ -128,7 +135,8 @@ function agentsEqual(a: ManagedAgent[], b: ManagedAgent[]): boolean {
       aa.memories !== bb.memories ||
       aa.webUiUrl !== bb.webUiUrl ||
       aa.sourceUrl !== bb.sourceUrl ||
-      aa.lastHeartbeat !== bb.lastHeartbeat
+      aa.lastHeartbeat !== bb.lastHeartbeat ||
+      JSON.stringify(aa.connectorHealth) !== JSON.stringify(bb.connectorHealth)
     )
       return false;
   }
@@ -218,6 +226,8 @@ export function AgentProvider({ children }: { children: ReactNode }) {
             billing: ca.billing,
             region: ca.region,
             createdAt: ca.createdAt,
+            updatedAt: ca.updatedAt,
+            tokens: ca.tokens,
             uptime: ca.uptime,
           });
         }
@@ -418,6 +428,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
       uptime?: number;
       memories?: number;
       agentName?: string;
+      connectorHealth?: Record<string, string>;
     } | null> => {
       await semaphore.acquire();
       try {
@@ -427,11 +438,13 @@ export function AgentProvider({ children }: { children: ReactNode }) {
         if (!health.ready && !health.status) {
           return { index: target.index, status: "unknown" };
         }
+        // Capture connector health from the health response (already fetched, no extra cost)
+        const connectorHealth = health.connectors as Record<string, string> | undefined;
         // If health returned a synthetic response (agent is auth-gated),
         // skip the status probe — we already know it's running and won't
         // get real data without auth. This reduces network requests.
         if (health._synthetic) {
-          return { index: target.index, status: "running" };
+          return { index: target.index, status: "running", connectorHealth };
         }
         try {
           const status = await target.client.getAgentStatus({
@@ -444,10 +457,11 @@ export function AgentProvider({ children }: { children: ReactNode }) {
             uptime: status.uptime,
             memories: status.memories,
             agentName: status.agentName,
+            connectorHealth,
           };
         } catch {
           // Health OK but no detailed status
-          return { index: target.index, status: "running" };
+          return { index: target.index, status: "running", connectorHealth };
         }
       } catch {
         // Health check failed
@@ -467,6 +481,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
           signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS),
         });
         if (!health.ready && !health.status) return null;
+        const connectorHealth = health.connectors as Record<string, string> | undefined;
         // If health returned a synthetic response (agent is auth-gated),
         // skip the status probe — we already know it's running.
         if (health._synthetic) {
@@ -477,6 +492,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
             status: "running",
             sourceUrl: LOCAL_AGENT_BASE,
             client: localClient,
+            connectorHealth,
           };
         }
         try {
@@ -493,6 +509,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
             memories: status.memories,
             sourceUrl: LOCAL_AGENT_BASE,
             client: localClient,
+            connectorHealth,
           };
         } catch {
           return {
@@ -502,6 +519,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
             status: "running",
             sourceUrl: LOCAL_AGENT_BASE,
             client: localClient,
+            connectorHealth,
           };
         }
       } catch {
@@ -525,7 +543,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
     // Apply probe results to their respective agents
     for (const result of probeResults) {
       if (result.status === "fulfilled" && result.value) {
-        const { index, status, model, uptime, memories, agentName } =
+        const { index, status, model, uptime, memories, agentName, connectorHealth } =
           result.value;
         if (index < enrichedResults.length) {
           const agent = enrichedResults[index];
@@ -534,6 +552,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
           if (uptime) agent.uptime = uptime;
           if (memories) agent.memories = memories;
           if (agentName && !agent.name) agent.name = agentName;
+          if (connectorHealth) agent.connectorHealth = connectorHealth;
         }
       }
     }
