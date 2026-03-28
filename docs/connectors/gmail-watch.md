@@ -15,7 +15,7 @@ The Gmail Watch connector is an elizaOS plugin that monitors Gmail inboxes via G
 | Field | Value |
 |-------|-------|
 | Package | `@elizaos/plugin-gmail-watch` |
-| Feature flag | `features.gmailWatch` |
+| Auto-enable trigger | `hooks.gmail.account` is set to a non-empty Gmail address |
 | Install | `milady plugins install gmail-watch` |
 
 ## Setup Requirements
@@ -25,12 +25,15 @@ The Gmail Watch connector is an elizaOS plugin that monitors Gmail inboxes via G
 
 ## Configuration
 
-Gmail Watch is enabled via the `features` section:
+Gmail Watch is auto-enabled when a Gmail account is configured in the `hooks` section:
 
 ```json
 {
-  "features": {
-    "gmailWatch": true
+  "hooks": {
+    "enabled": true,
+    "gmail": {
+      "account": "you@gmail.com"
+    }
   }
 }
 ```

@@ -36,7 +36,11 @@ A plugin is a self-contained module that registers one or more of:
 </Card>
 
 <Card title="Feature Plugins" icon="wand-magic-sparkles" href="/plugin-registry/browser">
-  Extended capabilities — browser control, image generation, text-to-speech, speech-to-text, computer use, cron scheduling, vision, shell, webhooks, FAL media generation, Suno music, OpenTelemetry diagnostics, x402 payments, and more.
+  Extended capabilities — browser control, image generation, text-to-speech, speech-to-text, computer use (CUA), cron scheduling, vision, shell, webhooks, FAL media generation, Suno music, OpenTelemetry diagnostics, x402 payments, personality, experience, form handling, agent skills, commands, and more.
+</Card>
+
+<Card title="Streaming Destinations" icon="video" href="/plugin-registry/streaming/twitch-streaming">
+  RTMP streaming to Twitch, YouTube, X (Twitter), PumpFun, or any custom RTMP endpoint. Auto-enabled when stream keys are configured.
 </Card>
 
 </CardGroup>
@@ -88,17 +92,18 @@ Install → Register → Initialize → Active → Shutdown
 milady plugins install @elizaos/plugin-openai
 ```
 
-### List Installed Plugins
+### List Plugins
 
 ```bash
-milady plugins list
+milady plugins list            # browse registry plugins
+milady plugins installed       # show what's currently installed
+milady plugins search <query>  # search by keyword
 ```
 
-### Enable/Disable
+### Configure
 
 ```bash
-milady plugins enable plugin-name
-milady plugins disable plugin-name
+milady plugins config plugin-name   # view/edit plugin configuration
 ```
 
 ### Eject (Copy to Local)
