@@ -42,7 +42,7 @@ my-plugin/
   },
   "devDependencies": {
     "typescript": "^5.0.0",
-    "vitest": "^4.0.0"
+    "vitest": "^4.1.0"
   }
 }
 ```

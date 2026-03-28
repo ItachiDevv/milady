@@ -65,16 +65,17 @@ bun run milady --version
 
 ## 4) Repo map (mental model)
 
-Core areas (all under `packages/app-core/`):
+Core areas:
 
 - `packages/app-core/src/runtime/` — runtime startup, plugin orchestration, lifecycle
 - `packages/app-core/src/cli/` — CLI parsing, command registration, process behavior
-- `packages/app-core/src/config/` — config types, loading, resolution
+- `packages/app-core/src/config/` — config types, loading, resolution (extends agent config with Milady-specific overrides like WeChat)
 - `packages/app-core/src/api/` — dashboard API server and routes
 - `packages/app-core/src/services/` — business logic (plugin installer, updater, etc.)
 - `packages/app-core/src/connectors/` — connector integration code
-- `packages/agent/` — upstream elizaOS agent (core plugins, auto-enable maps)
-- `apps/app/` — desktop/mobile UI app
+- `packages/agent/` — upstream elizaOS agent wrapper. **Important:** this is where `src/runtime/core-plugins.ts` (the source of truth for which plugins always load) and `src/config/plugin-auto-enable.ts` (the auto-enable maps for connectors, providers, features, streaming) live
+- `packages/plugin-wechat/` — Milady-local WeChat connector plugin (`@miladyai/plugin-wechat`)
+- `apps/app/` — desktop/mobile UI app (Vite + React + Electrobun)
 - `scripts/` — build/dev/release tooling
 - `test/` + colocated tests — verification
 

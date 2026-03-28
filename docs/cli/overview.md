@@ -9,12 +9,20 @@ The `milady` CLI is the primary interface for managing the Milady AI agent. Ever
 ## Installation
 
 ```bash
+npm install -g miladyai
+```
+
+Or with Bun:
+
+```bash
 bun install -g miladyai
 ```
 
-Or run directly:
+Or run directly without installing:
 
 ```bash
+npx miladyai
+# or
 bunx miladyai
 ```
 
