@@ -5,6 +5,7 @@ import type {
 import type { ElizaConfig } from "../config/config";
 import {
   CLOUD_BILLING_URL,
+  fetchCloudUserByApiKey,
   fetchUnifiedCloudCredits,
   resolveCloudConnectionSnapshot,
 } from "./cloud-connection";
@@ -21,11 +22,26 @@ export async function handleCloudStatusRoutes(
     const snapshot = resolveCloudConnectionSnapshot(typedConfig, runtime);
 
     if (snapshot.connected) {
+      // When userId is missing (API key only, no OAuth) try to resolve it
+      // from the cloud API so the dashboard can show a name.
+      let userId = snapshot.userId;
+      let username: string | undefined;
+      if (!userId && snapshot.apiKey) {
+        const cloudUser = await fetchCloudUserByApiKey(snapshot.apiKey).catch(
+          () => null,
+        );
+        if (cloudUser) {
+          userId = cloudUser.userId;
+          username = cloudUser.username || cloudUser.email || cloudUser.userId;
+        }
+      }
+
       json(res, {
         connected: true,
         enabled: snapshot.enabled,
         hasApiKey: snapshot.hasApiKey,
-        userId: snapshot.userId,
+        userId,
+        username,
         organizationId: snapshot.organizationId,
         topUpUrl: CLOUD_BILLING_URL,
         reason: snapshot.authConnected

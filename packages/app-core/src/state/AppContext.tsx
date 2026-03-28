@@ -2306,7 +2306,7 @@ function AppProviderInner({
       enabled,
       hasPersistedApiKey,
     });
-    setElizaCloudUserId(cloudStatus.userId ?? null);
+    setElizaCloudUserId(cloudStatus.username ?? cloudStatus.userId ?? null);
     setElizaCloudStatusReason(
       isConnected &&
         typeof cloudStatus.reason === "string" &&

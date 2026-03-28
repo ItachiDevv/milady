@@ -203,17 +203,27 @@ function isCloudStatusReasonApiKeyOnly(
 function resolveCloudAccountIdDisplay(
   userId: string | null,
   statusReason: string | null,
-  t: (key: string) => string,
+  t: (key: string, opts?: Record<string, unknown>) => string,
 ): { mono: boolean; text: string } {
   if (userId) {
-    return { mono: true, text: userId };
+    // Use mono for UUIDs/IDs, regular text for human-readable names
+    const looksLikeId =
+      /^[0-9a-f-]{20,}$/i.test(userId) || userId.startsWith("user_");
+    return { mono: looksLikeId, text: userId };
   }
   if (isCloudStatusReasonApiKeyOnly(statusReason)) {
-    return { mono: false, text: t("elizaclouddashboard.AccountIdApiKeyOnly") };
+    return {
+      mono: false,
+      text: t("elizaclouddashboard.AccountIdApiKeyConnected", {
+        defaultValue: "Connected via API key",
+      }),
+    };
   }
   return {
     mono: false,
-    text: t("elizaclouddashboard.AccountIdSessionNoUserId"),
+    text: t("elizaclouddashboard.AccountIdApiKeyConnected", {
+      defaultValue: "Connected via API key",
+    }),
   };
 }
 

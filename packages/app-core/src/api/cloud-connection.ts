@@ -1,11 +1,11 @@
 import type { AgentRuntime } from "@elizaos/core";
 import { logger } from "@elizaos/core";
+import { resolveCloudApiBaseUrl as resolveCanonicalCloudApiBaseUrl } from "@miladyai/agent/cloud/base-url";
+import { validateCloudBaseUrl } from "@miladyai/agent/cloud/validate-url";
 import {
   isMiladySettingsDebugEnabled,
   settingsDebugCloudSummary,
 } from "@miladyai/shared";
-import { resolveCloudApiBaseUrl as resolveCanonicalCloudApiBaseUrl } from "@miladyai/agent/cloud/base-url";
-import { validateCloudBaseUrl } from "@miladyai/agent/cloud/validate-url";
 import type { ElizaConfig } from "../config/config";
 import { normalizeEnvValue } from "../utils/env";
 import {
@@ -241,6 +241,97 @@ export function resolveCloudConnectionSnapshot(
       ? normalizeSecret(cloudAuth?.getUserId?.())
       : undefined,
   };
+}
+
+/**
+ * Try to resolve a display name or user ID from the cloud API using the API key.
+ * Tries dedicated user endpoints first, then falls back to extracting user/org
+ * info from the credits summary (which we know works).
+ */
+export async function fetchCloudUserByApiKey(
+  apiKey: string,
+): Promise<{ userId?: string; username?: string; email?: string } | null> {
+  const baseUrl = resolveCloudApiBaseUrl();
+  const headers = {
+    Accept: "application/json",
+    Authorization: `Bearer ${apiKey}`,
+  };
+
+  // Try dedicated user endpoints first
+  for (const path of ["/user", "/me", "/account"]) {
+    try {
+      const response = await fetch(`${baseUrl}${path}`, {
+        headers,
+        redirect: "manual",
+        signal: AbortSignal.timeout(5_000),
+      });
+      if (!response.ok) continue;
+      const data = (await response.json()) as Record<string, unknown>;
+      const record = (
+        typeof data.data === "object" && data.data !== null ? data.data : data
+      ) as Record<string, unknown>;
+      const result = extractUserFields(record);
+      if (result) return result;
+    } catch {
+      // Try next path
+    }
+  }
+
+  // Fallback: extract user/org name from credits summary
+  try {
+    const response = await fetch(`${baseUrl}/credits/summary`, {
+      headers,
+      redirect: "manual",
+      signal: AbortSignal.timeout(5_000),
+    });
+    if (response.ok) {
+      const data = (await response.json()) as Record<string, unknown>;
+      const org =
+        typeof data.organization === "object" && data.organization !== null
+          ? (data.organization as Record<string, unknown>)
+          : null;
+      const user =
+        typeof data.user === "object" && data.user !== null
+          ? (data.user as Record<string, unknown>)
+          : null;
+      // Try user first, then org name
+      const result = extractUserFields(user ?? org ?? data);
+      if (result) return result;
+    }
+  } catch {
+    // Not critical
+  }
+
+  return null;
+}
+
+function extractUserFields(
+  record: Record<string, unknown> | null,
+): { userId?: string; username?: string; email?: string } | null {
+  if (!record) return null;
+  const userId =
+    typeof record.id === "string"
+      ? record.id
+      : typeof record.userId === "string"
+        ? record.userId
+        : typeof record.user_id === "string"
+          ? record.user_id
+          : undefined;
+  const username =
+    typeof record.username === "string"
+      ? record.username
+      : typeof record.name === "string"
+        ? record.name
+        : typeof record.displayName === "string"
+          ? record.displayName
+          : typeof record.display_name === "string"
+            ? record.display_name
+            : undefined;
+  const email = typeof record.email === "string" ? record.email : undefined;
+  if (userId || username || email) {
+    return { userId, username, email };
+  }
+  return null;
 }
 
 async function fetchCloudCreditsByApiKey(
