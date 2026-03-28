@@ -30,6 +30,7 @@ The Bluesky connector is an elizaOS plugin that bridges your agent to Bluesky vi
   "connectors": {
     "bluesky": {
       "enabled": true,
+      "handle": "yourname.bsky.social",
       "postEnable": true,
       "postIntervalMin": 90,
       "postIntervalMax": 180
@@ -37,6 +38,8 @@ The Bluesky connector is an elizaOS plugin that bridges your agent to Bluesky vi
   }
 }
 ```
+
+Credentials (`BLUESKY_USERNAME` and `BLUESKY_PASSWORD`) should be set via environment variables or `~/.milady/.env` rather than in the config file.
 
 ## Environment Variables
 

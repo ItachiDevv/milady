@@ -1,7 +1,7 @@
 ---
 title: Stream
 sidebarTitle: Stream
-description: Go live with your Milady agent — stream to Twitch, YouTube, or any RTMP destination with overlays, voice, and real-time widgets.
+description: Go live with your Milady agent — stream to Twitch, YouTube, Pump.fun, X (Twitter), or any RTMP destination with overlays, voice, and real-time widgets.
 ---
 
 The Stream tab lets you broadcast your agent live to streaming platforms. The `StreamView` component renders the stream canvas (1280x720), manages overlays, and provides controls for going live, adjusting volume, and switching destinations.
@@ -16,7 +16,9 @@ To start streaming, select a destination from the status bar and click the strea
 |-------------|--------|-------|
 | **Twitch** | `@elizaos/plugin-twitch-streaming` | Standard Twitch RTMP ingest |
 | **YouTube** | `@elizaos/plugin-youtube-streaming` | Supports custom RTMP URL |
-| **Custom RTMP** | Any RTMP-compatible plugin | Any platform using standard RTMP protocol |
+| **Pump.fun** | `@elizaos/plugin-pumpfun-streaming` | Requires `streamKey` and `rtmpUrl` |
+| **X (Twitter)** | `@elizaos/plugin-x-streaming` | Requires `streamKey` and `rtmpUrl` |
+| **Custom RTMP** | `@elizaos/plugin-custom-rtmp` | Any platform using standard RTMP protocol (`rtmpUrl` + `rtmpKey`) |
 
 Each destination provides RTMP URL and stream key credentials, optional lifecycle hooks (`onStreamStart`, `onStreamStop`), and per-destination default overlay layouts.
 
