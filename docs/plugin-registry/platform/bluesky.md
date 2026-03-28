@@ -6,6 +6,10 @@ description: "Bluesky connector for Milady — post, reply, and interact on the 
 
 The Bluesky plugin connects Milady agents to the Bluesky social network via the AT Protocol, enabling posting, replying, and social interactions.
 
+<Info>
+This plugin requires manual installation — it is not auto-enabled from config or environment variables. Run `milady plugins install bluesky` to add it.
+</Info>
+
 **Package:** `@elizaos/plugin-bluesky`
 
 ## Installation

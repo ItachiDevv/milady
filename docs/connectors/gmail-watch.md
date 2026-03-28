@@ -6,9 +6,13 @@ description: Monitor Gmail inboxes using the @elizaos/plugin-gmail-watch package
 
 Monitor Gmail inboxes for incoming messages using Pub/Sub.
 
+<Info>
+Gmail Watch is **not a traditional connector**. It is enabled via feature flags (`features.gmailWatch`) or hooks config (`hooks.gmail.account`), not the `connectors` section. It does not appear in the auto-enable connector list.
+</Info>
+
 ## Overview
 
-The Gmail Watch connector is an elizaOS plugin that monitors Gmail inboxes via Google Cloud Pub/Sub. It watches for new messages and triggers agent events. This connector is enabled via feature flags rather than the `connectors` section. Available from the plugin registry.
+The Gmail Watch plugin monitors Gmail inboxes via Google Cloud Pub/Sub. It watches for new messages and triggers agent events. It is enabled via feature flags rather than the `connectors` section. Available from the plugin registry.
 
 ## Package Info
 

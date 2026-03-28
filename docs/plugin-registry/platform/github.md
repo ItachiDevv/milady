@@ -6,6 +6,10 @@ description: "GitHub connector for Milady — interact with repositories, issues
 
 The GitHub plugin connects Milady agents to GitHub, enabling interactions with repositories, issues, pull requests, and other GitHub resources.
 
+<Info>
+This plugin requires manual installation — it is not auto-enabled from config or environment variables. Run `milady plugins install github` to add it.
+</Info>
+
 **Package:** `@elizaos/plugin-github`
 
 ## Installation

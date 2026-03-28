@@ -6,9 +6,13 @@ description: Connect your agent to GitHub using the @elizaos/plugin-github packa
 
 Connect your agent to GitHub for repository management, issue tracking, and pull request workflows.
 
+<Warning>
+This connector is **not auto-enabled**. It must be manually installed from the elizaOS plugin registry before use. It will not activate from config or environment variables alone.
+</Warning>
+
 ## Overview
 
-The GitHub connector is an elizaOS plugin that bridges your agent to the GitHub API. It supports repository management, issue tracking, pull request creation and review, and code search. This connector is available from the plugin registry.
+The GitHub connector is an elizaOS plugin that bridges your agent to the GitHub API. It supports repository management, issue tracking, pull request creation and review, and code search. This connector is available from the plugin registry and requires explicit installation.
 
 ## Package Info
 

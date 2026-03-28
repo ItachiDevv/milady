@@ -6,9 +6,13 @@ description: Connect your agent to Bluesky using the @elizaos/plugin-bluesky pac
 
 Connect your agent to Bluesky for social posting and engagement on the AT Protocol network.
 
+<Warning>
+This connector is **not auto-enabled**. It must be manually installed from the elizaOS plugin registry before use. It will not activate from config or environment variables alone.
+</Warning>
+
 ## Overview
 
-The Bluesky connector is an elizaOS plugin that bridges your agent to Bluesky via the AT Protocol. It supports automated posting, mention monitoring, and reply handling. This connector is available from the plugin registry.
+The Bluesky connector is an elizaOS plugin that bridges your agent to Bluesky via the AT Protocol. It supports automated posting, mention monitoring, and reply handling. This connector is available from the plugin registry and requires explicit installation.
 
 ## Package Info
 

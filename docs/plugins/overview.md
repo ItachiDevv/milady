@@ -39,6 +39,10 @@ A plugin is a self-contained module that registers one or more of:
   Extended capabilities — browser control, image generation, text-to-speech, speech-to-text, computer use, cron scheduling, vision, shell, webhooks, FAL media generation, Suno music, OpenTelemetry diagnostics, x402 payments, and more.
 </Card>
 
+<Card title="Streaming Plugins" icon="video" href="/skills/streaming">
+  Live-streaming destinations — Retake, Twitch, YouTube, Custom RTMP, Pump.fun, and X (Twitter). Auto-enabled when their `streaming.*` config section is populated with credentials.
+</Card>
+
 </CardGroup>
 
 ## How Plugins Load

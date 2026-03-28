@@ -6,6 +6,10 @@ description: "LINE connector for Milady — bot integration with the LINE messag
 
 The LINE plugin connects Milady agents to LINE as a bot, enabling message handling in chats and groups.
 
+<Info>
+This plugin requires manual installation — it is not auto-enabled from config or environment variables. Run `milady plugins install line` to add it.
+</Info>
+
 **Package:** `@elizaos/plugin-line`
 
 ## Installation

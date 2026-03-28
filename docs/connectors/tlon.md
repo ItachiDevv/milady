@@ -6,9 +6,13 @@ description: Connect your agent to Tlon/Urbit using the @elizaos/plugin-tlon pac
 
 Connect your agent to the Urbit network via Tlon for ship-to-ship messaging.
 
+<Warning>
+This connector is **not auto-enabled**. It must be manually installed from the elizaOS plugin registry before use. It will not activate from config or environment variables alone.
+</Warning>
+
 ## Overview
 
-The Tlon connector is an elizaOS plugin that bridges your agent to the Urbit network. It supports ship-to-ship messaging and group chat participation. This connector is available from the plugin registry.
+The Tlon connector is an elizaOS plugin that bridges your agent to the Urbit network. It supports ship-to-ship messaging and group chat participation. This connector is available from the plugin registry and requires explicit installation.
 
 ## Package Info
 

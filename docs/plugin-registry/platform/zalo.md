@@ -6,6 +6,10 @@ description: "Zalo connector for Milady — bot integration with the Zalo messag
 
 The Zalo plugin connects Milady agents to Zalo, enabling message handling through the Zalo Official Account API.
 
+<Info>
+This plugin requires manual installation — it is not auto-enabled from config or environment variables. Run `milady plugins install zalo` to add it.
+</Info>
+
 **Package:** `@elizaos/plugin-zalo`
 
 ## Installation

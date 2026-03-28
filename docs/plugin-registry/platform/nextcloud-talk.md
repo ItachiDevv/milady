@@ -6,6 +6,10 @@ description: "Nextcloud Talk connector for Milady — bot integration with Nextc
 
 The Nextcloud Talk plugin connects Milady agents to Nextcloud Talk, enabling message handling in Nextcloud Talk conversations.
 
+<Info>
+This plugin requires manual installation — it is not auto-enabled from config or environment variables. Run `milady plugins install nextcloud-talk` to add it.
+</Info>
+
 **Package:** `@elizaos/plugin-nextcloud-talk`
 
 ## Installation

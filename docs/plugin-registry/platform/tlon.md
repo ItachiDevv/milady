@@ -6,6 +6,10 @@ description: "Tlon connector for Milady — bot integration with the Tlon (Urbit
 
 The Tlon plugin connects Milady agents to Tlon (Urbit), enabling message handling through a connected Urbit ship.
 
+<Info>
+This plugin requires manual installation — it is not auto-enabled from config or environment variables. Run `milady plugins install tlon` to add it.
+</Info>
+
 **Package:** `@elizaos/plugin-tlon`
 
 ## Installation

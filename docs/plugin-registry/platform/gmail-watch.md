@@ -6,6 +6,10 @@ description: "Gmail Watch connector for Milady — monitor Gmail inboxes and res
 
 The Gmail Watch plugin connects Milady agents to Gmail, enabling monitoring of incoming emails and automated responses.
 
+<Info>
+Gmail Watch is enabled via feature flags (`features.gmailWatch`) or hooks config (`hooks.gmail.account`), not the `connectors` section. Install with `milady plugins install gmail-watch`.
+</Info>
+
 **Package:** `@elizaos/plugin-gmail-watch`
 
 ## Installation

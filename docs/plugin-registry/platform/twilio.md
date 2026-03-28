@@ -6,6 +6,10 @@ description: "Twilio connector for Milady — SMS and voice integration via the 
 
 The Twilio plugin connects Milady agents to Twilio, enabling SMS messaging and voice interactions through Twilio phone numbers.
 
+<Info>
+This plugin requires manual installation — it is not auto-enabled from config or environment variables. Run `milady plugins install twilio` to add it.
+</Info>
+
 **Package:** `@elizaos/plugin-twilio`
 
 ## Installation

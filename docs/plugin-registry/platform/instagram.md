@@ -6,6 +6,10 @@ description: "Instagram connector for Milady — interact with Instagram messagi
 
 The Instagram plugin connects Milady agents to Instagram, enabling message handling and content interactions.
 
+<Info>
+This plugin requires manual installation — it is not auto-enabled from config or environment variables. Run `milady plugins install instagram` to add it.
+</Info>
+
 **Package:** `@elizaos/plugin-instagram`
 
 ## Installation

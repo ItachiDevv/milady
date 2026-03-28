@@ -500,6 +500,32 @@ The `vision`, `fal`, and `suno` plugins are also auto-enabled when their respect
 You can always force-disable any auto-enabled plugin by setting `plugins.entries.<id>.enabled: false`. The denylist takes priority over all auto-enable logic.
 </Tip>
 
+**Streaming plugins** are auto-enabled when a streaming destination is configured under `streaming`:
+
+```json5
+{
+  streaming: {
+    activeDestination: "twitch",  // Currently active destination
+    twitch: { streamKey: "live_...", enabled: true },
+    youtube: { streamKey: "xxxx-xxxx-xxxx-xxxx" },
+    customRtmp: { rtmpUrl: "rtmp://live.example.com/app", rtmpKey: "key123" },
+  },
+}
+```
+
+| Destination | Plugin | Auto-Enable Trigger |
+|-------------|--------|---------------------|
+| `retake` | `@elizaos/plugin-retake` | `streaming.retake.accessToken` or `enabled: true` |
+| `twitch` | `@elizaos/plugin-twitch-streaming` | `streaming.twitch.streamKey` or `enabled: true` |
+| `youtube` | `@elizaos/plugin-youtube-streaming` | `streaming.youtube.streamKey` or `enabled: true` |
+| `customRtmp` | `@elizaos/plugin-custom-rtmp` | `streaming.customRtmp.rtmpUrl` + `rtmpKey` |
+| `pumpfun` | `@elizaos/plugin-pumpfun-streaming` | `streaming.pumpfun.streamKey` + `rtmpUrl` |
+| `x` | `@elizaos/plugin-x-streaming` | `streaming.x.streamKey` + `rtmpUrl` |
+
+<Info>
+Streaming plugins are separate from platform connectors. For example, `@elizaos/plugin-twitch` is the chat connector while `@elizaos/plugin-twitch-streaming` handles live video streaming to Twitch.
+</Info>
+
 ## Connectors (Messaging Channels)
 
 Connectors integrate Milady with messaging platforms. Configure them under `connectors`:

@@ -6,9 +6,13 @@ description: Connect your agent to Twilio for SMS and voice using the @elizaos/p
 
 Connect your agent to Twilio for SMS messaging and voice call capabilities.
 
+<Warning>
+This connector is **not auto-enabled**. It must be manually installed from the elizaOS plugin registry before use. It will not activate from config or environment variables alone.
+</Warning>
+
 ## Overview
 
-The Twilio connector is an elizaOS plugin that bridges your agent to Twilio's communication APIs. It supports inbound and outbound SMS, as well as voice call capabilities. This connector is available from the plugin registry.
+The Twilio connector is an elizaOS plugin that bridges your agent to Twilio's communication APIs. It supports inbound and outbound SMS, as well as voice call capabilities. This connector is available from the plugin registry and requires explicit installation.
 
 ## Package Info
 
