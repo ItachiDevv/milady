@@ -124,7 +124,7 @@ my-plugin/
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@elizaos/core": "^2.0.0"
+    "@elizaos/core": "alpha"
   },
   "devDependencies": {
     "typescript": "^5.0.0"
@@ -816,6 +816,26 @@ Plugins can include an `elizaos.plugin.json` manifest file for rich metadata:
   "cliCommands": []
 }
 ```
+
+### Manifest Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | Unique plugin identifier |
+| `name` | string | Yes | Human-readable plugin name |
+| `description` | string | Yes | What the plugin does |
+| `version` | string | Yes | Semver version |
+| `kind` | PluginKind | No | Plugin category (see below) |
+| `configSchema` | object | No | JSON Schema for plugin configuration |
+| `uiHints` | object | No | UI rendering hints for config fields (label, type, sensitive, advanced) |
+| `requiredSecrets` | string[] | No | Secret keys the plugin needs to function |
+| `optionalSecrets` | string[] | No | Secret keys the plugin can use but doesn't require |
+| `dependencies` | string[] | No | Other plugin IDs this plugin depends on |
+| `channels` | string[] | No | Messaging channels this plugin provides |
+| `providers` | string[] | No | Context providers this plugin registers |
+| `skills` | string[] | No | Skills this plugin exposes |
+| `gatewayMethods` | string[] | No | Gateway methods this plugin adds |
+| `cliCommands` | string[] | No | CLI commands this plugin registers |
 
 ### PluginKind Types
 

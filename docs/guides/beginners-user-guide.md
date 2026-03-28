@@ -264,11 +264,18 @@ Good routine:
 
 ## 14) Beginner glossary
 
-- **Provider**: the LLM backend (Anthropic/OpenAI/Ollama/etc.)
-- **Plugin**: adds capabilities/integrations
-- **Headless**: no interactive UI; service-style runtime
-- **Workspace**: local files Milady uses for agent context and tasks
-- **Gateway**: service layer used by dashboard and interfaces
+- **Provider**: the LLM backend that generates responses (Anthropic, OpenAI, Ollama, etc.)
+- **Plugin**: a module that adds capabilities to your agent (tools, integrations, connectors)
+- **Connector**: a type of plugin that bridges your agent to a messaging platform (Discord, Telegram, etc.)
+- **Action**: something your agent can do in response to a message (search the web, run code, post to Twitter)
+- **Skill**: a markdown-based extension that teaches the agent new behavior without writing code
+- **Headless**: running without an interactive UI; server/service mode for background operation
+- **Workspace**: local files Milady uses for agent context, tasks, and database (`~/.milady/workspace/`)
+- **Gateway**: the WebSocket + HTTP service layer that connects all clients to the runtime (port 18789)
+- **Dashboard**: the web UI at `localhost:2138` for chatting, managing sessions, and configuring your agent
+- **Character**: the configuration that defines your agent's personality, name, bio, and style
+- **elizaOS**: the open-source agent framework that Milady is built on
+- **Onboarding**: the first-run wizard that sets up your agent name, personality, provider, and wallets
 
 ---
 
@@ -325,7 +332,7 @@ Use this staged path so you do not get overwhelmed.
 3. **App/platform specialization**
    - `/apps/desktop`
    - `/apps/mobile`
-   - Browser Relay release-status documentation when browser automation is relevant
+   - `/apps/chrome-extension`
 4. **Cloud and deployment**
    - `/guides/cloud`
    - `/deployment`
