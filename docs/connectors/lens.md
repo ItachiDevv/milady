@@ -41,3 +41,17 @@ The Lens connector is an external elizaOS plugin that bridges your agent to the 
 1. Obtain API credentials from the [Lens Protocol](https://www.lens.xyz/) developer portal
 2. Add the API key to `connectors.lens` in your config or set the `LENS_API_KEY` environment variable
 3. Start your agent — the Lens connector will auto-enable
+
+## Features
+
+- Post publishing and engagement on the Lens social graph
+- Profile-based social graph traversal
+- Decentralized content on Polygon
+- Mention and reply monitoring
+
+## Related
+
+- [Lens Plugin (Registry)](/plugin-registry/platform/lens) — Plugin registry reference
+- [Farcaster Connector](/connectors/farcaster) — Another decentralized social connector
+- [Nostr Connector](/connectors/nostr) — Relay-based decentralized social
+- [Connectors Guide](/guides/connectors#lens) — Full configuration reference

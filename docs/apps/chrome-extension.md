@@ -5,18 +5,18 @@ description: Release-status and architecture notes for the Milady Browser Relay 
 ---
 
 <Warning>
-Release `v2.0.0-alpha.125` does not ship an in-repo Chrome extension app, and the Browser Relay extension is not part of the shipped release surface for this repository checkout.
+The current release does not ship an in-repo Chrome extension app, and the Browser Relay extension is not part of the shipped release surface for this repository.
 </Warning>
 
 ## Release status
 
-The **Milady Browser Relay** remains a planned or separately distributed extension. This repository does not contain the extension source, an unpacked extension directory, or a supported in-repo installation path for release `v2.0.0-alpha.125`.
+The **Milady Browser Relay** remains a planned or separately distributed extension. This repository does not contain the extension source, an unpacked extension directory, or a supported in-repo installation path.
 
 Use this page as the single source of truth for that status:
 
-- There is no in-repo Chrome extension directory in this release checkout.
+- There is no in-repo Chrome extension directory in the current release.
 - The Dashboard may still report relay status fields when a compatible extension is installed separately.
-- If you need browser automation from the shipped release today, prefer the `@elizaos/plugin-browser` plugin and its Stagehand-based flow.
+- If you need browser automation today, prefer the `@elizaos/plugin-browser` plugin and its Stagehand-based flow.
 
 ## What this page still documents
 
@@ -28,7 +28,7 @@ The Browser Relay concept is still useful context because other runtime surfaces
 
 ## Current recommendation
 
-For release `v2.0.0-alpha.125`, treat browser control as one of these:
+For the current release, treat browser control as one of these:
 
 1. A separately distributed Browser Relay package with its own source and install instructions.
 2. A browser-capable runtime plugin such as `@elizaos/plugin-browser`.
