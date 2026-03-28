@@ -1,11 +1,11 @@
 ---
 title: Plugin Setup Guide
-description: Comprehensive setup instructions for Milady connector, AI provider, and streaming plugins.
+description: Comprehensive setup instructions for Milady connector, AI provider, feature, and streaming plugins.
 ---
 
 # Plugin Setup Guide — Milady AI
 
-Comprehensive setup instructions for all connector, AI provider, and streaming plugins.
+Comprehensive setup instructions for all AI provider, connector, feature, and streaming plugins.
 When users ask how to set up a plugin, use this guide: give them the exact env var names,
 where to get the credentials, minimum required fields, and tips for optional fields.
 
@@ -622,10 +622,92 @@ On-chain chat via Solana blockchain.
 - `IQ_DEFAULT_CHATROOM` — Default chatroom to join
 - `IQ_CHATROOMS` — Additional chatrooms (comma-separated)
 
+### Lens
+**Get credentials:** Lens Protocol API access
+**Minimum required:** `LENS_API_KEY`
+**Variables:**
+- `LENS_API_KEY` — Your Lens Protocol API key
+**Config-only fields** (set in `connectors.lens`):
+- `apiKey` — Lens API key (also triggers auto-enable)
+**Tips:** Lens is a decentralized social protocol. The connector enables publishing posts and engaging with Lens content. Auto-enables when `apiKey`, `token`, or `botToken` is present in `connectors.lens`.
+
 ### Gmail Watch
 Monitors Gmail via Google Pub/Sub push notifications.
 **Setup:** Requires Google Cloud service account with Gmail API access.
 **Tips:** Uses `gog gmail watch serve` internally. Requires Google Cloud project with Gmail API enabled and Pub/Sub configured.
+
+---
+
+## Feature Plugins
+
+Feature plugins extend Milady's capabilities beyond chat. They are auto-enabled via environment variables or `config.features` settings.
+
+### Computer Use (CUA)
+**Get credentials:** Requires a supported browser automation backend
+**Minimum required:** `CUA_API_KEY` or `CUA_HOST`
+**Variables:**
+- `CUA_API_KEY` — API key for the computer-use backend
+- `CUA_HOST` — Host URL for the computer-use agent
+**Tips:** Enables the agent to interact with desktop or browser environments. Plugin: `@elizaos/plugin-cua`.
+
+### Obsidian
+**Get credentials:** No API key — uses local Obsidian vault path
+**Minimum required:** `OBSIDIAN_VAULT_PATH`
+**Variables:**
+- `OBSIDIAN_VAULT_PATH` — Absolute path to your Obsidian vault directory
+**Tips:** Allows the agent to read and write notes in your Obsidian vault. Plugin: `@elizaos/plugin-obsidian`.
+
+### RepoPrompt
+**Get credentials:** Install the repoprompt CLI
+**Minimum required:** `REPOPROMPT_CLI_PATH`
+**Variables:**
+- `REPOPROMPT_CLI_PATH` — Path to the repoprompt CLI binary
+**Tips:** Enables repo-context-aware prompting for coding tasks. Plugin: `@elizaos/plugin-repoprompt`.
+
+### Claude Code Workbench
+**Minimum required:** `CLAUDE_CODE_WORKBENCH_ENABLED=true`
+**Variables:**
+- `CLAUDE_CODE_WORKBENCH_ENABLED` — Set to `true` to enable the Claude Code workbench
+**Tips:** Adds a workbench for running Claude Code tasks from within Milady. Plugin: `@elizaos/plugin-claude-code-workbench`.
+
+### Image Generation
+**Minimum required:** Enable via `config.features.imageGen: true` or have a supported provider key set
+**Tips:** Generates images through configured model providers. Works with OpenAI DALL-E, FAL, and other image backends. Plugin: `@elizaos/plugin-image-generation`.
+
+### FAL (Media Generation)
+**Get credentials:** https://fal.ai/dashboard/keys
+**Minimum required:** `FAL_KEY`
+**Variables:**
+- `FAL_KEY` — API key from fal.ai
+**Tips:** FAL provides fast image and video generation models (Flux, Stable Diffusion, etc.). Enable via `config.media.fal` or environment variable. Plugin: `@elizaos/plugin-fal`.
+
+### Text-to-Speech (TTS)
+**Minimum required:** Enable via `config.features.tts: true`
+**Tips:** Enables voice output using configured TTS providers (OpenAI, Edge TTS, Groq PlayAI). Plugin: `@elizaos/plugin-tts`.
+
+### Speech-to-Text (STT)
+**Minimum required:** Enable via `config.features.stt: true`
+**Tips:** Enables voice input transcription using configured STT providers. Plugin: `@elizaos/plugin-stt`.
+
+### Vision
+**Minimum required:** Enable via `config.features.vision: true`
+**Tips:** Enables image understanding and analysis via multimodal models. Plugin: `@elizaos/plugin-vision`.
+
+### Browser
+**Minimum required:** Enable via `config.features.browser: true`
+**Tips:** Allows the agent to browse the web, fetch pages, and extract content. Plugin: `@elizaos/plugin-browser`.
+
+### Cron (Scheduled Tasks)
+**Minimum required:** Enable via `config.features.cron: true` or configure cron jobs in `config.cron`
+**Tips:** Runs scheduled tasks on cron expressions. Define jobs in the `cron` config section. Plugin: `@elizaos/plugin-cron`.
+
+### Suno (Music Generation)
+**Minimum required:** Enable via `config.media.suno` settings
+**Tips:** Generates music and audio through the Suno API. Plugin: `@elizaos/plugin-suno`.
+
+### Webhooks
+**Minimum required:** Configure via `config.hooks.webhooks`
+**Tips:** Sends webhook notifications on agent events. Plugin: `@elizaos/plugin-webhooks`.
 
 ---
 
