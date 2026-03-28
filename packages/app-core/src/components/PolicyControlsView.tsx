@@ -55,6 +55,78 @@ const HOUR_TO_OPTIONS = Array.from({ length: 24 }, (_, i) => ({
   label: `${String(i + 1).padStart(2, "0")}:00`,
 }));
 
+function StewardNotConnected({ onRetry }: { onRetry: () => void }) {
+  const [url, setUrl] = useState("");
+  const [apiKey, setApiKey] = useState("");
+  const [connecting, setConnecting] = useState(false);
+  const [connectError, setConnectError] = useState<string | null>(null);
+
+  const handleConnect = async () => {
+    const trimmedUrl = url.trim();
+    const trimmedKey = apiKey.trim();
+    if (!trimmedUrl) return;
+    setConnecting(true);
+    setConnectError(null);
+    try {
+      await client.updateConfig({
+        env: {
+          STEWARD_API_URL: trimmedUrl,
+          ...(trimmedKey ? { STEWARD_API_KEY: trimmedKey } : {}),
+        },
+      });
+      onRetry();
+    } catch (err) {
+      setConnectError(
+        err instanceof Error ? err.message : "Failed to save configuration",
+      );
+    } finally {
+      setConnecting(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-5 py-10 text-center">
+      <StewardLogo size={48} className="opacity-30" />
+      <div>
+        <p className="text-sm font-semibold text-txt">Steward Not Connected</p>
+        <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-muted">
+          Enter your Steward API details to connect and manage wallet policies.
+        </p>
+      </div>
+      <div className="mx-auto flex w-full max-w-sm flex-col gap-2.5 text-left">
+        <Input
+          type="url"
+          placeholder="Steward API URL (https://...)"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          disabled={connecting}
+          className="h-10 border-border/55 bg-bg/82 text-sm"
+        />
+        <Input
+          type="password"
+          placeholder="API Key (optional)"
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+          disabled={connecting}
+          className="h-10 border-border/55 bg-bg/82 text-sm"
+        />
+        <Button
+          variant="default"
+          size="sm"
+          className="h-10 text-xs font-semibold"
+          disabled={!url.trim() || connecting}
+          onClick={() => void handleConnect()}
+        >
+          {connecting ? "Connecting..." : "Connect to Steward"}
+        </Button>
+        {connectError && (
+          <p className="text-[11px] text-danger">{connectError}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function PolicyControlsView() {
   const [policies, setPolicies] = useState<PolicyRule[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,9 +140,13 @@ export function PolicyControlsView() {
   const [confirmCallback, setConfirmCallback] = useState<(() => void) | null>(
     null,
   );
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
+    void retryKey; // trigger re-fetch on retry
+    setLoading(true);
+    setError(null);
     async function load() {
       try {
         const status = await client.getStewardStatus();
@@ -96,7 +172,7 @@ export function PolicyControlsView() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [retryKey]);
 
   const getPolicy = useCallback(
     (type: PolicyType) => findPolicy(policies, type),
@@ -211,15 +287,7 @@ export function PolicyControlsView() {
   }
 
   if (!stewardConnected) {
-    return (
-      <div className="flex flex-col items-center gap-4 py-8 text-center">
-        <StewardLogo size={48} className="opacity-30" />
-        <p className="text-sm font-semibold text-txt">Steward Not Connected</p>
-        <p className="text-xs text-muted max-w-sm">
-          Connect your Steward instance to manage wallet policies.
-        </p>
-      </div>
-    );
+    return <StewardNotConnected onRetry={() => setRetryKey((k) => k + 1)} />;
   }
 
   return (
