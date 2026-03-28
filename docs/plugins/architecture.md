@@ -150,6 +150,7 @@ const AUTH_PROVIDER_PLUGINS = {
   CUA_API_KEY:                    "@elizaos/plugin-cua",
   CUA_HOST:                       "@elizaos/plugin-cua",
   OBSIDIAN_VAULT_PATH:            "@elizaos/plugin-obsidian",
+  OBSIDAN_VAULT_PATH:             "@elizaos/plugin-obsidian",  // legacy typo alias
   REPOPROMPT_CLI_PATH:            "@elizaos/plugin-repoprompt",
   CLAUDE_CODE_WORKBENCH_ENABLED:  "@elizaos/plugin-claude-code-workbench",
 };

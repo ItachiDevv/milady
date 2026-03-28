@@ -31,6 +31,10 @@ A plugin is a self-contained module that registers one or more of:
   Bridges to 19 messaging platforms via auto-enable (Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, Feishu, Matrix, Nostr, Lens, WeChat). Additional connectors (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon) are available in the elizaOS registry.
 </Card>
 
+<Card title="Streaming Plugins" icon="video" href="/skills/streaming">
+  Live streaming destinations — Twitch, YouTube Live, X (Twitter), Custom RTMP, and Pump.fun. Auto-enabled when streaming destinations are configured.
+</Card>
+
 <Card title="DeFi & Blockchain" icon="wallet" href="/plugin-registry/defi/evm">
   On-chain interactions for EVM chains and Solana — token transfers, swaps, and DeFi protocols.
 </Card>
