@@ -3218,10 +3218,16 @@ export function buildCharacterFromConfig(config: ElizaConfig): Character {
     bundledPreset?.bio ?? [
       "{{name}} is an AI assistant powered by Eliza and elizaOS.",
     ];
-  const systemPrompt =
+  const ownerName = (
+    config.ui as Record<string, unknown> | undefined
+  )?.ownerName as string | undefined;
+  const baseSystemPrompt =
     agentEntry?.system ??
     bundledPreset?.system ??
     "You are {{name}}, an autonomous AI agent powered by elizaOS.";
+  const systemPrompt = ownerName?.trim()
+    ? `${baseSystemPrompt}\nYour owner's name is ${ownerName.trim()}. Address them by name when greeting or when it feels natural.`
+    : baseSystemPrompt;
   const style = agentEntry?.style ?? bundledPreset?.style;
   const adjectives = agentEntry?.adjectives ?? bundledPreset?.adjectives;
   const topics =

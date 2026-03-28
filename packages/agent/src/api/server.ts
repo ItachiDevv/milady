@@ -469,6 +469,8 @@ function resolveConversationGreetingText(
   const normalizedLanguage = normalizeCharacterLanguage(lang);
   const characterName = runtime.character.name?.trim();
   const assistantName = uiConfig?.assistant?.name?.trim();
+  const ownerName = (uiConfig as Record<string, unknown> | undefined)
+    ?.ownerName as string | undefined;
 
   // Prefer explicit UI selections over the loaded character card: users pick a
   // style in onboarding/roster (avatar + preset) while `runtime.character.name`
@@ -482,12 +484,17 @@ function resolveConversationGreetingText(
     resolveStylePresetByName(characterName, normalizedLanguage) ??
     resolveStylePresetByName(assistantName, normalizedLanguage);
 
-  const presetGreeting = pickRandom(preset?.postExamples);
-  if (presetGreeting) {
-    return presetGreeting;
+  let greeting = pickRandom(preset?.postExamples);
+  if (!greeting) {
+    greeting = pickRandom(runtime.character.postExamples);
   }
 
-  return pickRandom(runtime.character.postExamples);
+  // Personalize with the owner's name if available
+  if (greeting && ownerName?.trim()) {
+    greeting = greeting.replace(/\{\{ownerName\}\}/g, ownerName.trim());
+  }
+
+  return greeting;
 }
 
 interface AgentStartupDiagnostics {

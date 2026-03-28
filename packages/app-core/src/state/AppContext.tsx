@@ -2306,7 +2306,15 @@ function AppProviderInner({
       enabled,
       hasPersistedApiKey,
     });
-    setElizaCloudUserId(cloudStatus.username ?? cloudStatus.userId ?? null);
+    const resolvedCloudName =
+      cloudStatus.username ?? cloudStatus.userId ?? null;
+    setElizaCloudUserId(resolvedCloudName);
+    // Persist to config so the agent can address the user by name in greetings
+    if (resolvedCloudName && isConnected) {
+      void client
+        .updateConfig({ ui: { ownerName: resolvedCloudName } })
+        .catch(() => {});
+    }
     setElizaCloudStatusReason(
       isConnected &&
         typeof cloudStatus.reason === "string" &&
