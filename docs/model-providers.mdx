@@ -312,9 +312,14 @@ Every env variable that triggers auto-enable, grouped by provider:
 | `COHERE_API_KEY` | Cohere |
 | `PERPLEXITY_API_KEY` | Perplexity |
 | `ZAI_API_KEY` | Zai |
+| `ELIZA_USE_PI_AI` | Pi AI |
 | `ELIZAOS_CLOUD_API_KEY` | elizaOS Cloud |
 | `ELIZAOS_CLOUD_ENABLED` | elizaOS Cloud |
 
 <Tip>
 Some providers accept multiple env variable names for convenience (e.g., both `ANTHROPIC_API_KEY` and `CLAUDE_API_KEY` activate Anthropic). You only need to set one.
 </Tip>
+
+<Note>
+Additional env variables like `CUA_API_KEY`, `OBSIDIAN_VAULT_PATH`, `REPOPROMPT_CLI_PATH`, and `CLAUDE_CODE_WORKBENCH_ENABLED` also trigger plugin auto-enable, but these activate **feature plugins** rather than model providers. See [Configuration](/configuration) for the full list.
+</Note>

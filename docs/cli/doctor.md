@@ -79,10 +79,10 @@ milady doctor [options]
 
 | Check | Pass Condition |
 |-------|---------------|
-| Port 31337 | API port is available |
-| Port 2138 | UI port is available |
+| Port 31337 | API port is available (dev default; override with `MILADY_API_PORT`) |
+| Port 2138 | UI port is available (dev default; override with `MILADY_PORT`) |
 
-Port checks can be skipped with `--no-ports`.
+Port checks can be skipped with `--no-ports`. In production (`milady start`), the API and UI share port 2138 by default.
 
 ## Auto-Fix
 

@@ -88,6 +88,8 @@ For non-Ollama models, the manager fetches the file list from `https://huggingfa
 
 For models with an Ollama tag (e.g., `ollama/llama3.2:1b`), the manager calls `POST http://localhost:11434/api/pull` with the model name. Requires a running Ollama server.
 
+**Ollama setup:** Install Ollama from [ollama.ai](https://ollama.ai), then start the server with `ollama serve`. Set `OLLAMA_BASE_URL=http://127.0.0.1:11434` in your environment to auto-enable the Ollama provider plugin. Verify it's running with `curl http://127.0.0.1:11434/api/tags`.
+
 ## Programmatic API
 
 ```typescript

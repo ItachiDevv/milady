@@ -14,15 +14,14 @@ These variables control where Milady stores its state, config, and credentials.
 |----------|-------------|---------|
 | `MILADY_STATE_DIR` | Override the state directory. All resolved paths default to subdirectories of this directory. | `~/.milady/` |
 | `MILADY_CONFIG_PATH` | Override the config file path. Takes precedence over `MILADY_STATE_DIR` for config resolution. | `~/.milady/milady.json` |
-| `MILADY_PROFILE` | Active configuration profile name. When set, the state directory becomes `~/.milady-<profile>/`. Equivalent to the `--profile` CLI flag. | (none) |
-| `MILADY_OAUTH_DIR` | Override the OAuth credentials directory. | `~/.milady/credentials/` |
-| `MILADY_WORKSPACE_ROOT` | Override the workspace root directory used by the registry client. | (auto-resolved from config) |
+| `ELIZA_OAUTH_DIR` | Override the OAuth credentials directory. | `~/.milady/credentials/` |
+| `ELIZA_WORKSPACE_ROOT` | Override the workspace root directory used by the registry client. | (auto-resolved from config) |
 
 ### Path Resolution
 
 `MILADY_CONFIG_PATH` takes the highest precedence. If not set, `MILADY_STATE_DIR` determines where `milady.json` is looked for. If neither is set, the default `~/.milady/milady.json` is used.
 
-When a `--profile <name>` flag or `MILADY_PROFILE` is set, the state directory becomes `~/.milady-<name>/` and all path defaults shift accordingly.
+When a `--profile <name>` CLI flag is passed, the state directory becomes `~/.milady-<name>/` and all path defaults shift accordingly.
 
 ---
 
