@@ -1760,8 +1760,10 @@ function AgentDetailSidebar({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: rerun when logs update
   useEffect(() => {
-    if (logsEndRef.current) {
-      logsEndRef.current.scrollIntoView({ behavior: "smooth" });
+    // Scroll only the logs container, not the entire page
+    const scrollable = logsEndRef.current?.closest(".overflow-y-auto");
+    if (scrollable) {
+      scrollable.scrollTop = scrollable.scrollHeight;
     }
   }, [logs]);
 
