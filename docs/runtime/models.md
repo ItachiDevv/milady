@@ -65,7 +65,7 @@ The primary model is stored in `agents.defaults.model.primary` as a `"provider/m
   "agents": {
     "defaults": {
       "model": {
-        "primary": "anthropic/claude-sonnet-4-5",
+        "primary": "anthropic/claude-sonnet-4.5",
         "fallbacks": ["openai/gpt-4o", "groq/llama-3-70b"]
       }
     }
@@ -139,7 +139,7 @@ Define a custom model provider (e.g., a self-hosted OpenAI-compatible endpoint):
 
 | Field | Type | Description |
 |---|---|---|
-| `id` | string | Unique model identifier (e.g., `"anthropic/claude-sonnet-4-5"`) |
+| `id` | string | Unique model identifier (e.g., `"anthropic/claude-sonnet-4.5"`) |
 | `name` | string | Human-readable name |
 | `api` | ModelApi | API format: `"openai-completions"`, `"openai-responses"`, `"anthropic-messages"`, `"google-generative-ai"`, `"bedrock-converse-stream"` |
 | `reasoning` | boolean | Whether the model supports extended thinking / reasoning |
@@ -198,12 +198,12 @@ Each agent in `agents.list` can override the model:
     "list": [
       {
         "id": "main",
-        "model": "anthropic/claude-opus-4-5"
+        "model": "anthropic/claude-opus-4.5"
       },
       {
         "id": "coder",
         "model": {
-          "primary": "anthropic/claude-sonnet-4-5",
+          "primary": "anthropic/claude-sonnet-4.5",
           "fallbacks": ["openai/gpt-4o"]
         }
       }

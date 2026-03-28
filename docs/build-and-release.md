@@ -1,6 +1,6 @@
 # Build and release (CI, desktop binaries)
 
-`.github/workflows/release-electrobun.yml` is the canonical desktop release workflow and reusable desktop release-build graph. `.github/workflows/test-electrobun-release.yml` calls that same graph on pull requests in build-only mode, and `.github/workflows/release.yml` remains a manual legacy desktop fallback only.
+`.github/workflows/release-electrobun.yml` is the canonical desktop release workflow and reusable desktop release-build graph. `.github/workflows/test-electrobun-release.yml` calls that same graph on pull requests in build-only mode.
 
 Why the release pipeline and desktop bundle work the way they do.
 
@@ -34,7 +34,7 @@ We do **not** try to exclude deps that might already be inlined by tsdown into p
 
 ## Release workflow: design and WHYs
 
-The release workflow (`.github/workflows/release.yml`) is designed for **reproducible, fail-fast builds** and **diagnosable failures**. Key choices and their reasons:
+The release workflow (`.github/workflows/release-electrobun.yml`) is designed for **reproducible, fail-fast builds** and **diagnosable failures**. Key choices and their reasons:
 
 - **Strict shell (`bash -euo pipefail`)** — Applied at job default for `build-desktop` so every step exits on first error, undefined variable, or pipe failure. **Why:** Without it, a failing command in the middle of a script can be ignored and the step still "succeeds", producing broken artifacts or confusing later failures.
 - **Retry loops with final assertion** — `bun install` steps retry up to 3 times, then run the same install command once more after the loop. **Why:** If all retries failed, the loop exits without failing the step; the final run ensures the step fails with a clear install error instead of silently continuing.
@@ -54,14 +54,13 @@ CI workflows that need Node (for node-gyp / native modules or npm registry) were
 - **`useblacksmith/setup-node@v5` on Blacksmith runners** — In `test.yml`, jobs that run on `blacksmith-4vcpu-ubuntu-2404` use `useblacksmith/setup-node` instead of `actions/setup-node`. **Why:** Blacksmith’s action uses their colocated cache (same DC as the runner), so Node binaries are served at ~400MB/s and we avoid slow or failing downloads from nodejs.org.
 - **`actions/setup-node@v3` (not v4) on GitHub-hosted runners** — Release, test (macOS legs), nightly, publish-npm, and other workflows pin to `@v3`. **Why:** v4 has a known slow post-action step and often triggers nodejs.org downloads that time out; v3 uses the runner toolcache when the version is present and avoids the regression.
 - **`check-latest: false`** — We set this explicitly on every `actions/setup-node` step (Blacksmith jobs use `useblacksmith/setup-node`, which has its own caching behavior). **Why:** With the default, the action can hit nodejs.org to check for a newer patch; that adds latency and can timeout. We want a fixed, cached Node version for reproducible CI.
-- **Bun global cache (`~/.bun/install/cache`)** — test.yml, release.yml, benchmark-tests.yml, publish-npm.yml, and nightly.yml all cache this path with `actions/cache@v4` keyed by `bun.lock`. **Why:** Bun install is fast, but re-downloading every package every run was still a major cost; caching the global cache avoids re-downloading tarballs while letting `bun install` do its fast hardlink/clonefile into `node_modules`. We do not cache `node_modules` itself — compression/upload cost exceeds the gain.
+- **Bun global cache (`~/.bun/install/cache`)** — test.yml, release-electrobun.yml, benchmark-tests.yml, publish-npm.yml, and nightly.yml all cache this path with `actions/cache@v4` keyed by `bun.lock`. **Why:** Bun install is fast, but re-downloading every package every run was still a major cost; caching the global cache avoids re-downloading tarballs while letting `bun install` do its fast hardlink/clonefile into `node_modules`. We do not cache `node_modules` itself — compression/upload cost exceeds the gain.
 - **`timeout-minutes` on jobs** — We set explicit timeouts (e.g. 20–30 min for test jobs, 45 for release build-desktop). **Why:** So a hung or extremely slow run fails in a bounded time instead of burning runner hours; also makes flakiness visible.
 
 ## Where this runs
 
 - **Electrobun PR release validation:** `.github/workflows/test-electrobun-release.yml` — on pull requests; runs the same Electrobun release build matrix in build-only mode without creating a GitHub release.
 - **Electrobun release:** `.github/workflows/release-electrobun.yml` — on version tag push or manual dispatch; builds macOS arm64, macOS x64, Windows x64, and Linux x64 Electrobun artifacts plus update channel files.
-- **Legacy desktop compatibility stub:** `.github/workflows/release.yml` — manual workflow that only points maintainers at the Electrobun release path.
 - **Local desktop build:** From repo root, use the Electrobun path: `bun run build:desktop` for a local bundle build, then `bash apps/app/electrobun/scripts/smoke-test.sh` for packaged desktop verification.
 
 ## Electrobun update-channel naming

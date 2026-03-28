@@ -38,7 +38,7 @@ where to get the credentials, minimum required fields, and tips for optional fie
 
 ### Google Gemini
 **Get credentials:** https://aistudio.google.com/app/apikey
-**Minimum required:** `GOOGLE_GENERATIVE_AI_API_KEY` or `GOOGLE_API_KEY`
+**Minimum required:** `GOOGLE_GENERATIVE_AI_API_KEY`, `GOOGLE_API_KEY`, or `GEMINI_API_KEY`
 **Variables:**
 - `GOOGLE_GENERATIVE_AI_API_KEY` / `GOOGLE_API_KEY` — From AI Studio or Google Cloud (either works for auto-enable)
 - `GOOGLE_SMALL_MODEL` — e.g. `gemini-2.0-flash`

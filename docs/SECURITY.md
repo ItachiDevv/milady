@@ -21,7 +21,7 @@ This document describes the security architecture and hardening measures impleme
 
 ## SSRF Protection
 
-**File:** `src/security/network-policy.ts`
+**File:** `packages/agent/src/security/network-policy.ts`
 
 All user-supplied URLs (e.g. knowledge ingestion, web fetches) are validated through a multi-layer SSRF defense:
 
@@ -46,7 +46,7 @@ The `isBlockedPrivateOrLinkLocalIp()` function blocks access to:
 | `::ffff:` mapped | IPv4-mapped IPv6 addresses (decoded and rechecked) |
 
 ### DNS Resolution Verification
-**File:** `src/runtime/custom-actions.ts` (`isBlockedUrl()`)
+**File:** `packages/agent/src/runtime/custom-actions.ts` (`isBlockedUrl()`)
 
 After hostname validation, the `isBlockedUrl()` function performs DNS resolution (via `node:dns/promises` `lookup`) and checks **every resolved IP address** against the blocklist using `isBlockedPrivateOrLinkLocalIp()` from `network-policy.ts`. This prevents DNS rebinding and split-horizon DNS attacks where a hostname resolves to a private IP.
 
@@ -54,13 +54,13 @@ After hostname validation, the `isBlockedUrl()` function performs DNS resolution
 Literal hostnames like `localhost`, `metadata.google.internal`, and cloud metadata service hostnames are explicitly blocked.
 
 ### Test Coverage
-See `src/security/network-policy.test.ts` for comprehensive tests including IPv4, IPv6, mapped addresses, and edge cases.
+See `packages/agent/test/security/network-policy.test.ts` for comprehensive tests including IPv4, IPv6, mapped addresses, and edge cases.
 
 ---
 
 ## Environment Variable Blocklist
 
-**File:** `src/api/server.ts` (line ~812)
+**File:** `packages/agent/src/api/server.ts`
 
 The `BLOCKED_ENV_KEYS` set prevents the API from writing to security-sensitive environment variables via `PUT /api/env`. Without this, an attacker with API access could:
 
@@ -93,7 +93,7 @@ The `BLOCKED_ENV_KEYS` set prevents the API from writing to security-sensitive e
 
 ## SQL Injection Guards
 
-**File:** `src/api/database.ts`
+**File:** `packages/agent/src/api/database.ts`
 
 The database API enforces read-only query execution with multiple layers:
 
@@ -111,7 +111,7 @@ The database API enforces read-only query execution with multiple layers:
 ## Command Injection Defenses
 
 ### Terminal Run Endpoint
-**File:** `src/api/server.ts` (`/api/terminal/run`)
+**File:** `packages/agent/src/api/server.ts` (`/api/terminal/run`)
 
 The shell execution endpoint applies multiple constraints:
 - **Token authentication** — requires `MILADY_TERMINAL_RUN_TOKEN`
@@ -120,12 +120,12 @@ The shell execution endpoint applies multiple constraints:
 - **Rate limiting** — concurrent shell executions are bounded
 
 ### Sandbox Routes
-**File:** `src/api/sandbox-routes.ts`
+**File:** `packages/agent/src/api/sandbox-routes.ts`
 
 The `runCommand()` helper uses `execFileSync` with argument arrays, preventing shell metacharacter injection for general command execution. Note that `execSync` is also used elsewhere in the file for platform-specific operations (PowerShell commands, `osascript`, `wmctrl`/`xdotool`, audio recording, Docker). Variables used in commands are bounded integers or server-generated paths, never raw user input.
 
 ### Custom Actions
-**File:** `src/runtime/custom-actions.ts`
+**File:** `packages/agent/src/runtime/custom-actions.ts`
 
 Shell and code execution handlers are gated behind explicit configuration flags. The VM sandbox uses `vm.runInNewContext` with a restricted global scope.
 
@@ -133,7 +133,7 @@ Shell and code execution handlers are gated behind explicit configuration flags.
 
 ## Prototype Pollution Prevention
 
-**File:** `src/api/server.ts`
+**File:** `packages/agent/src/api/server.ts`
 
 Object property manipulation endpoints explicitly block dangerous keys:
 - `__proto__`
@@ -146,7 +146,7 @@ This prevents prototype pollution attacks that could modify the behavior of all 
 
 ## Plugin Installation Safety
 
-**Files:** `src/services/plugin-installer.ts`, `src/services/plugin-eject.ts`, `src/services/core-eject.ts`
+**Files:** `packages/app-core/src/services/plugin-installer.ts`, `packages/app-core/src/services/plugin-eject.ts`, `packages/app-core/src/services/core-eject.ts`
 
 All `npm install` and `bun install` calls include the `--ignore-scripts` flag to prevent:
 - Postinstall RCE from malicious packages
@@ -192,7 +192,7 @@ The "Open Link in Browser" context menu option routes through the same validated
 
 ## DNS Rebinding Protection
 
-**File:** `src/api/server.ts`
+**File:** `packages/agent/src/api/server.ts`
 
 Host header validation prevents DNS rebinding attacks where an attacker's domain resolves to `127.0.0.1` and bypasses same-origin policy. The server validates the `Host` header against expected values.
 
@@ -200,7 +200,7 @@ Host header validation prevents DNS rebinding attacks where an attacker's domain
 
 ## Configuration Injection Prevention
 
-**File:** `src/api/server.ts`
+**File:** `packages/agent/src/api/server.ts`
 
 ### `$include` Directive Blocking
 The `isBlockedObjectKey()` function (line ~2835) blocks dangerous property keys including `$include` directives across **all object property manipulation endpoints** — not just config writes. This prevents including arbitrary files from the filesystem into any object, potentially leaking secrets or overriding security settings. The same guard also blocks `__proto__`, `constructor`, and `prototype` (see [Prototype Pollution Prevention](#prototype-pollution-prevention)).
