@@ -64,7 +64,7 @@ Each line shows `configured` if the corresponding environment variable is set an
 | `ANTHROPIC_API_KEY` | Anthropic (Claude) | Claude 3 and 4 model families. Also accepted: `CLAUDE_API_KEY`. |
 | `OPENAI_API_KEY` | OpenAI (GPT) | GPT-4o, GPT-4, o1, o3 and other OpenAI models |
 | `AI_GATEWAY_API_KEY` | Vercel AI Gateway | Routes requests through the Vercel AI Gateway. Also accepted: `AIGATEWAY_API_KEY`. |
-| `GOOGLE_API_KEY` | Google (Gemini) | Gemini model family. Also accepted: `GOOGLE_GENERATIVE_AI_API_KEY`. |
+| `GOOGLE_API_KEY` | Google (Gemini) | Gemini model family. Also accepted: `GEMINI_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`. |
 | `GOOGLE_CLOUD_API_KEY` | Google Antigravity (Vertex AI) | Google Cloud / Vertex AI models |
 | `GROQ_API_KEY` | Groq | Fast inference via Groq hardware |
 | `XAI_API_KEY` | xAI (Grok) | Grok model family. Also accepted: `GROK_API_KEY`. |

@@ -16,6 +16,7 @@ CLAUDE_API_KEY                 → @elizaos/plugin-anthropic
 OPENAI_API_KEY                 → @elizaos/plugin-openai
 AI_GATEWAY_API_KEY             → @elizaos/plugin-vercel-ai-gateway
 AIGATEWAY_API_KEY              → @elizaos/plugin-vercel-ai-gateway
+GEMINI_API_KEY                 → @elizaos/plugin-google-genai
 GOOGLE_API_KEY                 → @elizaos/plugin-google-genai
 GOOGLE_GENERATIVE_AI_API_KEY   → @elizaos/plugin-google-genai
 GOOGLE_CLOUD_API_KEY           → @elizaos/plugin-google-antigravity
