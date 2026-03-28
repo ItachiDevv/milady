@@ -241,6 +241,46 @@ function createContext(
 }
 
 describe("InventoryView wallet settings", () => {
+  it("styles the empty-wallet settings action with an accent outline", async () => {
+    const ctx = createContext({
+      walletConfig: {
+        evmAddress: null,
+        solanaAddress: null,
+        managedBscRpcReady: false,
+        cloudManagedAccess: false,
+        ethereumBalanceReady: false,
+        baseBalanceReady: false,
+        bscBalanceReady: false,
+        avalancheBalanceReady: false,
+        solanaBalanceReady: false,
+        alchemyKeySet: false,
+        ankrKeySet: false,
+        heliusKeySet: false,
+        legacyCustomChains: [],
+      },
+      walletAddresses: {
+        evmAddress: null,
+        solanaAddress: null,
+      },
+      walletBalances: null,
+    });
+    mockUseApp.mockImplementation(() => ctx);
+
+    let tree: TestRenderer.ReactTestRenderer | undefined;
+    await act(async () => {
+      tree = TestRenderer.create(<InventoryView />);
+    });
+
+    const settingsButton = tree?.root.findByType("button");
+    expect(settingsButton?.children).toContain("nav.settings");
+    expect(settingsButton?.props.variant).toBe("outline");
+    expect(String(settingsButton?.props.className)).toContain(
+      "border-accent/40",
+    );
+    expect(String(settingsButton?.props.className)).toContain("bg-accent/15");
+    expect(String(settingsButton?.props.className)).toContain("text-accent");
+  });
+
   it("renders the token sort control and dispatches inventorySort updates", async () => {
     const ctx = createContext();
     mockUseApp.mockImplementation(() => ctx);

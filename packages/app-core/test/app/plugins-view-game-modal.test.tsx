@@ -580,6 +580,42 @@ describe("PluginsView game modal", () => {
     expect(mockHandlePluginConfigSave).toHaveBeenCalledWith("test-plugin", {});
   });
 
+  it("renders validation details after the config form content", async () => {
+    mockUseApp.mockReturnValue(
+      baseContext([
+        createPlugin("discord", "Discord", "connector", {
+          validationErrors: [
+            {
+              field: "CALLBACK_URL",
+              message: "Required before saving",
+            },
+          ],
+        }),
+      ]),
+    );
+
+    let tree: TestRenderer.ReactTestRenderer = null as any;
+    await act(async () => {
+      tree = TestRenderer.create(
+        React.createElement(PluginsView, { inModal: true, mode: "social" }),
+      );
+    });
+
+    const section = tree.root.findByProps({
+      "data-testid": "connector-section-discord",
+    });
+    const sectionText = text(section);
+
+    expect(section.findAllByProps({ "data-config-key": "API_KEY" })).toHaveLength(
+      1,
+    );
+    expect(sectionText).toContain("CALLBACK_URL");
+    expect(sectionText.indexOf("API key")).toBeGreaterThanOrEqual(0);
+    expect(sectionText.indexOf("API key")).toBeLessThan(
+      sectionText.indexOf("CALLBACK_URL"),
+    );
+  });
+
   it("shows streaming plugin only in streaming mode", async () => {
     mockUseApp.mockReturnValue(
       baseContext([
