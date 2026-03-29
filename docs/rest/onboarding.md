@@ -126,7 +126,7 @@ The agent's `name`, `bio`, and `systemPrompt` are persisted directly into the co
 | `providerApiKey` | string | No | API key for the selected provider |
 | `cloudProvider` | string | No | Cloud provider ID when `runMode` is `cloud` |
 | `smallModel` | string | No | Small model override (e.g. `openai/gpt-5-mini`) |
-| `largeModel` | string | No | Large model override (e.g. `anthropic/claude-sonnet-4.5`) |
+| `largeModel` | string | No | Large model override (e.g. `anthropic/claude-sonnet-4-6`) |
 | `sandboxMode` | string | No | Sandbox isolation level — `off`, `light`, `standard`, or `max` |
 | `telegramToken` | string | No | Telegram bot token |
 | `discordToken` | string | No | Discord bot token |

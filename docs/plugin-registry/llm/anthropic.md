@@ -40,7 +40,7 @@ export ANTHROPIC_API_KEY=sk-ant-...
     "profiles": {
       "default": {
         "provider": "anthropic",
-        "model": "claude-sonnet-4-20250514"
+        "model": "claude-sonnet-4-6"
       }
     }
   }
@@ -63,7 +63,7 @@ export ANTHROPIC_API_KEY=sk-ant-...
 |-------|---------|---------|
 | `claude-opus-4-20250514` | 200k | Complex reasoning |
 | `claude-sonnet-4-20250514` | 200k | Balanced performance and cost |
-| `claude-sonnet-4.5` | 200k | Improved coding |
+| `claude-sonnet-4-5-20241022` | 200k | Improved coding |
 | `claude-3-5-haiku-20241022` | 200k | Fast responses |
 
 ### Claude 3.7 Family
@@ -91,24 +91,24 @@ export ANTHROPIC_API_KEY=sk-ant-...
 
 | elizaOS Model Type | Anthropic Model |
 |-------------------|----------------|
-| `TEXT_SMALL` | `claude-3-5-haiku-20241022` |
-| `TEXT_LARGE` | `claude-sonnet-4-20250514` |
-| `OBJECT_SMALL` | `claude-3-5-haiku-20241022` |
-| `OBJECT_LARGE` | `claude-sonnet-4-20250514` |
+| `TEXT_SMALL` | `claude-haiku-4-5-20251001` |
+| `TEXT_LARGE` | `claude-sonnet-4-6` |
+| `OBJECT_SMALL` | `claude-haiku-4-5-20251001` |
+| `OBJECT_LARGE` | `claude-sonnet-4-6` |
 
 ## Features
 
 - Streaming responses
 - Tool use (function calling)
 - Vision (image input on all models)
-- Extended thinking (claude-3-7-sonnet, claude-opus-4-6)
+- Extended thinking (claude-3-7-sonnet, claude-opus-4-6, claude-sonnet-4-6)
 - Structured JSON output via tool use
 - 200k token context window on all models
 - Prompt caching for cost reduction on repeated context
 
 ## Extended Thinking
 
-Claude 3.7 Sonnet and Claude Opus 4 (`claude-opus-4-20250514`) support extended thinking — a mode where the model reasons step-by-step before answering. This is particularly effective for complex reasoning, math, and multi-step planning.
+Claude 3.7 Sonnet, Claude Opus 4.6 (`claude-opus-4-6`), and Claude Sonnet 4.6 (`claude-sonnet-4-6`) support extended thinking — a mode where the model reasons step-by-step before answering. This is particularly effective for complex reasoning, math, and multi-step planning.
 
 ```typescript
 const response = await runtime.useModel("TEXT_REASONING_LARGE", {
