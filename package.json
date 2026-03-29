@@ -56,7 +56,7 @@
     "./eliza": "./dist/runtime/eliza.js"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "benchmark:preflight": "node scripts/benchmark-preflight.mjs",

@@ -24,11 +24,11 @@ A plugin is a self-contained module that registers one or more of:
 </Card>
 
 <Card title="Model Providers" icon="brain" href="/plugin-registry/llm/openai">
-  LLM integrations for OpenAI, Anthropic, Google Gemini, Google Antigravity, Groq, Ollama, OpenRouter, DeepSeek, xAI, Mistral, Cohere, Together, Qwen, Minimax, Pi AI, Perplexity, Zai, and Vercel AI Gateway. Eliza Cloud auto-enables separately via `ELIZAOS_CLOUD_API_KEY`.
+  18 LLM provider plugins auto-enable when their API key is detected: OpenAI, Anthropic, Google Gemini, Google Antigravity, Groq, Ollama, OpenRouter, DeepSeek, xAI, Mistral, Cohere, Together, Qwen, Minimax, Pi AI, Perplexity, Zai, and Vercel AI Gateway. Eliza Cloud auto-enables separately via `ELIZAOS_CLOUD_API_KEY`.
 </Card>
 
-<Card title="Platform Connectors" icon="plug" href="/plugin-registry/platform/discord">
-  Bridges to 19 messaging platforms via auto-enable (Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, Feishu, Matrix, Nostr, Lens, WeChat). Additional connectors (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon) are available in the elizaOS registry.
+<Card title="Platform Connectors" icon="plug" href="/connectors/overview">
+  **19 built-in** connectors auto-enable when configured (Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, Feishu, Matrix, Nostr, Lens) plus WeChat (Milady-specific). **9 registry-installable** connectors are available via `milady plugins install` (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon).
 </Card>
 
 <Card title="DeFi & Blockchain" icon="wallet" href="/plugin-registry/defi/evm">
@@ -46,12 +46,33 @@ A plugin is a self-contained module that registers one or more of:
 Plugins are loaded during runtime initialization in this order:
 
 1. **Milady plugin** — The bridge plugin (`createElizaPlugin()`) providing workspace context, session keys, emotes, custom actions, and lifecycle actions. Always first in the plugins array.
-2. **Pre-registered plugins** — `@elizaos/plugin-sql` and `@elizaos/plugin-local-embedding` are pre-registered before `runtime.initialize()` to prevent race conditions.
-3. **Core plugins** — Always loaded: `sql`, `local-embedding`, `form`, `knowledge`, `trajectory-logger`, `agent-orchestrator`, `cron`, `shell`, `agent-skills` (see `packages/agent/src/runtime/core-plugins.ts`). Additional plugins like `pdf`, `cua`, `browser`, `computeruse`, `obsidian`, `code`, `repoprompt`, `claude-code-workbench`, `vision`, `cli`, `edge-tts`, `elevenlabs`, `discord`, `telegram`, and `twitch` are optional and loaded when their feature flags or environment variables are configured.
-4. **Auto-enabled plugins** — Connector, provider, feature, and streaming plugins are auto-enabled based on config and environment variables (see [Architecture](/plugins/architecture) for the full maps).
+2. **Core plugins** (pre-registered) — All 9 core plugins are registered sequentially before `runtime.initialize()` to prevent race conditions. Always loaded: `sql`, `local-embedding`, `form`, `knowledge`, `trajectory-logger`, `agent-orchestrator`, `cron`, `shell`, `agent-skills` (see `packages/agent/src/runtime/core-plugins.ts`).
+3. **Optional core plugins** — Not loaded by default. Require explicit configuration, feature flags, or platform dependencies: `pdf`, `cua`, `browser`, `computeruse`, `obsidian`, `code`, `repoprompt`, `claude-code-workbench`, `vision`, `cli`, `discord`, `telegram`, `twitch`, `edge-tts`, `elevenlabs` (see `OPTIONAL_CORE_PLUGINS` in `core-plugins.ts`).
+4. **Auto-enabled plugins** — Connector, provider, feature, and streaming plugins are auto-enabled based on config and environment variables. Auto-enable runs *before* plugin resolution and mutates `config.plugins.allow`. Categories:
+   - **Connectors** — Enabled when a connector has credentials in `connectors.<name>` config (19 built-in + WeChat via Milady override).
+   - **Providers** — Enabled when their API key env variable is set (e.g., `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`). See [Architecture](/plugins/architecture) for the full maps.
+   - **Features** — Enabled when `features.<name>` is `true` in config (browser, imageGen, tts, stt, vision, computeruse, webhooks, gmailWatch, and more).
+   - **Streaming** — Enabled when `streaming.destinations.<name>` is configured (Twitch, YouTube, Custom RTMP, PumpFun, X).
+   - **Media** — FAL, Suno, and Vision plugins auto-enable based on `media` config or env variables.
 5. **Ejected plugins** — Local overrides discovered from `~/.milady/plugins/ejected/`. When an ejected copy exists, it takes priority over the npm-published version.
-6. **User-installed plugins** — Tracked in `plugins.installs` in `milady.json`. Collected before drop-in plugins; any plugin name already present here takes precedence.
-7. **Custom/drop-in plugins** — Scanned from `~/.milady/plugins/custom/` and any extra paths in `plugins.load.paths`. Plugins whose names already exist in `plugins.installs` are skipped (`mergeDropInPlugins` precedence rule).
+6. **Workspace overrides** — When using a linked local Eliza checkout (`bun run setup:eliza-workspace`), workspace copies take priority between ejected and installed plugins.
+7. **User-installed plugins** — Tracked in `plugins.installs` in `milady.json`. Collected before drop-in plugins; any plugin name already present here takes precedence.
+8. **Custom/drop-in plugins** — Scanned from `~/.milady/plugins/custom/` and any extra paths in `plugins.load.paths`. Plugins whose names already exist in `plugins.installs` are skipped (`mergeDropInPlugins` precedence rule).
+
+### Deny List
+
+To prevent a plugin from loading even if auto-enable would activate it, add it to `plugins.deny` or set `plugins.entries.<name>.enabled` to `false`:
+
+```json
+{
+  "plugins": {
+    "deny": ["@elizaos/plugin-browser"],
+    "entries": {
+      "discord": { "enabled": false }
+    }
+  }
+}
+```
 
 ```json
 // milady.json plugin configuration

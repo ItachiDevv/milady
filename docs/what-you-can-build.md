@@ -8,7 +8,7 @@ Milady is a modular AI agent framework. Here's what people are building with it.
 
 ## Social Media Agents
 
-Deploy agents across Twitter/X, Discord, Telegram, Slack, Farcaster, and 20+ other platforms that engage with communities, post content, and respond to mentions — all driven by a configurable character personality. A single character file controls posting cadence, tone, and auto-reply behavior across every connected platform.
+Deploy agents across Twitter/X, Discord, Telegram, Slack, Farcaster, and other platforms (19 built-in connectors plus 9 more installable from the registry) that engage with communities, post content, and respond to mentions — all driven by a configurable character personality. A single character file controls posting cadence, tone, and auto-reply behavior across every connected platform. See [Connectors Overview](/connectors/overview) for the full list.
 
 ```json
 {
@@ -138,7 +138,7 @@ Create agents that browse the web, fill forms, extract data, and automate multi-
 - Screenshot analysis
 - Multi-step web workflows
 
-**Plugins**: `browser`, computer-use plugins
+**Plugins**: `browser`, `computeruse` (optional core plugins — enable via `features.browser` / `features.computeruse` in config, or install via `milady plugins install`)
 
 ---
 

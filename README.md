@@ -72,7 +72,7 @@ Grab from **[Releases](https://github.com/milady-ai/milady/releases/latest)**:
 | macOS (Apple Silicon) | [`Milady-arm64.dmg`](https://github.com/milady-ai/milady/releases/latest) | for your overpriced rectangle |
 | macOS (Intel) | [`Milady-x64.dmg`](https://github.com/milady-ai/milady/releases/latest) | boomer mac (why separate arm64/x64: [Build & release](docs/build-and-release.md#macos-why-two-dmgs-arm64-and-x64)) |
 | Windows | [`Milady-Setup.exe`](https://github.com/milady-ai/milady/releases/latest) | for the gamer anons |
-| iOS | [App Store](https://apps.apple.com/app/milady-private-ai-assistant/id0000000000) | for the privacy-pilled |
+| iOS | [Releases](https://github.com/milady-ai/milady/releases/latest) | for the privacy-pilled (check releases for latest build) |
 | Android | [Google Play](https://play.google.com/store/apps/details?id=ai.milady.app) / [APK](https://github.com/milady-ai/milady/releases/latest) | for the degen on the go |
 | Linux | [`.AppImage`](https://github.com/milady-ai/milady/releases/latest) / [`.deb`](https://github.com/milady-ai/milady/releases/latest) / [Snap](#snap) / [Flatpak](#flatpak) / [APT repo](#debian--ubuntu-apt) | I use arch btw |
 
@@ -464,6 +464,8 @@ Or use `~/.milady/.env` for secrets.
 
 ## Model Providers
 
+Milady auto-enables provider plugins when their API key is detected in your environment or config. Set the env variable and the plugin loads automatically — no manual install needed.
+
 | Provider | Env Variable | Vibe |
 |----------|--------------|------|
 | [Anthropic](https://anthropic.com) | `ANTHROPIC_API_KEY` | **recommended** — claude is cracked |
@@ -471,7 +473,7 @@ Or use `~/.milady/.env` for secrets.
 | [OpenRouter](https://openrouter.ai) | `OPENROUTER_API_KEY` | 100+ models one API |
 | [Google Gemini](https://ai.google.dev) | `GOOGLE_API_KEY` | gemini pro, flash, ultra |
 | [Google Antigravity](https://cloud.google.com/vertex-ai) | `GOOGLE_CLOUD_API_KEY` | vertex AI / cloud models |
-| [Ollama](https://ollama.ai) | — | local, free, no API key, full privacy |
+| [Ollama](https://ollama.ai) | `OLLAMA_BASE_URL` | local, free, no API key, full privacy |
 | [Groq](https://groq.com) | `GROQ_API_KEY` | fast af |
 | [xAI](https://x.ai) | `XAI_API_KEY` | grok, based |
 | [DeepSeek](https://deepseek.com) | `DEEPSEEK_API_KEY` | reasoning arc |
@@ -479,11 +481,12 @@ Or use `~/.milady/.env` for secrets.
 | [Together AI](https://together.ai) | `TOGETHER_API_KEY` | open-source model hosting |
 | [Cohere](https://cohere.com) | `COHERE_API_KEY` | command R+ and embed |
 | [Perplexity](https://perplexity.ai) | `PERPLEXITY_API_KEY` | search-augmented gen |
-| [Qwen](https://qwen.ai) | — | alibaba's qwen models (configure via plugin entry) |
-| [MiniMax](https://minimaxi.com) | — | minimax language models (configure via plugin entry) |
+| [Qwen](https://qwen.ai) | — | alibaba's qwen models (configure via `plugins.entries.qwen`) |
+| [MiniMax](https://minimaxi.com) | — | minimax language models (configure via `plugins.entries.minimax`) |
 | [Pi AI](https://pi.ai) | `ELIZA_USE_PI_AI` | inflection pi, conversational |
 | [Zai](https://homunculuslabs.com) | `ZAI_API_KEY` | homunculus labs zai |
 | [Vercel AI Gateway](https://sdk.vercel.ai) | `AI_GATEWAY_API_KEY` | unified gateway |
+| [Eliza Cloud](https://elizacloud.ai) | `ELIZAOS_CLOUD_API_KEY` | managed cloud provider |
 
 See [Model Providers](docs/model-providers.mdx) for the full provider reference with configuration details. The `milady models` command checks which providers are configured.
 
@@ -533,7 +536,7 @@ This routes through the OpenAI plugin instead of the broken Ollama plugin. Works
 
 | | Version | Check | Install |
 |---|---------|-------|---------|
-| **Node.js** | >= 22 | `node --version` | [nodejs.org](https://nodejs.org) |
+| **Node.js** | >= 22.12.0 | `node --version` | [nodejs.org](https://nodejs.org) |
 | **Bun** | latest | `bun --version` | `curl -fsSL https://bun.sh/install \| bash` |
 | **Git** | any | `git --version` | system package manager |
 
