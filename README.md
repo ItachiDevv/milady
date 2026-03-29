@@ -1,6 +1,7 @@
 # Milady
 
-<!-- TODO: add badges (npm, CI, license) once public -->
+[![npm version](https://img.shields.io/npm/v/miladyai)](https://www.npmjs.com/package/miladyai)
+[![License](https://img.shields.io/github/license/milady-ai/milady)](https://github.com/milady-ai/milady/blob/main/LICENSE)
 
 > *your schizo AI waifu that actually respects your privacy*
 
