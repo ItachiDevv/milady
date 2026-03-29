@@ -79,7 +79,8 @@ Navigate to **OAuth & Permissions** and click **Install to Workspace**. Copy the
 | `appToken` | No | App-Level Token for Socket Mode (`xapp-...`) |
 | `signingSecret` | No | Signing secret for webhook verification |
 | `enabled` | No | Set `false` to disable (default: `true`) |
-| `allowedChannels` | No | Array of channel IDs to respond in |
+| `groupPolicy` | No | Group message policy: `"allowlist"` (default) or `"open"` |
+| `channels` | No | Per-channel configuration (record of channel ID to settings) |
 
 ## Features
 

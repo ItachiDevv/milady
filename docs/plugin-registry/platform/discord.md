@@ -40,7 +40,7 @@ milady plugins install discord
 {
   "connectors": {
     "discord": {
-      "botToken": "YOUR_BOT_TOKEN"
+      "token": "YOUR_BOT_TOKEN"
     }
   }
 }
@@ -52,23 +52,42 @@ Or via environment variable:
 export DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
 ```
 
+<Warning>
+Use the `token` field in your config — the Discord connector schema uses strict validation and `botToken` is not a recognized field. While `botToken` triggers auto-enable detection, only `token` passes schema validation.
+</Warning>
+
 ## Configuration
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `botToken` | Yes | Discord bot token |
+| `token` | Yes | Discord bot token |
 | `enabled` | No | Set `false` to disable (default: `true`) |
-| `allowedChannels` | No | Array of channel IDs to respond in |
-| `ignoredChannels` | No | Array of channel IDs to ignore |
-| `prefix` | No | Command prefix (default: none, uses bot mentions) |
+| `groupPolicy` | No | Group message policy: `"allowlist"` (default) or `"open"` |
+| `guilds` | No | Per-guild configuration (channels, mention requirements) |
+| `dm` | No | DM policy settings |
+| `blockStreaming` | No | Disable streaming responses |
 
 ```json
 {
   "connectors": {
     "discord": {
-      "botToken": "YOUR_BOT_TOKEN",
-      "allowedChannels": ["1234567890123456789"],
-      "prefix": "!"
+      "token": "YOUR_BOT_TOKEN",
+      "groupPolicy": "allowlist",
+      "guilds": {
+        "SERVER_ID": {
+          "requireMention": true,
+          "channels": {
+            "CHANNEL_ID": {
+              "allow": true,
+              "requireMention": false
+            }
+          }
+        }
+      },
+      "dm": {
+        "enabled": true,
+        "policy": "pairing"
+      }
     }
   }
 }
@@ -83,6 +102,8 @@ export DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
 - **Voice channels** — Can join voice channels (requires additional setup)
 - **Multi-server** — Operates across multiple servers simultaneously
 - **Role detection** — Reads member roles for permission-based responses
+- **Per-guild/channel config** — Fine-grained control over which servers and channels the bot responds in
+- **Execution approvals** — Designate approver users for sensitive operations
 
 ## Message Flow
 
@@ -104,13 +125,13 @@ Response sent back to Discord channel/DM
 
 ## Auto-Enable
 
-The plugin auto-enables when the `connectors.discord` block contains a `botToken`:
+The plugin auto-enables when the `connectors.discord` block contains a `token`:
 
 ```json
 {
   "connectors": {
     "discord": {
-      "botToken": "YOUR_BOT_TOKEN"
+      "token": "YOUR_BOT_TOKEN"
     }
   }
 }
@@ -126,6 +147,7 @@ export DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
 
 ## Related
 
+- [Discord Connector Guide](/connectors/discord) — Detailed connector documentation with per-guild/channel config
 - [Telegram Plugin](/plugin-registry/platform/telegram) — Telegram bot integration
 - [Slack Plugin](/plugin-registry/platform/slack) — Slack workspace integration
 - [Connectors Guide](/guides/connectors) — General connector documentation

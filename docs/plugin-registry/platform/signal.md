@@ -55,11 +55,11 @@ signal-cli -a +1234567890 daemon --http localhost:8080
 | `host` | No | Hostname alternative to `httpUrl` |
 | `port` | No | Port alternative to `httpUrl` |
 | `cliPath` | No | Path to signal-cli binary for auto-start |
-| `startupTimeout` | No | Seconds to wait for CLI startup (1-120, default: 30) |
+| `startupTimeoutMs` | No | Milliseconds to wait for CLI startup (1000-120000) |
 | `receiveMode` | No | `on-start` or `manual` (default: `on-start`) |
-| `includeAttachments` | No | Include attachments in messages (default: `true`) |
-| `includeStories` | No | Process story messages (default: `false`) |
-| `readReceipts` | No | Send read receipts (default: `true`) |
+| `ignoreAttachments` | No | Skip attachments in messages (default: `false`) |
+| `ignoreStories` | No | Skip story messages (default: `false`) |
+| `sendReadReceipts` | No | Send read receipts (default: `false`) |
 | `reactionNotifications` | No | Reaction notification level |
 | `dmPolicy` | No | DM handling policy |
 

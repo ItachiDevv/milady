@@ -48,7 +48,7 @@ From the BlueBubbles server settings, note the:
 | `serverUrl` | Yes | BlueBubbles server URL |
 | `password` | Yes | Server password |
 | `webhookPath` | No | Webhook endpoint path for incoming events |
-| `readReceipts` | No | Send read receipts (default: `true`) |
+| `sendReadReceipts` | No | Send read receipts |
 | `dmPolicy` | No | DM handling policy |
 
 ## Features

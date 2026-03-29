@@ -46,8 +46,8 @@ export TELEGRAM_BOT_TOKEN=123456789:ABCdef...
 |-------|----------|-------------|
 | `botToken` | Yes | Telegram bot token from BotFather |
 | `enabled` | No | Set `false` to disable (default: `true`) |
-| `allowedUsers` | No | Array of Telegram user IDs to accept messages from |
-| `allowedGroups` | No | Array of group/channel IDs to respond in |
+| `allowFrom` | No | Array of Telegram user IDs to accept messages from |
+| `groupAllowFrom` | No | Array of group/channel IDs to respond in |
 | `webhookUrl` | No | Use webhook instead of polling (requires HTTPS URL) |
 | `webhookSecret` | No | Secret token for webhook verification |
 
@@ -56,8 +56,8 @@ export TELEGRAM_BOT_TOKEN=123456789:ABCdef...
   "connectors": {
     "telegram": {
       "botToken": "123456789:ABCdef...",
-      "allowedUsers": [123456, 789012],
-      "allowedGroups": [-1001234567890]
+      "allowFrom": [123456, 789012],
+      "groupAllowFrom": [-1001234567890]
     }
   }
 }
@@ -99,7 +99,7 @@ In group chats, the agent responds only when:
 - A message is a reply to the bot's message
 - The message starts with a configured command
 
-To have the bot respond to all messages in a group, set `allowedGroups` and configure the character to respond more broadly.
+To have the bot respond to all messages in a group, set `groupAllowFrom` and configure the character to respond more broadly.
 
 ## Webhook Mode
 

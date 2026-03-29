@@ -52,8 +52,8 @@ The session is saved to `authDir` and persists across restarts.
 |-------|----------|-------------|
 | `authDir` | Yes | Directory path for auth state files |
 | `enabled` | No | Set `false` to disable (default: `true`) |
-| `allowedJids` | No | Array of WhatsApp JIDs (phone numbers) to respond to |
-| `allowedGroups` | No | Array of group JIDs to participate in |
+| `allowFrom` | No | Array of WhatsApp JIDs (phone numbers) to respond to |
+| `groupAllowFrom` | No | Array of group JIDs to participate in |
 | `ignoreOwnMessages` | No | Skip messages sent by the bot itself (default: `true`) |
 
 ```json
@@ -61,8 +61,8 @@ The session is saved to `authDir` and persists across restarts.
   "connectors": {
     "whatsapp": {
       "authDir": "./whatsapp-auth",
-      "allowedJids": ["1234567890@s.whatsapp.net"],
-      "allowedGroups": ["1234567890-1234567890@g.us"]
+      "allowFrom": ["1234567890@s.whatsapp.net"],
+      "groupAllowFrom": ["1234567890-1234567890@g.us"]
     }
   }
 }
