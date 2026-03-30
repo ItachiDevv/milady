@@ -78,7 +78,14 @@ All fields are defined under `connectors.twitch` in `milady.json`.
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `clientId` | string | — | Twitch application Client ID |
+| `clientSecret` | string | — | Twitch application Client Secret |
 | `accessToken` | string | — | OAuth access token with chat scopes |
+| `refreshToken` | string | — | OAuth refresh token |
+| `username` | string | — | Twitch bot username |
+| `channel` | string | — | Primary channel to join |
+| `channels` | string | — | Additional channels (comma-separated) |
+| `requireMention` | boolean | — | Only respond when mentioned |
+| `allowedRoles` | string | — | Roles allowed to interact with the bot |
 | `enabled` | boolean | — | Explicitly enable/disable |
 
 ### Features

@@ -115,7 +115,7 @@ All fields are defined under `connectors.whatsapp` in `milady.json`.
 | `accounts` | object | -- | Named account configurations (see Multi-Account below) |
 | `authDir` | string | -- | Directory for Baileys session files (single-account shorthand) |
 | `enabled` | boolean | -- | Explicitly enable/disable |
-| `dmPolicy` | `"pairing"` \| `"open"` \| `"closed"` | `"pairing"` | DM acceptance policy. `"open"` requires `allowFrom` to include `"*"` |
+| `dmPolicy` | `"pairing"` \| `"allowlist"` \| `"open"` \| `"disabled"` | `"pairing"` | DM acceptance policy. `"open"` requires `allowFrom` to include `"*"` |
 | `allowFrom` | string[] | -- | Allowlist of phone numbers (required when `dmPolicy: "open"`) |
 | `groupPolicy` | `"open"` \| `"disabled"` \| `"allowlist"` | `"allowlist"` | Group message policy |
 | `groupAllowFrom` | string[] | -- | Allowlist of group JIDs |
@@ -123,7 +123,7 @@ All fields are defined under `connectors.whatsapp` in `milady.json`.
 | `dmHistoryLimit` | number | -- | Max messages for DM history |
 | `textChunkLimit` | number | -- | Max characters per outgoing message chunk |
 | `chunkMode` | `"length"` \| `"newline"` | -- | Long message splitting strategy |
-| `mediaMaxMb` | number | `50` | Max media attachment size in MB |
+| `mediaMaxMb` | number | -- | Max media attachment size in MB |
 | `sendReadReceipts` | boolean | -- | Send read receipts for incoming messages |
 | `selfChatMode` | boolean | -- | Respond to your own messages (for testing; avoid in production) |
 | `messagePrefix` | string | -- | Text prefix added to all outgoing messages |

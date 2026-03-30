@@ -59,6 +59,9 @@ No environment variable is required to trigger auto-enable — it is driven enti
 |----------|--------|-------------|
 | `BLOOIO_API_KEY` | `apiKey` | Blooio service API key |
 | `BLOOIO_WEBHOOK_URL` | `webhookUrl` | URL for receiving inbound messages |
+| `BLOOIO_PHONE_NUMBER` | `fromNumber` | Outbound phone number |
+| `BLOOIO_WEBHOOK_SECRET` | `webhookSecret` | Webhook signature verification secret |
+| `BLOOIO_WEBHOOK_PORT` | `webhookPort` | Local webhook listener port |
 
 ## Setup Steps
 
@@ -76,6 +79,9 @@ All fields are defined under `connectors.blooio` in `milady.json`.
 |-------|------|---------|-------------|
 | `apiKey` | string | — | Blooio API key (required) |
 | `webhookUrl` | string | — | Webhook URL for receiving inbound messages |
+| `fromNumber` | string | — | Outbound phone number |
+| `webhookSecret` | string | — | Webhook signature verification secret |
+| `webhookPort` | number | — | Local webhook listener port |
 | `enabled` | boolean | — | Explicitly enable/disable |
 
 ### Features

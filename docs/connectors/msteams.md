@@ -83,7 +83,8 @@ When the connector is loaded, the runtime can consume the following secrets from
 |----------|--------|-------------|
 | `MSTEAMS_APP_ID` | `appId` | Azure Bot App ID |
 | `MSTEAMS_APP_PASSWORD` | `appPassword` | Azure Bot App Password (client secret) |
-| `MSTEAMS_TENANT_ID` | `tenantId` | Azure AD Tenant ID |
+
+The `tenantId` field is read directly from the connector config object, not injected as an environment variable.
 
 ## Full Configuration Reference
 

@@ -216,8 +216,8 @@ Resolves PluralKit proxy messages to their original authors.
       "execApprovals": {
         "enabled": true,
         "approvers": ["user-id-1"],
-        "agentFilter": "pattern",
-        "sessionFilter": "pattern"
+        "agentFilter": ["pattern"],
+        "sessionFilter": ["pattern"]
       }
     }
   }
