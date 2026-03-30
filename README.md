@@ -470,7 +470,7 @@ Or use `~/.milady/.env` for secrets.
 | [OpenRouter](https://openrouter.ai) | `OPENROUTER_API_KEY` | 100+ models one API |
 | [Google Gemini](https://ai.google.dev) | `GOOGLE_API_KEY` | gemini pro, flash, ultra |
 | [Google Antigravity](https://cloud.google.com/vertex-ai) | `GOOGLE_CLOUD_API_KEY` | vertex AI / cloud models |
-| [Ollama](https://ollama.ai) | — | local, free, no API key, full privacy |
+| [Ollama](https://ollama.ai) | `OLLAMA_BASE_URL` | local, free, no API key, full privacy |
 | [Groq](https://groq.com) | `GROQ_API_KEY` | fast af |
 | [xAI](https://x.ai) | `XAI_API_KEY` | grok, based |
 | [DeepSeek](https://deepseek.com) | `DEEPSEEK_API_KEY` | reasoning arc |
@@ -480,9 +480,10 @@ Or use `~/.milady/.env` for secrets.
 | [Perplexity](https://perplexity.ai) | `PERPLEXITY_API_KEY` | search-augmented gen |
 | [Qwen](https://qwen.ai) | — | alibaba's qwen models (configure via plugin entry) |
 | [MiniMax](https://minimaxi.com) | — | minimax language models (configure via plugin entry) |
-| [Pi AI](https://pi.ai) | `ELIZA_USE_PI_AI` | inflection pi, conversational |
+| [Pi AI](https://pi.ai) | `ELIZA_USE_PI_AI` or `MILADY_USE_PI_AI` | inflection pi, conversational |
 | [Zai](https://homunculuslabs.com) | `ZAI_API_KEY` | homunculus labs zai |
 | [Vercel AI Gateway](https://sdk.vercel.ai) | `AI_GATEWAY_API_KEY` | unified gateway |
+| [elizaOS Cloud](https://elizacloud.ai) | `ELIZAOS_CLOUD_API_KEY` | managed cloud inference |
 
 See [Model Providers](docs/model-providers.mdx) for the full provider reference with configuration details. The `milady models` command checks which providers are configured.
 
