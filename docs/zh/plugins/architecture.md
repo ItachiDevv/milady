@@ -31,10 +31,12 @@ export const CORE_PLUGINS: readonly string[] = [
   "@elizaos/plugin-form",              // form handling for guided user journeys
   "@elizaos/plugin-knowledge",         // RAG knowledge management — required for knowledge tab
   "@elizaos/plugin-trajectory-logger", // trajectory logging for debugging and RL training
-  "@elizaos/plugin-agent-orchestrator",// multi-agent orchestration (PTY, SwarmCoordinator)
+  "@elizaos/plugin-agent-orchestrator",// multi-agent orchestration (PTY, SwarmCoordinator, workspace provisioning)
   "@elizaos/plugin-cron",              // scheduled jobs and automation
   "@elizaos/plugin-shell",             // shell command execution
   "@elizaos/plugin-agent-skills",      // skill execution and marketplace runtime
+  "@elizaos/plugin-commands",          // slash command handling (skills auto-register as /commands)
+  "@miladyai/plugin-roles",           // role-based access control (OWNER/ADMIN/NONE)
 ];
 ```
 
@@ -68,7 +70,7 @@ export const OPTIONAL_CORE_PLUGINS: readonly string[] = [
 ];
 ```
 
-`@elizaos/plugin-directives`、`@elizaos/plugin-commands`、`@elizaos/plugin-mcp` 和 `@elizaos/plugin-scheduling` 等插件在源码中被注释掉，可能会在未来版本中激活。
+`@elizaos/plugin-directives`、`@elizaos/plugin-mcp`、`@elizaos/plugin-scratchpad` 和 `@elizaos/plugin-scheduling` 等插件在源码中被注释掉，可能会在未来版本中激活。
 
 <div id="plugin-hook-points">
 
