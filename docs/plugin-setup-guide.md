@@ -187,9 +187,9 @@ where to get the credentials, minimum required fields, and tips for optional fie
 **Tips:** Minimax provides Chinese and multilingual AI models.
 
 ### Pi AI
-**Minimum required:** `ELIZA_USE_PI_AI=true`
+**Minimum required:** `ELIZA_USE_PI_AI=true` or `MILADY_USE_PI_AI=true`
 **Variables:**
-- `ELIZA_USE_PI_AI` — Set to `true` to enable Pi AI as a model provider
+- `ELIZA_USE_PI_AI` / `MILADY_USE_PI_AI` — Set to `true` to enable Pi AI as a model provider (either works for auto-enable)
 **Tips:** Pi AI provides conversational models optimized for friendly, helpful dialogue.
 
 ### Zai

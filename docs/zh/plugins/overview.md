@@ -28,7 +28,7 @@ description: Milady 的插件系统提供模块化能力 — 模型提供者、�
 <CardGroup cols={2}>
 
 <Card title="核心插件" icon="cube" href="/zh/plugin-registry/knowledge">
-  每个 Milady 安装都附带的基础插件 — knowledge、database、form、cron、shell、agent-skills、trajectory-logger 和 agent-orchestrator。
+  每个 Milady 安装都附带的基础插件 — sql、local-embedding、form、knowledge、trajectory-logger、agent-orchestrator、cron、shell、agent-skills、commands 和 roles。
 </Card>
 
 <Card title="模型提供者" icon="brain" href="/zh/plugin-registry/llm/openai">
@@ -59,7 +59,7 @@ description: Milady 的插件系统提供模块化能力 — 模型提供者、�
 
 1. **Milady 插件** — 桥接插件（`createMiladyPlugin()`），提供工作区上下文、会话密钥、表情、自定义操作和生命周期操作。始终是插件数组中的第一个。
 2. **预注册插件** — `@elizaos/plugin-sql` 和 `@elizaos/plugin-local-embedding` 在 `runtime.initialize()` 之前预注册，以防止竞态条件。
-3. **核心插件** — 始终加载：`sql`、`local-embedding`、`form`、`knowledge`、`trajectory-logger`、`agent-orchestrator`、`cron`、`shell`、`agent-skills`（见 `packages/agent/src/runtime/core-plugins.ts`）。`pdf`、`browser`、`computeruse`、`obsidian`、`code`、`repoprompt`、`claude-code-workbench`、`vision`、`cli`、`edge-tts` 和 `elevenlabs` 等附加插件是可选的，当其功能标志或环境变量配置后才会加载。
+3. **核心插件** — 始终加载：`sql`、`local-embedding`、`form`、`knowledge`、`trajectory-logger`、`agent-orchestrator`、`cron`、`shell`、`agent-skills`、`commands` 和 `roles`（见 `packages/agent/src/runtime/core-plugins.ts`）。`pdf`、`browser`、`computeruse`、`obsidian`、`code`、`repoprompt`、`claude-code-workbench`、`vision`、`cli`、`edge-tts` 和 `elevenlabs` 等附加插件是可选的，当其功能标志或环境变量配置后才会加载。
 4. **自动启用的插件** — 连接器、提供者、功能和流式插件根据配置和环境变量自动启用（参见[架构](/zh/plugins/architecture)了解完整映射）。
 5. **弹出的插件** — 从 `~/.milady/plugins/ejected/` 发现的本地覆盖。当存在弹出副本时，它优先于 npm 发布的版本。
 6. **用户安装的插件** — 在 `milady.json` 的 `plugins.installs` 中跟踪。在 drop-in 插件之前收集；此处已存在的任何插件名称具有优先权。
