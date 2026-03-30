@@ -71,10 +71,8 @@ bun run dev
 ### Editor Setup
 
 **VS Code Extensions:**
-- ESLint
-- Prettier
 - TypeScript
-- Biome (for formatting)
+- Biome (lint + format — there is no ESLint or Prettier)
 
 **Settings (.vscode/settings.json):**
 ```json
@@ -89,70 +87,48 @@ bun run dev
 
 ## Monorepo Structure
 
-Milady is a monorepo managed with Turborepo and Bun workspaces.
+Milady is a monorepo managed with Bun workspaces.
 
 ```
 milady/
-├── packages/                # Shared packages
-│   ├── typescript/          # @elizaos/core — Core TypeScript SDK
-│   ├── elizaos/             # CLI tool (milady command)
-│   ├── skills/              # Skills system and bundled skills
-│   ├── docs/                # Documentation site (Mintlify)
-│   ├── schemas/             # Protobuf schemas
-│   └── tui/                 # Terminal UI (disabled)
-├── plugins/                 # Official plugins (100+)
-│   ├── plugin-anthropic/    # Anthropic model provider
-│   ├── plugin-telegram/     # Telegram connector
-│   ├── plugin-discord/      # Discord connector
-│   └── ...
+├── packages/
+│   ├── app-core/            # Main application package (runtime, CLI, API)
+│   │   └── src/
+│   │       ├── entry.ts     # CLI bootstrap (env, log level)
+│   │       ├── cli/         # Commander CLI (milady command)
+│   │       ├── runtime/     # Agent loader, dev server
+│   │       ├── api/         # Dashboard API (port 31337 dev, 2138 prod)
+│   │       ├── config/      # Plugin auto-enable, config schemas
+│   │       ├── connectors/  # Connector integration code
+│   │       └── services/    # Business logic
+│   ├── agent/               # Upstream elizaOS agent (core plugins, auto-enable maps)
+│   ├── plugin-roles/        # Role-based access control plugin (@miladyai/plugin-roles)
+│   ├── plugin-wechat/       # WeChat connector plugin (@miladyai/plugin-wechat)
+│   ├── ui/                  # Shared UI component library
+│   ├── shared/              # Shared utilities
+│   └── vrm-utils/           # VRM avatar utilities
 ├── apps/
-│   ├── app/                 # Desktop/mobile app (Capacitor + React)
-│   └── ...                  # No shipped chrome-extension app in this release checkout
-├── src/                     # Milady runtime
-│   ├── runtime/             # ElizaOS runtime bootstrap
-│   ├── plugins/             # Built-in Milady plugins
-│   ├── config/              # Configuration loading
-│   ├── services/            # Registry client, plugin manager
-│   └── api/                 # REST API server
-├── skills/                  # Workspace skills
-├── docs/                    # Documentation (this site)
+│   ├── app/                 # Main web + desktop UI (Vite + React)
+│   │   └── electrobun/      # Electrobun desktop shell
+│   └── homepage/            # Marketing site
 ├── scripts/                 # Build and utility scripts
-├── test/                    # Test setup, helpers, e2e
-├── AGENTS.md                # Repository guidelines
-├── plugins.json             # Plugin registry manifest
-└── tsdown.config.ts         # Build config
-```
-
-### Turbo Build System
-
-Turborepo orchestrates builds across all packages with dependency-aware caching:
-
-```bash
-# Build everything (with caching)
-turbo run build
-
-# Build a specific package
-turbo run build --filter=@elizaos/core
-
-# Build a package and all its dependencies
-turbo run build --filter=@elizaos/plugin-telegram...
-
-# Run tests across all packages
-turbo run test
-
-# Lint all packages
-turbo run lint
+│   ├── dev-ui.mjs           # Dev orchestrator (API + Vite)
+│   ├── run-node.mjs         # CLI runner (spawns entry.js with NODE_PATH)
+│   └── patch-deps.mjs       # Post-install patches for broken upstream exports
+├── docs/                    # Documentation
+├── skills/                  # Workspace skills
+└── CLAUDE.md                # Agent conventions
 ```
 
 ### Key Entry Points
 
 | File | Purpose |
 |------|---------|
-| `src/entry.ts` | CLI entry point |
-| `src/index.ts` | Library exports |
-| `src/runtime/eliza.ts` | elizaOS runtime initialization |
-| `src/runtime/milady-plugin.ts` | Main Milady plugin |
-| `milady.mjs` | npm bin entry |
+| `packages/app-core/src/entry.ts` | CLI bootstrap (env, log level) |
+| `packages/app-core/src/runtime/eliza.ts` | Agent loader — sets NODE_PATH, loads plugins dynamically |
+| `packages/app-core/src/runtime/dev-server.ts` | Dev mode entry point (started by dev-ui.mjs) |
+| `packages/agent/src/runtime/core-plugins.ts` | Core and optional plugin lists |
+| `scripts/run-node.mjs` | CLI runner (npm bin entry) |
 
 ---
 
@@ -213,8 +189,8 @@ bun run test:e2e
 # Live tests (requires API keys)
 MILADY_LIVE_TEST=1 bun run test:live
 
-# Docker-based tests
-bun run test:docker:all
+# End-to-end tests
+bun run test:e2e
 ```
 
 ### Runtime fallback for Bun crashes

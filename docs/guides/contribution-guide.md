@@ -86,9 +86,6 @@ bun run test:e2e
 
 # Live API tests (requires API keys)
 MILADY_LIVE_TEST=1 bun run test:live
-
-# Docker-based integration tests
-bun run test:docker:all
 ```
 
 **Test file conventions:**
@@ -308,51 +305,44 @@ Install the [Biome VS Code extension](https://marketplace.visualstudio.com/items
 
 ```
 milady/
+├── packages/
+│   ├── app-core/            # Main application package (runtime, CLI, API)
+│   │   └── src/
+│   │       ├── entry.ts     # CLI bootstrap (env, log level)
+│   │       ├── cli/         # Commander CLI (milady command)
+│   │       ├── runtime/     # Agent loader, dev server
+│   │       ├── api/         # Dashboard API (port 31337 dev, 2138 prod)
+│   │       ├── config/      # Plugin auto-enable, config schemas
+│   │       ├── connectors/  # Connector integration code
+│   │       └── services/    # Business logic
+│   ├── agent/               # Upstream elizaOS agent (core plugins, auto-enable maps)
+│   ├── plugin-roles/        # Role-based access control plugin (@miladyai/plugin-roles)
+│   ├── plugin-wechat/       # WeChat connector plugin (@miladyai/plugin-wechat)
+│   ├── ui/                  # Shared UI component library
+│   ├── shared/              # Shared utilities
+│   └── vrm-utils/           # VRM avatar utilities
 ├── apps/
-│   ├── app/                 # Desktop/mobile app (Capacitor + React)
-│   │   ├── electrobun/      # Electrobun desktop wrapper
-│   │   └── src/             # React UI components
-├── deploy/                  # Docker deployment configs
-├── docs/                    # Documentation site
-├── packages/                # Workspace packages
-├── plugins/                 # Workspace plugin packages
-├── scripts/                 # Build, dev, and release tooling
-├── skills/                  # Skill catalog cache
-├── src/                     # Core source code
-│   ├── actions/             # Agent actions
-│   ├── api/                 # HTTP API routes
-│   ├── cli/                 # CLI command definitions
-│   ├── config/              # Configuration handling
-│   ├── hooks/               # Runtime hooks
-│   ├── plugins/             # Built-in plugins
-│   ├── providers/           # Context providers
-│   ├── runtime/             # elizaOS runtime wrapper
-│   ├── security/            # Security utilities
-│   ├── services/            # Background services
-│   ├── triggers/            # Trigger system
-│   ├── tui/                 # Terminal UI (disabled)
-│   └── utils/               # Helper utilities
-├── test/                    # Test setup, helpers, e2e scripts
-├── AGENTS.md                # Repository guidelines for agents
-├── CONTRIBUTING.md          # Contribution philosophy
-├── package.json             # Root package config
-├── plugins.json             # Plugin registry manifest
+│   ├── app/                 # Main web + desktop UI (Vite + React)
+│   │   └── electrobun/      # Electrobun desktop shell
+│   └── homepage/            # Marketing site
+├── scripts/                 # Build and utility scripts
+├── docs/                    # Documentation
+├── skills/                  # Workspace skills
 ├── biome.json               # Biome linter/formatter config
 ├── tsconfig.json            # TypeScript config
 ├── tsdown.config.ts         # Build config (tsdown bundler)
-├── vitest.config.ts         # Vitest test config
-└── milady.mjs               # npm bin entry point
+└── vitest.config.ts         # Vitest test config
 ```
 
 ### Key Entry Points
 
 | File | Purpose |
 |------|---------|
-| `src/entry.ts` | CLI entry point |
-| `src/index.ts` | Library exports |
-| `src/runtime/eliza.ts` | elizaOS runtime initialization |
-| `src/runtime/milady-plugin.ts` | Main Milady plugin |
-| `milady.mjs` | npm bin entry (`"bin"` in package.json) |
+| `packages/app-core/src/entry.ts` | CLI bootstrap (env, log level) |
+| `packages/app-core/src/runtime/eliza.ts` | Agent loader — sets NODE_PATH, loads plugins dynamically |
+| `packages/app-core/src/runtime/dev-server.ts` | Dev mode entry point (started by dev-ui.mjs) |
+| `packages/agent/src/runtime/core-plugins.ts` | Core and optional plugin lists |
+| `scripts/run-node.mjs` | CLI runner (npm bin entry) |
 
 ---
 

@@ -14,12 +14,11 @@ The trigger system consists of four source modules:
 
 | Module | Path | Purpose |
 |--------|------|---------|
-| Types | `src/triggers/types.ts` | TypeScript interfaces and type definitions |
-| Scheduling | `src/triggers/scheduling.ts` | Interval clamping, cron parsing, timing resolution, deduplication |
-| Runtime | `src/triggers/runtime.ts` | Task execution, worker registration, health metrics |
-| Action | `src/triggers/action.ts` | Chat-based trigger creation via LLM extraction |
+| Scheduling | `packages/app-core/src/triggers/scheduling.ts` | Interval clamping, cron parsing, timing resolution, deduplication |
+| Runtime | `packages/app-core/src/triggers/runtime.ts` | Task execution, worker registration, health metrics |
+| Action | `packages/app-core/src/triggers/action.ts` | Chat-based trigger creation via LLM extraction |
 
-The API routes are defined in `src/api/trigger-routes.ts` and handle all REST endpoints.
+The API routes are defined in `packages/app-core/src/api/trigger-routes.ts` and handle all REST endpoints.
 
 ## Trigger Types
 

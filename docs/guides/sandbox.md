@@ -34,7 +34,7 @@ The sandbox supports four security levels, configured via the `mode` field:
 
 ## Container Engines
 
-The sandbox engine layer (`src/services/sandbox-engine.ts`) supports multiple container runtimes:
+The sandbox engine layer (`packages/agent/src/services/sandbox-engine.ts`) supports multiple container runtimes:
 
 | Engine | Description |
 |--------|-------------|
@@ -113,7 +113,7 @@ interface SandboxManagerConfig {
 
 ## Network Policy
 
-The network policy module (`src/security/network-policy.ts`) prevents sandboxed code from reaching sensitive network targets.
+The network policy module (`packages/app-core/src/security/network-policy.ts`) prevents sandboxed code from reaching sensitive network targets.
 
 ### Always Blocked IPs
 
@@ -149,7 +149,7 @@ IPv6-mapped IPv4 addresses (e.g., `::ffff:192.168.1.1`) are normalized to their 
 
 ## Audit Logging
 
-The audit log (`src/security/audit-log.ts`) provides an append-only record of security-relevant events. It never logs actual secret values -- only token IDs and metadata.
+The audit log (`packages/app-core/src/security/audit-log.ts`) provides an append-only record of security-relevant events. It never logs actual secret values -- only token IDs and metadata.
 
 ### Audit Event Types
 
@@ -208,7 +208,7 @@ Each sandbox instance has its own `SandboxAuditLog` with convenience methods:
 
 ## Remote Signing Service
 
-The remote signing service (`src/services/remote-signing-service.ts`) keeps private keys on the host machine while allowing sandboxed agents to request transaction signatures.
+The remote signing service (`packages/app-core/src/services/remote-signing-service.ts`) keeps private keys on the host machine while allowing sandboxed agents to request transaction signatures.
 
 ### Architecture
 

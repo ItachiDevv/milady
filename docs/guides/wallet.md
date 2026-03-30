@@ -429,9 +429,9 @@ All signing events are recorded to a `SandboxAuditLog` (if configured). Event ty
 
 ## Smart Contract Interactions
 
-Milady defines several smart contract interaction interfaces in `src/contracts/`:
+Milady defines several smart contract interaction interfaces in `packages/shared/src/contracts/`:
 
-### Apps Registry (`src/contracts/apps.ts`)
+### Apps Registry (`packages/shared/src/contracts/apps.ts`)
 
 Manages installable apps with viewer configurations:
 
@@ -439,14 +439,14 @@ Manages installable apps with viewer configurations:
 - `InstalledAppInfo` — installed app metadata (name, plugin, version, install time)
 - `AppStopResult` — app shutdown with plugin uninstall scope
 
-### Drops and Airdrops (`src/contracts/drop.ts`)
+### Drops and Airdrops (`packages/shared/src/contracts/drop.ts`)
 
 Supports NFT minting with drop mechanics:
 
 - `DropStatus` — drop state (dropEnabled, publicMintOpen, whitelistMintOpen, mintedOut, currentSupply, maxSupply, shinyPrice, userHasMinted)
 - `MintResult` — agentId (number), mintNumber, txHash, isShiny
 
-### Verification (`src/contracts/verification.ts`)
+### Verification (`packages/shared/src/contracts/verification.ts`)
 
 Identity verification:
 

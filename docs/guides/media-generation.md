@@ -10,8 +10,8 @@ Milady includes a media generation abstraction layer that provides a unified int
 
 The media system is organized into three components:
 
-1. **Provider abstraction** (`src/providers/media-provider.ts`) -- Defines unified interfaces (`ImageGenerationProvider`, `VideoGenerationProvider`, `AudioGenerationProvider`, `VisionAnalysisProvider`) and concrete implementations for each backend. A factory function for each media type selects the appropriate provider based on your configuration.
-2. **Actions** (`src/actions/media.ts`) -- Four built-in agent actions (`GENERATE_IMAGE`, `GENERATE_VIDEO`, `GENERATE_AUDIO`, `ANALYZE_IMAGE`) that expose media capabilities to the agent during conversations. Each action reads the current `milady.json` configuration, instantiates the correct provider, and returns results as message attachments.
+1. **Provider abstraction** (`packages/app-core/src/providers/media-provider.ts`) -- Defines unified interfaces (`ImageGenerationProvider`, `VideoGenerationProvider`, `AudioGenerationProvider`, `VisionAnalysisProvider`) and concrete implementations for each backend. A factory function for each media type selects the appropriate provider based on your configuration.
+2. **Actions** (`packages/app-core/src/actions/media.ts`) -- Four built-in agent actions (`GENERATE_IMAGE`, `GENERATE_VIDEO`, `GENERATE_AUDIO`, `ANALYZE_IMAGE`) that expose media capabilities to the agent during conversations. Each action reads the current `milady.json` configuration, instantiates the correct provider, and returns results as message attachments.
 3. **Configuration** (`milady.json`) -- The `media` section controls which provider is used for each media type, whether to use Eliza Cloud or your own API keys, and provider-specific settings like model names and base URLs.
 
 ```

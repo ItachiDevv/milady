@@ -122,7 +122,7 @@ This takes a final backup snapshot, clears the API key from config, and removes 
 
 ## Cloud Manager
 
-The `CloudManager` class (`src/cloud/cloud-manager.ts`) orchestrates all cloud components. It tracks connection state through the following transitions:
+The cloud connection layer (`packages/app-core/src/api/cloud-connection.ts`) orchestrates all cloud components. It tracks connection state through the following transitions:
 
 ```
 disconnected → connecting → connected → reconnecting → error
@@ -173,7 +173,7 @@ CloudManager.disconnect()
 
 ## Cloud Login Flow
 
-Authentication with Eliza Cloud uses a browser-based OAuth flow (`src/cloud/auth.ts`):
+Authentication with Eliza Cloud uses a browser-based OAuth flow (`packages/app-core/src/api/cloud-routes.ts`):
 
 1. **Create session** -- POST to `/api/auth/cli-session` with a random UUID session ID
 2. **Open browser** -- Direct user to `{baseUrl}/auth/cli-login?session={sessionId}`
@@ -220,7 +220,7 @@ The proxy is created during `CloudManager.connect()` and carries the agent ID an
 
 ## Backup Scheduler
 
-The `BackupScheduler` (`src/cloud/backup.ts`) takes periodic state snapshots of the cloud agent.
+The backup scheduler takes periodic state snapshots of the cloud agent.
 
 - **Default interval**: 60 seconds (configurable via `cloud.backup.autoBackupIntervalMs`)
 - **Mechanism**: Calls `client.snapshot(agentId)` on each tick
@@ -231,7 +231,7 @@ The `BackupScheduler` (`src/cloud/backup.ts`) takes periodic state snapshots of 
 
 ## Connection Monitor
 
-The `ConnectionMonitor` (`src/cloud/reconnect.ts`) ensures the cloud connection stays alive via heartbeat checks.
+The connection monitor ensures the cloud connection stays alive via heartbeat checks.
 
 ### Configuration
 

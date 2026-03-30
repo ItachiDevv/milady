@@ -22,7 +22,7 @@ When a user sends a message, the runtime evaluates all registered actions. If th
 
 ## Built-in Actions Reference
 
-Milady registers the following built-in actions from `src/actions/` automatically at runtime.
+Milady registers the following built-in actions from `packages/app-core/src/actions/` automatically at runtime.
 
 ### Agent Lifecycle
 

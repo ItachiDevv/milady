@@ -56,12 +56,9 @@ If your token is ever exposed, regenerate it immediately by clicking **Regenerat
 ```json5
 {
   // ... existing config ...
-  "plugins": {
+  "connectors": {
     "discord": {
-      "enabled": true,
-      "token": "YOUR_BOT_TOKEN_HERE",
-      "intents": ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "MESSAGE_CONTENT"],
-      "prefix": "!"
+      "token": "YOUR_BOT_TOKEN_HERE"
     }
   }
 }
@@ -71,7 +68,7 @@ If your token is ever exposed, regenerate it immediately by clicking **Regenerat
 4. Save the file
 
 <Info>
-The `intents` field tells Discord which events your bot should receive. `MESSAGE_CONTENT` is required to read message text.
+When a `token` is present in `connectors.discord`, the Discord connector plugin (`@elizaos/plugin-discord`) is auto-enabled at startup.
 </Info>
 
 </Step>
@@ -81,11 +78,11 @@ The `intents` field tells Discord which events your bot should receive. `MESSAGE
 2. Run the following command to verify the plugin is recognized:
 
 ```bash
-bun run milady --plugins
+milady plugins installed
 ```
 
-3. Confirm that `discord` appears in the list of available plugins
-4. Check `milady.json` to ensure `"enabled": true` is set for the Discord plugin
+3. Confirm that `discord` appears in the list of loaded plugins
+4. Check `milady.json` to ensure the `connectors.discord` section has a valid `token`
 
 </Step>
 
@@ -219,7 +216,7 @@ Visit the [Discord Developer Portal](https://discord.com/developers/applications
 See the [Configuration Guide](/configuration) for detailed options in `milady.json`.
 </Tab>
 <Tab title="elizaOS Documentation">
-Learn more about elizaOS at the [elizaOS GitHub](https://github.com/ai16z/eliza).
+Learn more about elizaOS at the [elizaOS GitHub](https://github.com/elizaOS).
 </Tab>
 </Tabs>
 
@@ -230,4 +227,4 @@ If you encounter issues:
 1. Check the troubleshooting section above
 2. Review Milady's console output for error messages
 3. Visit the [Milady Community Discord](https://discord.gg/milady)
-4. Open an issue on the [Milady GitHub repository](https://github.com/milady/milady)
+4. Open an issue on the [Milady GitHub repository](https://github.com/milady-ai/milady)
