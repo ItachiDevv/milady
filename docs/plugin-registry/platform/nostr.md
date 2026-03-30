@@ -65,7 +65,7 @@ Use any Nostr client or key generation tool to create a keypair. You need the pr
 
 ## Auto-Enable
 
-The plugin auto-enables when `NOSTR_PRIVATE_KEY` is set and `NOSTR_ENABLED` is not `false`.
+The plugin auto-enables when the `connectors.nostr` block contains a `token`, `botToken`, or `apiKey` field in `milady.json`.
 
 ## Related
 

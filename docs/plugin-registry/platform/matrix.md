@@ -67,7 +67,7 @@ curl -X POST https://matrix.example.com/_matrix/client/v3/login \
 
 ## Auto-Enable
 
-The plugin auto-enables when `MATRIX_ACCESS_TOKEN` is set in the environment.
+The plugin auto-enables when the `connectors.matrix` block contains a `token`, `botToken`, or `apiKey` field in `milady.json`.
 
 ## Related
 

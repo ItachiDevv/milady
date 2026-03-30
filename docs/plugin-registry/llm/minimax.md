@@ -16,7 +16,7 @@ milady plugins install minimax
 
 ## Configuration
 
-MiniMax does not have an env-var auto-enable trigger. Enable it explicitly in your config:
+MiniMax does not have an env-var auto-enable trigger but auto-enables when configured as a provider in an auth profile:
 
 ### milady.json Example
 
@@ -28,9 +28,6 @@ MiniMax does not have an env-var auto-enable trigger. Enable it explicitly in yo
         "provider": "minimax"
       }
     }
-  },
-  "plugins": {
-    "allow": ["@elizaos/plugin-minimax"]
   }
 }
 ```

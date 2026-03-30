@@ -16,7 +16,7 @@ milady plugins install qwen
 
 ## Configuration
 
-Qwen does not have an env-var auto-enable trigger. Enable it explicitly in your config:
+Qwen does not have an env-var auto-enable trigger but auto-enables when configured as a provider in an auth profile:
 
 ### milady.json Example
 
@@ -28,9 +28,6 @@ Qwen does not have an env-var auto-enable trigger. Enable it explicitly in your 
         "provider": "qwen"
       }
     }
-  },
-  "plugins": {
-    "allow": ["@elizaos/plugin-qwen"]
   }
 }
 ```

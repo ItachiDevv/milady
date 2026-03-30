@@ -60,7 +60,7 @@ Under your app settings, enable the **Bot** capability and configure event subsc
 
 ## Auto-Enable
 
-The plugin auto-enables when both `FEISHU_APP_ID` and `FEISHU_APP_SECRET` are set.
+The plugin auto-enables when the `connectors.feishu` block contains a `token`, `botToken`, or `apiKey` field in `milady.json`.
 
 ## Related
 

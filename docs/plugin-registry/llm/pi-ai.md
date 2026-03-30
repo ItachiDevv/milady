@@ -16,10 +16,12 @@ milady plugins install pi-ai
 
 ## Auto-Enable
 
-The plugin auto-enables when `ELIZA_USE_PI_AI` is set:
+The plugin auto-enables when `ELIZA_USE_PI_AI` or `MILADY_USE_PI_AI` is set:
 
 ```bash
 export ELIZA_USE_PI_AI=1
+# or
+export MILADY_USE_PI_AI=1
 ```
 
 ## Configuration
@@ -27,6 +29,7 @@ export ELIZA_USE_PI_AI=1
 | Environment Variable | Required | Description |
 |---------------------|----------|-------------|
 | `ELIZA_USE_PI_AI` | Yes | Set to `1` to enable the Pi AI provider |
+| `MILADY_USE_PI_AI` | — | Alias for `ELIZA_USE_PI_AI` |
 
 ### milady.json Example
 

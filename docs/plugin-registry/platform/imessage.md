@@ -23,11 +23,13 @@ milady plugins install imessage
 
 ### 2. Configure Milady
 
+The plugin auto-enables when `connectors.imessage.cliPath` is set:
+
 ```json
 {
   "connectors": {
     "imessage": {
-      "enabled": true,
+      "cliPath": "/usr/local/bin/imessage-cli",
       "service": "auto",
       "dmPolicy": "pairing"
     }
