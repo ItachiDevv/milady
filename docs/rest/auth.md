@@ -13,8 +13,10 @@ The API supports three authentication headers, checked in priority order:
 | Priority | Header | Format | Example |
 |----------|--------|--------|---------|
 | 1 | `Authorization` | `Bearer <token>` | `Authorization: Bearer sk-milady-...` |
-| 2 | `x-milady-token` | Plain token string | `x-milady-token: sk-milady-...` |
-| 3 | `x-api-key` | Plain token string | `x-api-key: sk-milady-...` |
+| 2 | `x-eliza-token` | Plain token string | `x-eliza-token: sk-milady-...` |
+| 3 | `x-milady-token` | Plain token string | `x-milady-token: sk-milady-...` |
+| 4 | `x-api-key` | Plain token string | `x-api-key: sk-milady-...` |
+| 5 | `x-api-token` | Plain token string | `x-api-token: sk-milady-...` |
 
 When no `MILADY_API_TOKEN` is set, all requests are allowed without authentication.
 
@@ -88,7 +90,7 @@ When the agent is running as a cloud-provisioned container (e.g., on Eliza Cloud
 1. `MILADY_CLOUD_PROVISIONED=1` (or `ELIZA_CLOUD_PROVISIONED=1`) is set
 2. `MILADY_API_TOKEN` (or `ELIZA_API_TOKEN`) is configured
 
-When cloud provisioned, `GET /api/auth/status` returns `{ "required": true, "pairingEnabled": false, "expiresAt": null }` — the API token is still required for requests, but the pairing flow is disabled since the token is already provisioned.
+When cloud provisioned, `GET /api/auth/status` returns `{ "required": false, "pairingEnabled": false, "expiresAt": null }` — authentication is handled by the cloud infrastructure, so the local pairing flow is disabled.
 
 A container with only the cloud flag but no API token falls through to the normal pairing flow.
 
@@ -163,7 +165,7 @@ This means that in production, sensitive endpoints are never accessible without 
 The API server includes these auth-related headers in CORS preflight responses:
 
 ```
-Access-Control-Allow-Headers: Content-Type, Authorization, X-Milady-Token, X-Api-Key, X-Milady-Export-Token
+Access-Control-Allow-Headers: Content-Type, Authorization, X-API-Token, X-Api-Key, X-Milady-Client-Id, X-Milady-UI-Language, X-Milady-Token, X-Milady-Export-Token, X-Milady-Terminal-Token
 ```
 
 ## Related
