@@ -29,19 +29,12 @@ const onboardingMock = RequestMock()
 const getProtocol = ClientFunction(() => window.location.protocol);
 const getHref = ClientFunction(() => window.location.href);
 
-fixture`Packaged hash routing (file protocol)`.page`about:blank`
-  .requestHooks(onboardingMock)
-  .beforeEach(async (t) => {
-    await t.eval(() => {
-      localStorage.setItem("eliza:onboarding-complete", "1");
-      localStorage.setItem("eliza:onboarding:step", "activate");
-      localStorage.setItem(
-        "eliza:connection-mode",
-        JSON.stringify({ runMode: "local" }),
-      );
-      localStorage.setItem("eliza:ui-shell-mode", "native");
-    });
-  });
+// Note: localStorage seeding must happen on the same origin as the file:// URL.
+// We rely on requestHooks (onboardingMock) to bypass onboarding; localStorage
+// is seeded after navigating to the file:// origin inside each test.
+fixture`Packaged hash routing (file protocol)`.page`about:blank`.requestHooks(
+  onboardingMock,
+);
 
 // skipJsErrors: see file header.
 test.skipJsErrors()(
@@ -66,12 +59,11 @@ test.skipJsErrors()(
       .ok("#root should exist on file:// + hash");
 
     await t
-      .expect(await getProtocol())
+      .expect(getProtocol())
       .eql("file:", "Should use file protocol");
 
-    const url = await getHref();
     await t
-      .expect(url)
+      .expect(getHref())
       .notContains("onboarding", "Should not land on onboarding URL hash");
   },
 );
