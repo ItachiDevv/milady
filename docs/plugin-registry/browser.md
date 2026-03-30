@@ -20,7 +20,9 @@ milady plugins install browser
 
 The plugin automatically installs Playwright's Chromium browser on first run.
 
-## Enable via Features
+## Auto-Enable
+
+The plugin auto-enables when the `browser` feature flag is set in `milady.json`:
 
 ```json
 {
@@ -30,10 +32,16 @@ The plugin automatically installs Playwright's Chromium browser on first run.
 }
 ```
 
-Or set in environment:
+You can also use the expanded form with additional options:
 
-```bash
-export MILADY_FEATURE_BROWSER=true
+```json
+{
+  "features": {
+    "browser": {
+      "enabled": true
+    }
+  }
+}
 ```
 
 ## Configuration

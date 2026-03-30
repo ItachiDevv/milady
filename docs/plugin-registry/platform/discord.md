@@ -40,11 +40,15 @@ milady plugins install discord
 {
   "connectors": {
     "discord": {
-      "botToken": "YOUR_BOT_TOKEN"
+      "token": "YOUR_BOT_TOKEN"
     }
   }
 }
 ```
+
+<Warning>
+Use the `token` field — the Discord config schema uses strict validation and `botToken` is not a recognized schema field. While `botToken` triggers auto-enable detection, only `token` passes schema validation.
+</Warning>
 
 Or via environment variable:
 
@@ -56,23 +60,35 @@ export DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `botToken` | Yes | Discord bot token |
+| `token` | Yes | Discord bot token |
 | `enabled` | No | Set `false` to disable (default: `true`) |
-| `allowedChannels` | No | Array of channel IDs to respond in |
-| `ignoredChannels` | No | Array of channel IDs to ignore |
-| `prefix` | No | Command prefix (default: none, uses bot mentions) |
+| `groupPolicy` | No | Group message policy: `"allowlist"` (default), `"open"`, or `"disabled"` |
+| `maxLinesPerMessage` | No | Max lines per Discord message (default: `17`) |
+| `textChunkLimit` | No | Max characters per message chunk |
+| `blockStreaming` | No | Disable streaming responses |
 
 ```json
 {
   "connectors": {
     "discord": {
-      "botToken": "YOUR_BOT_TOKEN",
-      "allowedChannels": ["1234567890123456789"],
-      "prefix": "!"
+      "token": "YOUR_BOT_TOKEN",
+      "groupPolicy": "allowlist",
+      "guilds": {
+        "SERVER_ID": {
+          "requireMention": true,
+          "channels": {
+            "CHANNEL_ID": {
+              "allow": true
+            }
+          }
+        }
+      }
     }
   }
 }
 ```
+
+See the [Discord Connector](/connectors/discord) page for the full configuration reference including guild/channel settings, DM policies, actions, and advanced features.
 
 ## Features
 
@@ -104,13 +120,13 @@ Response sent back to Discord channel/DM
 
 ## Auto-Enable
 
-The plugin auto-enables when the `connectors.discord` block contains a `botToken`:
+The plugin auto-enables when the `connectors.discord` block contains a `token`, `botToken`, or `apiKey` field and `enabled` is not explicitly `false`. Use the `token` field for schema-valid configuration:
 
 ```json
 {
   "connectors": {
     "discord": {
-      "botToken": "YOUR_BOT_TOKEN"
+      "token": "YOUR_BOT_TOKEN"
     }
   }
 }
@@ -118,7 +134,7 @@ The plugin auto-enables when the `connectors.discord` block contains a `botToken
 
 ## Environment Variables
 
-The bot token can also be set via:
+When loaded, the plugin reads the bot token from the config and sets both `DISCORD_API_TOKEN` and `DISCORD_BOT_TOKEN` in `process.env`. You can also pre-set the token via environment variable:
 
 ```bash
 export DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN

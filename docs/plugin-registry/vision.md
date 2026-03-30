@@ -14,12 +14,28 @@ The Vision plugin gives Milady agents the ability to understand and analyze imag
 milady plugins install vision
 ```
 
-## Enable via Features
+## Auto-Enable
+
+The plugin auto-enables via two mechanisms:
+
+**1. Feature flag** — Set the `vision` feature flag in `milady.json`:
 
 ```json
 {
   "features": {
     "vision": true
+  }
+}
+```
+
+**2. Media config** — The plugin also auto-enables when a vision provider is configured:
+
+```json
+{
+  "media": {
+    "vision": {
+      "provider": "openai"
+    }
   }
 }
 ```
@@ -30,7 +46,7 @@ milady plugins install vision
 
 - Image understanding and description
 - Visual analysis of screenshots and photos
-- Feature-gated — only loaded when explicitly enabled
+- Feature-gated — loaded when explicitly enabled via feature flag or media config
 
 ## Related
 

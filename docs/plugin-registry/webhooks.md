@@ -14,12 +14,26 @@ The Webhooks plugin enables Milady agents to receive and process incoming webhoo
 milady plugins install webhooks
 ```
 
-## Enable via Features
+## Auto-Enable
+
+The plugin auto-enables via two mechanisms:
+
+**1. Feature flag** — Set the `webhooks` feature flag in `milady.json`:
 
 ```json
 {
   "features": {
     "webhooks": true
+  }
+}
+```
+
+**2. Hooks configuration** — The plugin also auto-enables when a webhook token is configured in the `hooks` section (and `hooks.enabled` is not `false`):
+
+```json
+{
+  "hooks": {
+    "token": "your-webhook-secret"
   }
 }
 ```

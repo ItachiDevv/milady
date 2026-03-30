@@ -14,7 +14,9 @@ The Speech-to-Text (STT) plugin enables Milady agents to transcribe audio input 
 milady plugins install stt
 ```
 
-## Enable via Features
+## Auto-Enable
+
+The plugin auto-enables when the `stt` feature flag is set in `milady.json`:
 
 ```json
 {
@@ -23,6 +25,8 @@ milady plugins install stt
   }
 }
 ```
+
+No environment variable is required — the plugin loads automatically when the feature flag is present.
 
 ## Features
 
