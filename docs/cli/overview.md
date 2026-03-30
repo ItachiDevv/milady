@@ -80,8 +80,8 @@ bunx miladyai
   Check environment health and diagnose common issues.
 </Card>
 
-<Card title="benchmark" icon="timer">
-  Run a benchmark task headlessly against the Milady agent.
+<Card title="benchmark" icon="stopwatch" href="/cli/benchmark">
+  Run a benchmark task headlessly against the agent runtime.
 </Card>
 
 </CardGroup>
@@ -118,6 +118,9 @@ milady db reset
 
 # Run health checks
 milady doctor
+
+# Run a benchmark task
+milady benchmark --task ./tasks/my-task.json
 ```
 
 ## Environment Variables
