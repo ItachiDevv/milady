@@ -27,6 +27,7 @@ export ELIZA_USE_PI_AI=1
 | Environment Variable | Required | Description |
 |---------------------|----------|-------------|
 | `ELIZA_USE_PI_AI` | Yes | Set to `1` to enable the Pi AI provider |
+| `MILADY_USE_PI_AI` | — | Alias for `ELIZA_USE_PI_AI` (either works) |
 
 ### milady.json Example
 

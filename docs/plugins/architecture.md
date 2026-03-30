@@ -31,10 +31,12 @@ export const CORE_PLUGINS: readonly string[] = [
   "@elizaos/plugin-cron",              // scheduled jobs and automation
   "@elizaos/plugin-shell",             // shell command execution
   "@elizaos/plugin-agent-skills",      // skill execution and marketplace runtime
+  "@elizaos/plugin-commands",          // slash command handling (skills auto-register as /commands)
+  "@miladyai/plugin-roles",            // role-based access control (OWNER/ADMIN/NONE)
 ];
 ```
 
-> **Note:** `@elizaos/plugin-secrets-manager`, `@elizaos/plugin-rolodex`, `@elizaos/plugin-plugin-manager`, `@elizaos/plugin-trust`, `@elizaos/plugin-todo`, `@elizaos/plugin-personality`, and `@elizaos/plugin-experience` are statically imported for fast resolution but commented out of the core list. They may be re-enabled in a future release.
+> **Note:** `@elizaos/plugin-secrets-manager`, `@elizaos/plugin-rolodex`, `@elizaos/plugin-plugin-manager`, `@elizaos/plugin-trust`, `@elizaos/plugin-todo`, `@elizaos/plugin-personality`, and `@elizaos/plugin-experience` are commented out of the core list. They may be re-enabled in a future release.
 
 ### Optional Core Plugins
 
@@ -60,7 +62,7 @@ export const OPTIONAL_CORE_PLUGINS: readonly string[] = [
 ];
 ```
 
-Plugins such as `@elizaos/plugin-directives`, `@elizaos/plugin-commands`, `@elizaos/plugin-mcp`, and `@elizaos/plugin-scheduling` are commented out in the source and may be activated in future releases.
+Plugins such as `@elizaos/plugin-directives`, `@elizaos/plugin-mcp`, `@elizaos/plugin-scheduling`, and `@elizaos/plugin-scratchpad` are commented out in the source and may be activated in future releases.
 
 ## Plugin Hook Points
 
@@ -147,6 +149,7 @@ const AUTH_PROVIDER_PLUGINS = {
   ELIZAOS_CLOUD_API_KEY:          "@elizaos/plugin-elizacloud",
   ELIZAOS_CLOUD_ENABLED:          "@elizaos/plugin-elizacloud",
   ELIZA_USE_PI_AI:                "@elizaos/plugin-pi-ai",
+  MILADY_USE_PI_AI:               "@elizaos/plugin-pi-ai",
   CUA_API_KEY:                    "@elizaos/plugin-cua",
   CUA_HOST:                       "@elizaos/plugin-cua",
   OBSIDIAN_VAULT_PATH:            "@elizaos/plugin-obsidian",

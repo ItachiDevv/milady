@@ -174,23 +174,21 @@ With the agent running, open `http://localhost:2138` in your browser or type dir
 ```
 you: hey, what can you do?
 you: help me write a python script that reads a CSV
-you: /status
-you: /think high
+you: /model anthropic/claude-sonnet-4-20250514
 you: explain how transformers work
 ```
 
-### Useful Chat Commands
+### Built-in Chat Commands
 
 | Command | What It Does |
 |---------|-------------|
-| `/status` | Show session status, token count, and cost |
-| `/new` or `/reset` | Clear memory, start a fresh session |
-| `/compact` | Compress context (the agent summarizes the conversation) |
-| `/think <level>` | Set reasoning depth: `off`, `minimal`, `low`, `medium`, `high`, `max` |
-| `/model <id>` | Switch model mid-session (e.g., `/model openai/gpt-4o`) |
-| `/verbose on\|off` | Toggle verbose responses |
-| `/usage off\|tokens\|full` | Control per-message token display |
-| `/help` | List all available commands |
+| `/model [provider/id]` | Open the model selector, or switch directly (e.g., `/model openai/gpt-4o`) |
+| `/models` | Alias for `/model` |
+| `/clear` | Clear the chat display and reset to the welcome message |
+| `/help` | Show help information |
+| `/exit` or `/quit` | Quit Milady |
+
+Additional runtime commands (shell access, config inspection, debug diagnostics) can be enabled through the `commands` section in `milady.json`. See [Chat Commands](/chat-commands) for the full reference.
 
 ## Common First-Run Scenarios
 

@@ -172,8 +172,8 @@ Plugins can extend the command system by registering actions through the elizaOS
 
 Common plugin-provided capabilities include:
 
-- **Shell plugin** (`@elizaos/plugin-shell`) -- provides shell command execution actions
-- **Commands plugin** (`@elizaos/plugin-commands`) -- provides slash command handling
+- **Shell plugin** (`@elizaos/plugin-shell`) -- provides shell command execution actions (core plugin, always loaded)
+- **Commands plugin** (`@elizaos/plugin-commands`) -- provides slash command handling (core plugin, always loaded)
 - **Custom actions** -- any plugin can define actions that respond to specific patterns or intents
 
 Plugins declare their capabilities through the standard elizaOS plugin interface:

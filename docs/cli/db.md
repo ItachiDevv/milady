@@ -110,13 +110,14 @@ This operation cannot be undone. There is no recovery mechanism for deleted data
 
   <Accordion title="Switching Characters or Personalities">
     When switching to a completely different character configuration, reset the database to prevent character data from interfering:
-    
+
     ```bash
-    milady character set new-character
+    # Edit your character/personality in milady.json first
+    $EDITOR "$(milady config path)"
     milady db reset --yes
     milady start
     ```
-    
+
     This ensures the agent starts with a clean slate and proper initialization for the new character.
   </Accordion>
 
