@@ -63,7 +63,7 @@ where to get the credentials, minimum required fields, and tips for optional fie
 **Variables:**
 - `OPENROUTER_API_KEY` — From openrouter.ai/keys
 - `OPENROUTER_SMALL_MODEL` — e.g. `openai/gpt-4o-mini` or `meta-llama/llama-3.3-70b`
-- `OPENROUTER_LARGE_MODEL` — e.g. `anthropic/claude-3.5-sonnet`
+- `OPENROUTER_LARGE_MODEL` — e.g. `anthropic/claude-sonnet-4-6`
 - `OPENROUTER_IMAGE_MODEL` — e.g. `openai/gpt-4o` (for vision tasks)
 - `OPENROUTER_IMAGE_GENERATION_MODEL` — e.g. `openai/dall-e-3`
 - `OPENROUTER_EMBEDDING_MODEL` — e.g. `openai/text-embedding-3-small`
@@ -167,12 +167,12 @@ where to get the credentials, minimum required fields, and tips for optional fie
 - `PERPLEXITY_LARGE_MODEL` — e.g. `llama-3.1-sonar-large-128k-online`
 **Tips:** Perplexity models have built-in web search — ideal for tasks requiring up-to-date information.
 
-### Google Antigravity
-**Get credentials:** Google Cloud API key with Antigravity access
+### Google Antigravity (Vertex AI)
+**Get credentials:** Google Cloud API key with Vertex AI / Antigravity access
 **Minimum required:** `GOOGLE_CLOUD_API_KEY`
 **Variables:**
-- `GOOGLE_CLOUD_API_KEY` — Google Cloud API key
-**Tips:** Google Antigravity is a specialized Google model provider. Requires separate Google Cloud credentials from Google Gemini.
+- `GOOGLE_CLOUD_API_KEY` — Google Cloud API key (distinct from `GOOGLE_API_KEY` used by Gemini)
+**Tips:** Google Antigravity is the elizaOS plugin name for Google Cloud's Vertex AI model provider. It requires a separate Google Cloud API key from the Google Gemini (AI Studio) plugin. Use this when you need Vertex AI–hosted models or enterprise Google Cloud features.
 
 ### Qwen
 **Minimum required:** Configure via provider plugins config in `milady.json`
@@ -187,9 +187,9 @@ where to get the credentials, minimum required fields, and tips for optional fie
 **Tips:** Minimax provides Chinese and multilingual AI models.
 
 ### Pi AI
-**Minimum required:** `ELIZA_USE_PI_AI=true`
+**Minimum required:** `ELIZA_USE_PI_AI=true` or `MILADY_USE_PI_AI=true`
 **Variables:**
-- `ELIZA_USE_PI_AI` — Set to `true` to enable Pi AI as a model provider
+- `ELIZA_USE_PI_AI` / `MILADY_USE_PI_AI` — Set to `true` to enable Pi AI as a model provider (either works for auto-enable)
 **Tips:** Pi AI provides conversational models optimized for friendly, helpful dialogue.
 
 ### Zai
@@ -504,6 +504,13 @@ where to get the credentials, minimum required fields, and tips for optional fie
 - `BLOOIO_PHONE_NUMBER` — Phone number to send from
 - `BLOOIO_WEBHOOK_PORT` — Port for webhook listener
 **Tips:** Blooio bridges iMessage/SMS. Requires a Mac running the Blooio app.
+
+### Lens Protocol
+**Get credentials:** From the Lens Protocol developer tools
+**Minimum required:** `apiKey` in `connectors.lens` config block
+**Config-only fields** (set in `connectors.lens` in `milady.json`):
+- `apiKey` — Your Lens API key
+**Tips:** Lens is a decentralized social graph on Polygon. The connector auto-enables when `connectors.lens.apiKey` is set in `milady.json`. Package: `@elizaos/plugin-lens`.
 
 ### Nostr
 **Get credentials:** Generate your own keypair using any Nostr client

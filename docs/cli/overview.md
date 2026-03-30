@@ -36,7 +36,7 @@ bunx miladyai
 <CardGroup cols={2}>
 
 <Card title="start" icon="play" href="/cli/start">
-  Start the elizaOS agent runtime.
+  Start the Milady agent runtime.
 </Card>
 
 

@@ -103,7 +103,7 @@ These variables configure access to AI model providers. Set at least one to enab
 | `ELIZAOS_CLOUD_API_KEY` | elizaOS Cloud | Cloud-hosted model inference via elizaOS |
 | `ELIZAOS_CLOUD_ENABLED` | elizaOS Cloud | Set to `1` to enable elizaOS Cloud (requires API key) |
 | `ELIZAOS_CLOUD_BASE_URL` | elizaOS Cloud | Override the elizaOS Cloud endpoint URL. Set automatically from config when cloud is enabled. |
-| `ELIZA_USE_PI_AI` | Pi AI | Set to `1` to enable the Pi AI model provider |
+| `ELIZA_USE_PI_AI` / `MILADY_USE_PI_AI` | Pi AI | Set to `1` to enable the Pi AI model provider |
 
 Use `milady models` to check which providers are currently configured.
 
