@@ -13,7 +13,8 @@
  */
 const { Selector, ClientFunction, RequestMock } = require("testcafe");
 
-const BASE = "http://localhost:2138";
+const MILADY_PORT = process.env.MILADY_PORT || "2138";
+const BASE = `http://localhost:${MILADY_PORT}`;
 const ROOT = Selector("#root");
 const SETTINGS_SHELL = Selector('[data-testid="settings-shell"]');
 const ROOT_TIMEOUT_MS = 20000;
@@ -106,16 +107,16 @@ test.skipJsErrors()(
     const animateSwitch = animateCard.find('[role="switch"]');
 
     await t.click(btnEfficient);
-    await t.expect(await readLs("eliza:companion-vrm-power")).eql("efficiency");
+    await t.expect(readLs("eliza:companion-vrm-power")).eql("efficiency");
 
     await t.click(btnAlwaysHalf);
     await t
-      .expect(await readLs("eliza:companion-half-framerate"))
+      .expect(readLs("eliza:companion-half-framerate"))
       .eql("always");
 
     await t.click(animateSwitch);
     await t
-      .expect(await readLs("eliza:companion-animate-when-hidden"))
+      .expect(readLs("eliza:companion-animate-when-hidden"))
       .eql("1");
 
     await t.navigateTo(`${BASE}/companion`);
@@ -172,19 +173,19 @@ test.skipJsErrors()(
 
     await t.click(animateAfter.find('[role="switch"]'));
     await t
-      .expect(await readLs("eliza:companion-animate-when-hidden"))
+      .expect(readLs("eliza:companion-animate-when-hidden"))
       .eql("0");
 
     await t.click(
       vrmAfter.find("button").withExactText("Depends on power source"),
     );
-    await t.expect(await readLs("eliza:companion-vrm-power")).eql("balanced");
+    await t.expect(readLs("eliza:companion-vrm-power")).eql("balanced");
 
     await t.click(
       halfAfter.find("button").withExactText("Depends on power source"),
     );
     await t
-      .expect(await readLs("eliza:companion-half-framerate"))
+      .expect(readLs("eliza:companion-half-framerate"))
       .eql("when_saving_power");
   },
 );
