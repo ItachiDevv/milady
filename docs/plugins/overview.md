@@ -36,7 +36,7 @@ A plugin is a self-contained module that registers one or more of:
 </Card>
 
 <Card title="Feature Plugins" icon="wand-magic-sparkles" href="/plugin-registry/browser">
-  Extended capabilities — browser control, image generation, text-to-speech, speech-to-text, computer use, cron scheduling, vision, shell, webhooks, FAL media generation, Suno music, OpenTelemetry diagnostics, x402 payments, Obsidian vault sync, Gmail Watch, personality tuning, experience tracking, agent skills, Claude Code workbench, RepoPrompt, and more.
+  Extended capabilities — browser control, image generation, text-to-speech (Edge TTS, ElevenLabs), speech-to-text, computer use, cron scheduling, vision, shell, webhooks, FAL media generation, Suno music, OpenTelemetry diagnostics, x402 payments, Obsidian vault sync, Gmail Watch, personality tuning, experience tracking, agent skills, Claude Code workbench, RepoPrompt, PDF processing, and more.
 </Card>
 
 </CardGroup>

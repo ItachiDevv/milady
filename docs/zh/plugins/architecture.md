@@ -35,10 +35,12 @@ export const CORE_PLUGINS: readonly string[] = [
   "@elizaos/plugin-cron",              // scheduled jobs and automation
   "@elizaos/plugin-shell",             // shell command execution
   "@elizaos/plugin-agent-skills",      // skill execution and marketplace runtime
+  "@elizaos/plugin-commands",          // slash command handling (skills auto-register as /commands)
+  "@miladyai/plugin-roles",            // role-based access control (OWNER/ADMIN/NONE)
 ];
 ```
 
-> **注意：** `@elizaos/plugin-secrets-manager`、`@elizaos/plugin-rolodex`、`@elizaos/plugin-plugin-manager`、`@elizaos/plugin-trust`、`@elizaos/plugin-todo`、`@elizaos/plugin-personality` 和 `@elizaos/plugin-experience` 已静态导入以实现快速解析，但在核心列表中被注释掉了。它们可能会在未来的版本中重新启用。
+> **注意：** `@elizaos/plugin-secrets-manager`、`@elizaos/plugin-rolodex`、`@elizaos/plugin-plugin-manager`、`@elizaos/plugin-trust`、`@elizaos/plugin-todo`、`@elizaos/plugin-personality` 和 `@elizaos/plugin-experience` 已静态导入以实现快速解析，但在核心列表中被注释掉了。它们可能会在未来的版本中重新启用。`@miladyai/plugin-roles` 提供 Milady 特有的基于角色的访问控制 (OWNER/ADMIN/NONE)。
 
 <div id="optional-core-plugins">
 
@@ -68,7 +70,7 @@ export const OPTIONAL_CORE_PLUGINS: readonly string[] = [
 ];
 ```
 
-`@elizaos/plugin-directives`、`@elizaos/plugin-commands`、`@elizaos/plugin-mcp` 和 `@elizaos/plugin-scheduling` 等插件在源码中被注释掉，可能会在未来版本中激活。
+`@elizaos/plugin-directives`、`@elizaos/plugin-mcp` 和 `@elizaos/plugin-scheduling` 等插件在源码中被注释掉，可能会在未来版本中激活。
 
 <div id="plugin-hook-points">
 

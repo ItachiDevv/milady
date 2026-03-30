@@ -35,10 +35,12 @@ export const CORE_PLUGINS: readonly string[] = [
   "@elizaos/plugin-cron",              // scheduled jobs and automation
   "@elizaos/plugin-shell",             // shell command execution
   "@elizaos/plugin-agent-skills",      // skill execution and marketplace runtime
+  "@elizaos/plugin-commands",          // slash command handling (skills auto-register as /commands)
+  "@miladyai/plugin-roles",            // role-based access control (OWNER/ADMIN/NONE)
 ];
 ```
 
-> **Nota:** `@elizaos/plugin-secrets-manager`, `@elizaos/plugin-rolodex`, `@elizaos/plugin-plugin-manager`, `@elizaos/plugin-trust`, `@elizaos/plugin-todo`, `@elizaos/plugin-personality` y `@elizaos/plugin-experience` se importan estáticamente para una resolución rápida, pero están comentados en la lista principal. Podrían ser re-habilitados en una versión futura.
+> **Nota:** `@elizaos/plugin-secrets-manager`, `@elizaos/plugin-rolodex`, `@elizaos/plugin-plugin-manager`, `@elizaos/plugin-trust`, `@elizaos/plugin-todo`, `@elizaos/plugin-personality` y `@elizaos/plugin-experience` se importan estáticamente para una resolución rápida, pero están comentados en la lista principal. Podrían ser re-habilitados en una versión futura. `@miladyai/plugin-roles` proporciona control de acceso basado en roles específico de Milady (OWNER/ADMIN/NONE).
 
 <div id="optional-core-plugins">
 
@@ -68,7 +70,7 @@ export const OPTIONAL_CORE_PLUGINS: readonly string[] = [
 ];
 ```
 
-Plugins como `@elizaos/plugin-directives`, `@elizaos/plugin-commands`, `@elizaos/plugin-mcp` y `@elizaos/plugin-scheduling` están comentados en el código fuente y podrían activarse en versiones futuras.
+Plugins como `@elizaos/plugin-directives`, `@elizaos/plugin-mcp` y `@elizaos/plugin-scheduling` están comentados en el código fuente y podrían activarse en versiones futuras.
 
 <div id="plugin-hook-points">
 
