@@ -47,15 +47,34 @@ function setLocalStorage() {
 
 const setupStorage = setLocalStorage();
 
+// Track console.error calls to fail tests on unexpected errors (since skipJsErrors is enabled)
+const initErrorTracking = ClientFunction(() => {
+  window.__testcafe_error_count = 0;
+  const originalError = console.error;
+  console.error = function (...args) {
+    window.__testcafe_error_count++;
+    originalError.apply(console, args);
+  };
+});
+
+const getErrorCount = ClientFunction(() => window.__testcafe_error_count || 0);
+
 fixture`Milady UI — Full View Traversal`.page`about:blank`
   .requestHooks(onboardingMock)
   .beforeEach(async (t) => {
     await t.navigateTo(BASE);
     await setupStorage();
+    await initErrorTracking();
     await t.navigateTo(BASE);
     await t
       .expect(ROOT_READY.with({ timeout: ROOT_TIMEOUT_MS }).exists)
       .ok("#root should appear after onboarding seed");
+  })
+  .afterEach(async (t) => {
+    const errorCount = await getErrorCount();
+    await t
+      .expect(errorCount)
+      .eql(0, `Expected no console.error calls, but got ${errorCount}`);
   });
 
 // ---------------------------------------------------------------------------
