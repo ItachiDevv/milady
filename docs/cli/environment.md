@@ -14,15 +14,15 @@ These variables control where Milady stores its state, config, and credentials.
 |----------|-------------|---------|
 | `MILADY_STATE_DIR` | Override the state directory. All resolved paths default to subdirectories of this directory. | `~/.milady/` |
 | `MILADY_CONFIG_PATH` | Override the config file path. Takes precedence over `MILADY_STATE_DIR` for config resolution. | `~/.milady/milady.json` |
-| `MILADY_PROFILE` | Active configuration profile name. When set, the state directory becomes `~/.milady-<profile>/`. Equivalent to the `--profile` CLI flag. | (none) |
-| `MILADY_OAUTH_DIR` | Override the OAuth credentials directory. | `~/.milady/credentials/` |
-| `MILADY_WORKSPACE_ROOT` | Override the workspace root directory used by the registry client. | (auto-resolved from config) |
+| `ELIZA_PROFILE` | Active configuration profile name. When set, the state directory becomes `~/.milady-<profile>/`. Equivalent to the `--profile` CLI flag. | (none) |
+| `ELIZA_OAUTH_DIR` | Override the OAuth credentials directory. | `~/.milady/credentials/` |
+| `ELIZA_WORKSPACE_ROOT` | Override the workspace root directory used by the registry client. | (auto-resolved from config) |
 
 ### Path Resolution
 
 `MILADY_CONFIG_PATH` takes the highest precedence. If not set, `MILADY_STATE_DIR` determines where `milady.json` is looked for. If neither is set, the default `~/.milady/milady.json` is used.
 
-When a `--profile <name>` flag or `MILADY_PROFILE` is set, the state directory becomes `~/.milady-<name>/` and all path defaults shift accordingly.
+When a `--profile <name>` flag or `ELIZA_PROFILE` is set, the state directory becomes `~/.milady-<name>/` and all path defaults shift accordingly.
 
 ---
 
@@ -174,7 +174,7 @@ These variables control elizaOS runtime initialization behavior.
 |----------|-------------|---------|
 | `ELIZA_ALLOW_DESTRUCTIVE_MIGRATIONS` | Allow destructive database migrations on startup. Automatically set to `true` by Milady. | `true` (set by Milady) |
 | `ELIZA_CONFIG_PATH` | **Deprecated.** Legacy alias for `MILADY_CONFIG_PATH`. Recognized as a fallback when `MILADY_CONFIG_PATH` is not set. Prefer `MILADY_CONFIG_PATH`. | `~/.milady/milady.json` |
-| `MILADY_DISABLE_WORKSPACE_PLUGIN_OVERRIDES` | When set to `1`, disables loading plugin overrides from workspace directories. | (unset) |
+| `ELIZA_DISABLE_WORKSPACE_PLUGIN_OVERRIDES` | When set to `1`, disables loading plugin overrides from workspace directories. | (unset) |
 | `MILADY_BUNDLED_VERSION` | Override the bundled version string returned by the version resolver. Used in special packaging scenarios. | (unset) |
 | `MILADY_DISABLE_EDGE_TTS` | When set to `1`, `true`, or `yes`, Milady does **not** auto-load `@elizaos/plugin-edge-tts` when `@elizaos/plugin-agent-orchestrator` is enabled (orchestrator-driven flows use `TEXT_TO_SPEECH`). Without this, the bundled `node-edge-tts` client **contacts Microsoft’s Edge TTS cloud service** even though no API key is required—there is still an outbound network call to Microsoft. To opt out while keeping other plugins: set this variable, or set `plugins.entries["edge-tts"].enabled` to `false` in `milady.json`. Alias: `ELIZA_DISABLE_EDGE_TTS`. | (unset — Edge TTS is auto-loaded with the agent orchestrator) |
 

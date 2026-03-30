@@ -28,7 +28,6 @@ bunx miladyai
 | `--dev` | Shorthand for `--profile dev` (also sets the gateway port to `19001`) |
 | `--verbose` | Enable informational runtime logs |
 | `--debug` | Enable debug-level runtime logs |
-| `--connection-key [key]` | Set or auto-generate a connection key for remote access |
 | `--no-color` | Disable ANSI colors |
 
 ## Commands
@@ -79,6 +78,10 @@ bunx miladyai
 
 <Card title="doctor" icon="stethoscope" href="/cli/doctor">
   Check environment health and diagnose common issues.
+</Card>
+
+<Card title="benchmark" icon="timer">
+  Run a benchmark task headlessly against the Milady agent.
 </Card>
 
 </CardGroup>
