@@ -88,14 +88,19 @@ The wizard prompts for your API key and saves it to the config file. Use `--no-w
 
 3. **Ensure the workspace** -- creates the workspace directory if it does not exist and writes all required bootstrap files (character definition, default settings, etc.). This step is idempotent -- running setup on an existing workspace is safe.
 
-4. **Report success** -- prints the resolved workspace path and a "Setup complete." message.
+4. **Run health checks** (interactive only) -- when running in an interactive terminal (TTY), setup runs `doctor` checks (without port checks) and prints a summary of any issues found.
+
+5. **Report success** -- prints the resolved workspace path and a "Setup complete." message.
 
 ## Output
 
 ```
 → No config found, using defaults
 ✓ Agent workspace ready: /Users/you/.milady/workspace
-Setup complete.
+Setup complete. Running health check...
+  ✓ Runtime: Bun v1.2.5
+  ✓ Storage: 12.4 GB free
+Run eliza start to launch your agent.
 ```
 
 If a config file exists:
@@ -103,7 +108,10 @@ If a config file exists:
 ```
 ✓ Config loaded
 ✓ Agent workspace ready: /Users/you/.milady/workspace
-Setup complete.
+Setup complete. Running health check...
+  ✓ Runtime: Node.js v22.12.0
+  ✓ Storage: 8.1 GB free
+Run eliza start to launch your agent.
 ```
 
 ## Configuration File Location
