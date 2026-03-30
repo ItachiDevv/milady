@@ -75,7 +75,7 @@ All fields are set under `connectors.discord` in `milady.json`.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `token` | string | — | Bot token (legacy field name) |
+| `token` | string | — | Discord bot token |
 | `name` | string | — | Account display name |
 | `enabled` | boolean | — | Explicitly enable/disable |
 | `capabilities` | string[] | — | Capability flags |

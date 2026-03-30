@@ -54,7 +54,7 @@ These variables affect the update checker and plugin registry client.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `MILADY_UPDATE_CHANNEL` | Override the active release channel (`stable`, `beta`, or `nightly`). Takes precedence over the `update.channel` value in `milady.json`. Invalid values are ignored and fall back to the config value. | (from config) |
+| `ELIZA_UPDATE_CHANNEL` | Override the active release channel (`stable`, `beta`, or `nightly`). Takes precedence over the `update.channel` value in `milady.json`. Invalid values are ignored and fall back to the config value. | (from config) |
 | `MILADY_SKILLS_CATALOG` | Override the path to the skills catalog JSON file. | (auto-resolved from package root) |
 | `ELIZA_DISABLE_LAZY_SUBCOMMANDS` | When set to `1` (or any truthy value), all subcommands (`plugins`, `models`) are eagerly registered at startup instead of on first invocation. Useful for shell completion scripts. | (unset) |
 

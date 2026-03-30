@@ -28,15 +28,15 @@ description: Milady 的插件系统提供模块化能力 — 模型提供者、�
 <CardGroup cols={2}>
 
 <Card title="核心插件" icon="cube" href="/zh/plugin-registry/knowledge">
-  每个 Milady 安装都附带的基础插件 — knowledge、database、form、cron、shell、agent-skills、trajectory-logger 和 agent-orchestrator。
+  每个 Milady 安装都附带的基础插件 — sql、local-embedding、form、knowledge、trajectory-logger、agent-orchestrator、cron、shell 和 agent-skills。
 </Card>
 
 <Card title="模型提供者" icon="brain" href="/zh/plugin-registry/llm/openai">
-  LLM 集成，支持 OpenAI、Anthropic、Google Gemini、Google Antigravity、Groq、Ollama、OpenRouter、DeepSeek、xAI、Mistral、Cohere、Together、Qwen、Minimax、Pi AI、Perplexity、Zai、Vercel AI Gateway 和 Eliza Cloud。
+  LLM 集成，支持 OpenAI、Anthropic、Google Gemini、Google Antigravity、Groq、Ollama、OpenRouter、DeepSeek、xAI、Mistral、Cohere、Together、Qwen、Minimax、Pi AI、Perplexity、Zai 和 Vercel AI Gateway。Eliza Cloud 通过 `ELIZAOS_CLOUD_API_KEY` 单独自动启用。
 </Card>
 
 <Card title="平台连接器" icon="plug" href="/zh/plugin-registry/platform/discord">
-  通过自动启用桥接 18 个以上消息平台（Discord、Telegram、Twitter、Slack、WhatsApp、Signal、iMessage、BlueBubbles、Blooio、MS Teams、Google Chat、Mattermost、Farcaster、Twitch、WeChat、Feishu、Matrix、Nostr）。额外连接器（Bluesky、Instagram、Lens、LINE、Zalo、Twilio、GitHub、Gmail Watch、Nextcloud Talk、Tlon）可从 elizaOS 注册表获取。
+  通过自动启用桥接 19 个消息平台（Discord、Telegram、Twitter、Slack、WhatsApp、Signal、iMessage、BlueBubbles、Blooio、MS Teams、Google Chat、Mattermost、Farcaster、Twitch、Feishu、Matrix、Nostr、Lens、WeChat）。额外连接器（Bluesky、Instagram、LINE、Zalo、Twilio、GitHub、Gmail Watch、Nextcloud Talk、Tlon）可从 elizaOS 注册表获取。
 </Card>
 
 <Card title="DeFi 与区块链" icon="wallet" href="/zh/plugin-registry/defi/evm">

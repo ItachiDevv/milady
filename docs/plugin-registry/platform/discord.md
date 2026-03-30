@@ -40,7 +40,7 @@ milady plugins install discord
 {
   "connectors": {
     "discord": {
-      "botToken": "YOUR_BOT_TOKEN"
+      "token": "YOUR_BOT_TOKEN"
     }
   }
 }
@@ -52,23 +52,32 @@ Or via environment variable:
 export DISCORD_BOT_TOKEN=YOUR_BOT_TOKEN
 ```
 
+<Warning>
+Use the `token` field — the Discord config schema uses strict validation and `botToken` is not a recognized field. While `botToken` triggers auto-enable detection, only `token` passes schema validation.
+</Warning>
+
 ## Configuration
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `botToken` | Yes | Discord bot token |
+| `token` | Yes | Discord bot token |
 | `enabled` | No | Set `false` to disable (default: `true`) |
-| `allowedChannels` | No | Array of channel IDs to respond in |
-| `ignoredChannels` | No | Array of channel IDs to ignore |
-| `prefix` | No | Command prefix (default: none, uses bot mentions) |
+| `allowBots` | No | Allow bot messages (default: `false`) |
+| `groupPolicy` | No | Group message policy: `"allowlist"` (default) or `"open"` |
+| `textChunkLimit` | No | Max characters per message chunk |
+| `maxLinesPerMessage` | No | Max lines per message |
 
 ```json
 {
   "connectors": {
     "discord": {
-      "botToken": "YOUR_BOT_TOKEN",
-      "allowedChannels": ["1234567890123456789"],
-      "prefix": "!"
+      "token": "YOUR_BOT_TOKEN",
+      "groupPolicy": "allowlist",
+      "guilds": {
+        "SERVER_ID": {
+          "requireMention": true
+        }
+      }
     }
   }
 }
@@ -104,13 +113,13 @@ Response sent back to Discord channel/DM
 
 ## Auto-Enable
 
-The plugin auto-enables when the `connectors.discord` block contains a `botToken`:
+The plugin auto-enables when the `connectors.discord` block contains a `token` (or `botToken` / `apiKey` for detection only):
 
 ```json
 {
   "connectors": {
     "discord": {
-      "botToken": "YOUR_BOT_TOKEN"
+      "token": "YOUR_BOT_TOKEN"
     }
   }
 }

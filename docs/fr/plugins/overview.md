@@ -28,15 +28,15 @@ Un plugin est un module autonome qui enregistre un ou plusieurs des éléments s
 <CardGroup cols={2}>
 
 <Card title="Plugins principaux" icon="cube" href="/fr/plugin-registry/knowledge">
-  Plugins essentiels livrés avec chaque installation de Milady — knowledge, database, form, cron, shell, agent-skills, trajectory-logger et agent-orchestrator.
+  Plugins essentiels livrés avec chaque installation de Milady — sql, local-embedding, form, knowledge, trajectory-logger, agent-orchestrator, cron, shell et agent-skills.
 </Card>
 
 <Card title="Fournisseurs de modèles" icon="brain" href="/fr/plugin-registry/llm/openai">
-  Intégrations LLM pour OpenAI, Anthropic, Google Gemini, Google Antigravity, Groq, Ollama, OpenRouter, DeepSeek, xAI, Mistral, Cohere, Together, Qwen, Minimax, Pi AI, Perplexity, Zai, Vercel AI Gateway et Eliza Cloud.
+  Intégrations LLM pour OpenAI, Anthropic, Google Gemini, Google Antigravity, Groq, Ollama, OpenRouter, DeepSeek, xAI, Mistral, Cohere, Together, Qwen, Minimax, Pi AI, Perplexity, Zai et Vercel AI Gateway. Eliza Cloud s'active automatiquement via `ELIZAOS_CLOUD_API_KEY`.
 </Card>
 
 <Card title="Connecteurs de plateformes" icon="plug" href="/fr/plugin-registry/platform/discord">
-  Passerelles vers plus de 18 plateformes de messagerie via auto-activation (Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, WeChat, Feishu, Matrix, Nostr). Des connecteurs supplémentaires (Bluesky, Instagram, Lens, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon) sont disponibles dans le registre elizaOS.
+  Passerelles vers 19 plateformes de messagerie via auto-activation (Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, Feishu, Matrix, Nostr, Lens, WeChat). Des connecteurs supplémentaires (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon) sont disponibles dans le registre elizaOS.
 </Card>
 
 <Card title="DeFi et Blockchain" icon="wallet" href="/fr/plugin-registry/defi/evm">

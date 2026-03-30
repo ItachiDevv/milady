@@ -16,7 +16,7 @@ Milady uses the Discord plugin to interact with Discord servers. This guide assu
 
 Before starting, ensure you have:
 - A Discord account with a server where you have admin permissions
-- Milady installed on your system (see [Getting Started](/getting-started))
+- Milady installed on your system (see [Installation](/installation))
 - Node.js 22+ installed
 - A code editor for modifying configuration files
 
@@ -56,12 +56,9 @@ If your token is ever exposed, regenerate it immediately by clicking **Regenerat
 ```json5
 {
   // ... existing config ...
-  "plugins": {
+  "connectors": {
     "discord": {
-      "enabled": true,
-      "token": "YOUR_BOT_TOKEN_HERE",
-      "intents": ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "MESSAGE_CONTENT"],
-      "prefix": "!"
+      "token": "YOUR_BOT_TOKEN_HERE"
     }
   }
 }
@@ -71,21 +68,19 @@ If your token is ever exposed, regenerate it immediately by clicking **Regenerat
 4. Save the file
 
 <Info>
-The `intents` field tells Discord which events your bot should receive. `MESSAGE_CONTENT` is required to read message text.
+Discord gateway intents (Message Content, Server Members, Presence) must be enabled in the Discord Developer Portal under **Bot → Privileged Gateway Intents**. The plugin requests them automatically at runtime.
 </Info>
 
 </Step>
 
-<Step title="Enable the Discord Plugin">
-1. Open your terminal and navigate to your Milady installation directory
-2. Run the following command to verify the plugin is recognized:
+<Step title="Verify the Discord Plugin">
+The Discord plugin auto-enables when a `token` is present in `connectors.discord`. Verify it loaded by checking the startup logs or running:
 
 ```bash
-bun run milady --plugins
+milady plugins installed
 ```
 
-3. Confirm that `discord` appears in the list of available plugins
-4. Check `milady.json` to ensure `"enabled": true` is set for the Discord plugin
+You should see `@elizaos/plugin-discord` in the list of active plugins.
 
 </Step>
 
@@ -114,13 +109,13 @@ For a production bot, you may want to add additional permissions like `Manage Me
 1. In your terminal, start Milady:
 
 ```bash
-bun run milady
+milady start
 ```
 
 2. You should see output confirming the Discord plugin has connected
 3. In your Discord server, send a message to your bot:
    - Direct message: `Hello bot`
-   - In a channel: `!hello bot` (using the prefix)
+   - In a channel: mention your bot by name or @mention
 
 4. Your bot should respond with an AI-generated message
 5. Test a few more interactions to confirm everything is working

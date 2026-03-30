@@ -64,7 +64,7 @@ milady update status
 | `beta` | Release candidates. May contain minor issues. |
 | `nightly` | Latest development builds. May be unstable. |
 
-The active channel is stored in `milady.json` under `update.channel`. It can also be overridden with the `MILADY_UPDATE_CHANNEL` environment variable.
+The active channel is stored in `milady.json` under `update.channel`. It can also be overridden with the `ELIZA_UPDATE_CHANNEL` environment variable.
 
 ## Behavior
 
@@ -127,7 +127,7 @@ Switching channels with this command saves the new channel to `milady.json`. Run
 
 | Variable | Description |
 |----------|-------------|
-| `MILADY_UPDATE_CHANNEL` | Override the active release channel (`stable`, `beta`, or `nightly`). Takes precedence over the config file value. |
+| `ELIZA_UPDATE_CHANNEL` | Override the active release channel (`stable`, `beta`, or `nightly`). Takes precedence over the config file value. |
 
 ## Update Cache
 
@@ -138,5 +138,5 @@ When switching channels (`--channel` or `update channel`), the cache is automati
 ## Related
 
 - [milady start](/cli/start) -- restart the agent after updating
-- [Environment Variables](/cli/environment) -- `MILADY_UPDATE_CHANNEL` and other variables
+- [Environment Variables](/cli/environment) -- `ELIZA_UPDATE_CHANNEL` and other variables
 - [Self-Updates](/self-updates) -- detailed documentation on the update system
