@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 /**
  * TestCafe runner — auto-detects an available browser and runs the UI E2E suite.
  *
