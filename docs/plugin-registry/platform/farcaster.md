@@ -58,10 +58,13 @@ Your agent needs a Farcaster account (FID — Farcaster ID):
 | `signerUuid` | Yes | Neynar signer UUID for the agent account |
 | `fid` | Yes | Farcaster ID (FID) of the agent account |
 | `enabled` | No | Set `false` to disable (default: `true`) |
-| `pollInterval` | No | Seconds between mention checks (default: `60`) |
+| `pollInterval` | No | Seconds between mention checks (default: `120`) |
 | `channels` | No | Array of Farcaster channel names to monitor |
-| `castIntervalMin` | No | Min minutes between autonomous casts (default: `120`) |
-| `castIntervalMax` | No | Max minutes between autonomous casts (default: `240`) |
+| `castIntervalMin` | No | Min minutes between autonomous casts (default: `90`) |
+| `castIntervalMax` | No | Max minutes between autonomous casts (default: `180`) |
+| `dryRun` | No | Simulate operations without executing |
+| `enableCast` | No | Enable or disable casting (default: `true`) |
+| `hubUrl` | No | Custom Farcaster hub URL |
 
 ```json
 {
@@ -111,7 +114,7 @@ Casts are limited to 320 characters. Longer responses are split into cast thread
 
 ## Auto-Enable
 
-The plugin auto-enables when `connectors.farcaster.apiKey` is set.
+The plugin auto-enables when `connectors.farcaster.apiKey` is set or when the `FARCASTER_NEYNAR_API_KEY` environment variable is present.
 
 ## Related
 

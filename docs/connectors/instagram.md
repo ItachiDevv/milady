@@ -44,6 +44,8 @@ The Instagram connector is an elizaOS plugin that bridges your agent to Instagra
 | `INSTAGRAM_POLL_INTERVAL` | Polling interval in ms |
 | `INSTAGRAM_POST_INTERVAL_MIN` | Min seconds between posts |
 | `INSTAGRAM_POST_INTERVAL_MAX` | Max seconds between posts |
+| `INSTAGRAM_VERIFICATION_CODE` | Verification code for login challenges |
+| `INSTAGRAM_PROXY` | Proxy URL for Instagram API requests |
 
 ## Features
 

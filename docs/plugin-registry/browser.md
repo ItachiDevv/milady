@@ -38,6 +38,17 @@ export MILADY_FEATURE_BROWSER=true
 
 ## Configuration
 
+### Environment Variables
+
+| Environment Variable | Required | Description |
+|---------------------|----------|-------------|
+| `BROWSERBASE_API_KEY` | No | Browserbase cloud API key (for remote browser sessions) |
+| `BROWSERBASE_PROJECT_ID` | No | Browserbase project ID |
+| `BROWSER_HEADLESS` | No | Run browser in headless mode (default: `true`) |
+| `CAPSOLVER_API_KEY` | No | Capsolver API key for CAPTCHA solving |
+
+### Feature Settings
+
 | Setting | Description | Default |
 |---------|-------------|---------|
 | `browser.headless` | Run browser in headless mode | `true` |

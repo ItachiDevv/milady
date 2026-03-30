@@ -25,20 +25,20 @@ The registry has two layers:
 
 ### Bundled Registry (`plugins.json`)
 
-A local JSON file shipped with Milady containing metadata for ~97 plugins from the elizaOS ecosystem. Each entry includes the plugin's id, npm package name, category, environment variables, version, dependencies, and detailed parameter definitions. This file follows the `plugin-index-v1` schema.
+A local JSON file shipped with Milady containing metadata for ~106 plugins from the elizaOS ecosystem. Each entry includes the plugin's id, npm package name, category, environment variables, version, dependencies, and detailed parameter definitions. This file follows the `plugin-index-v1` schema.
 
 ```json
 {
   "$schema": "plugin-index-v1",
-  "generatedAt": "2026-02-09T20:23:38.561Z",
-  "count": 97,
+  "generatedAt": "2026-03-22T08:36:32.187Z",
+  "count": 106,
   "plugins": [
     {
       "id": "telegram",
       "dirName": "plugin-telegram",
       "name": "Telegram",
       "npmName": "@elizaos/plugin-telegram",
-      "description": "Telegram bot connector for elizaOS agents",
+      "description": "Telegram connector for bot chats, groups, channels, and topic-based conversations.",
       "category": "connector",
       "envKey": "TELEGRAM_BOT_TOKEN",
       "configKeys": ["TELEGRAM_BOT_TOKEN", "TELEGRAM_BOT_USERNAME"],

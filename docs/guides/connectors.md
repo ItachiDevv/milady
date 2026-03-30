@@ -548,8 +548,8 @@ Connects to iMessage and SMS messaging via the Blooio service with signed webhoo
       "signerUuid": "YOUR_SIGNER_UUID",
       "fid": 12345,
       "channels": ["ai", "agents"],
-      "castIntervalMin": 120,
-      "castIntervalMax": 240
+      "castIntervalMin": 90,
+      "castIntervalMax": 180
     }
   }
 }

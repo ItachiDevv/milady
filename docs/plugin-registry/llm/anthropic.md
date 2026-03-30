@@ -28,7 +28,7 @@ export ANTHROPIC_API_KEY=sk-ant-...
 |---------------------|----------|-------------|
 | `ANTHROPIC_API_KEY` | Yes* | Anthropic API key from [console.anthropic.com](https://console.anthropic.com) |
 | `CLAUDE_API_KEY` | Yes* | Alias for `ANTHROPIC_API_KEY` |
-| `ANTHROPIC_API_URL` | No | Custom base URL |
+| `ANTHROPIC_BASE_URL` | No | Custom base URL |
 
 *Either `ANTHROPIC_API_KEY` or `CLAUDE_API_KEY` is required.
 

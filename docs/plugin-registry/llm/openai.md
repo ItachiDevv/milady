@@ -37,7 +37,7 @@ export OPENAI_API_KEY=sk-...
 | Environment Variable | Required | Description |
 |---------------------|----------|-------------|
 | `OPENAI_API_KEY` | Yes | OpenAI API key from [platform.openai.com](https://platform.openai.com) |
-| `OPENAI_API_URL` | No | Custom base URL (for Azure OpenAI or compatible APIs) |
+| `OPENAI_BASE_URL` | No | Custom base URL (for Azure OpenAI or compatible APIs) |
 | `OPENAI_ORG_ID` | No | Organization ID for usage tracking |
 | `OPENAI_PROJECT_ID` | No | Project ID for quota management |
 

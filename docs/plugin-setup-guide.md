@@ -516,6 +516,13 @@ where to get the credentials, minimum required fields, and tips for optional fie
 - `NOSTR_ENABLED` — `true` to enable
 **Tips:** Generate keys with any Nostr app (Damus, Primal, Amethyst). Keep private key secret — it's your identity. Use multiple relays for reliability.
 
+### Lens Protocol
+**Minimum required:** `LENS_API_KEY` or set `connectors.lens.apiKey` in milady.json
+**Variables:**
+- `LENS_API_KEY` — Lens Protocol API key
+**Config:** `connectors.lens.apiKey` — API key for Lens Protocol access
+**Tips:** Lens is a decentralized social graph built on Polygon. The connector auto-enables when `apiKey` is set in the connector config.
+
 ### LINE
 **Get credentials:** https://developers.line.biz/console
 **Minimum required:** `LINE_CHANNEL_ACCESS_TOKEN` + `LINE_CHANNEL_SECRET`

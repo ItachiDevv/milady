@@ -55,7 +55,7 @@ To explicitly disable the connector even when an API key is present:
 
 The `plugin-auto-enable.ts` module checks `connectors.farcaster` in your config. If the `apiKey` field is truthy (and `enabled` is not explicitly `false`), the runtime automatically loads `@elizaos/plugin-farcaster`.
 
-No environment variable is required to trigger auto-enable — it is driven entirely by the connector config object.
+The plugin also auto-enables when the `FARCASTER_NEYNAR_API_KEY` environment variable is set.
 
 ## Full Configuration Reference
 
@@ -70,7 +70,7 @@ All fields are defined under `connectors.farcaster` in `milady.json`.
 | `fid` | number | — | Farcaster ID of the agent account (required) |
 | `enabled` | boolean | — | Explicitly enable/disable |
 | `channels` | string[] | — | Farcaster channel names to monitor and participate in |
-| `pollInterval` | number | `60` | Seconds between mention checks |
+| `pollInterval` | number | `120` | Seconds between mention checks |
 
 ### Autonomous Casting
 
@@ -78,8 +78,8 @@ The agent can post casts autonomously at random intervals. The LLM generates cas
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `castIntervalMin` | number | `120` | Minimum minutes between autonomous casts |
-| `castIntervalMax` | number | `240` | Maximum minutes between autonomous casts |
+| `castIntervalMin` | number | `90` | Minimum minutes between autonomous casts |
+| `castIntervalMax` | number | `180` | Maximum minutes between autonomous casts |
 
 ```json
 {
@@ -95,6 +95,22 @@ The agent can post casts autonomously at random intervals. The LLM generates cas
   }
 }
 ```
+
+### Additional Configuration
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `dryRun` | boolean | `false` | Simulate operations without executing |
+| `enableCast` | boolean | `true` | Enable or disable casting |
+| `castImmediately` | boolean | — | Post a cast immediately on startup |
+| `enableActionProcessing` | boolean | — | Process actions (likes, recasts) |
+| `actionInterval` | number | — | Minutes between action processing cycles |
+| `maxActionsProcessing` | number | — | Max actions to process per cycle |
+| `maxCastLength` | number | — | Max cast length (default: 320) |
+| `hubUrl` | string | — | Custom Farcaster hub URL |
+| `mode` | string | — | Connector operating mode |
+
+**Environment variables:** `FARCASTER_NEYNAR_API_KEY`, `FARCASTER_SIGNER_UUID`, `FARCASTER_FID`, `FARCASTER_POLL_INTERVAL`, `FARCASTER_DRY_RUN`, `FARCASTER_HUB_URL`, `FARCASTER_MODE`
 
 ### Cast Limits
 
