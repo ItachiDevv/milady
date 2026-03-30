@@ -81,6 +81,10 @@ bunx miladyai
   Check environment health and diagnose common issues.
 </Card>
 
+<Card title="benchmark" icon="gauge-high">
+  Run a benchmark task headlessly against the agent. Options: `--task <path>` (task JSON), `--server` (accept tasks via stdin), `--timeout <ms>`.
+</Card>
+
 </CardGroup>
 
 ## Quick Reference

@@ -28,7 +28,7 @@ Un plugin es un módulo autónomo que registra uno o más de los siguientes:
 <CardGroup cols={2}>
 
 <Card title="Plugins principales" icon="cube" href="/es/plugin-registry/knowledge">
-  Plugins esenciales que se incluyen con cada instalación de Milady — knowledge, database, form, cron, shell, agent-skills, trajectory-logger y agent-orchestrator.
+  Plugins esenciales que se incluyen con cada instalación de Milady — sql, local-embedding, form, knowledge, trajectory-logger, agent-orchestrator, cron, shell, agent-skills, commands y roles.
 </Card>
 
 <Card title="Proveedores de modelos" icon="brain" href="/es/plugin-registry/llm/openai">
@@ -36,7 +36,7 @@ Un plugin es un módulo autónomo que registra uno o más de los siguientes:
 </Card>
 
 <Card title="Conectores de plataformas" icon="plug" href="/es/plugin-registry/platform/discord">
-  Puentes hacia más de 18 plataformas de mensajería mediante auto-habilitación (Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, WeChat, Feishu, Matrix, Nostr). Conectores adicionales (Bluesky, Instagram, Lens, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon) están disponibles en el registro de elizaOS.
+  Puentes hacia 19 plataformas de mensajería mediante auto-habilitación (Discord, Telegram, Twitter, Slack, WhatsApp, Signal, iMessage, BlueBubbles, Blooio, MS Teams, Google Chat, Mattermost, Farcaster, Twitch, WeChat, Feishu, Matrix, Nostr, Lens). Conectores adicionales (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon) están disponibles en el registro de elizaOS.
 </Card>
 
 <Card title="DeFi y Blockchain" icon="wallet" href="/es/plugin-registry/defi/evm">

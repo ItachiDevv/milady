@@ -28,7 +28,7 @@ description: Milady 的插件系统提供模块化能力 — 模型提供者、�
 <CardGroup cols={2}>
 
 <Card title="核心插件" icon="cube" href="/zh/plugin-registry/knowledge">
-  每个 Milady 安装都附带的基础插件 — knowledge、database、form、cron、shell、agent-skills、trajectory-logger 和 agent-orchestrator。
+  每个 Milady 安装都附带的基础插件 — sql、local-embedding、form、knowledge、trajectory-logger、agent-orchestrator、cron、shell、agent-skills、commands 和 roles。
 </Card>
 
 <Card title="模型提供者" icon="brain" href="/zh/plugin-registry/llm/openai">
@@ -36,7 +36,7 @@ description: Milady 的插件系统提供模块化能力 — 模型提供者、�
 </Card>
 
 <Card title="平台连接器" icon="plug" href="/zh/plugin-registry/platform/discord">
-  通过自动启用桥接 18 个以上消息平台（Discord、Telegram、Twitter、Slack、WhatsApp、Signal、iMessage、BlueBubbles、Blooio、MS Teams、Google Chat、Mattermost、Farcaster、Twitch、WeChat、Feishu、Matrix、Nostr）。额外连接器（Bluesky、Instagram、Lens、LINE、Zalo、Twilio、GitHub、Gmail Watch、Nextcloud Talk、Tlon）可从 elizaOS 注册表获取。
+  通过自动启用桥接 19 个消息平台（Discord、Telegram、Twitter、Slack、WhatsApp、Signal、iMessage、BlueBubbles、Blooio、MS Teams、Google Chat、Mattermost、Farcaster、Twitch、WeChat、Feishu、Matrix、Nostr、Lens）。额外连接器（Bluesky、Instagram、LINE、Zalo、Twilio、GitHub、Gmail Watch、Nextcloud Talk、Tlon）可从 elizaOS 注册表获取。
 </Card>
 
 <Card title="DeFi 与区块链" icon="wallet" href="/zh/plugin-registry/defi/evm">
