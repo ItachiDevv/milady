@@ -147,6 +147,7 @@ const AUTH_PROVIDER_PLUGINS = {
   ELIZAOS_CLOUD_API_KEY:          "@elizaos/plugin-elizacloud",
   ELIZAOS_CLOUD_ENABLED:          "@elizaos/plugin-elizacloud",
   ELIZA_USE_PI_AI:                "@elizaos/plugin-pi-ai",
+  MILADY_USE_PI_AI:               "@elizaos/plugin-pi-ai",
   CUA_API_KEY:                    "@elizaos/plugin-cua",
   CUA_HOST:                       "@elizaos/plugin-cua",
   OBSIDIAN_VAULT_PATH:            "@elizaos/plugin-obsidian",
