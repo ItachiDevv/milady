@@ -35,6 +35,8 @@ export const CORE_PLUGINS: readonly string[] = [
   "@elizaos/plugin-cron",              // scheduled jobs and automation
   "@elizaos/plugin-shell",             // shell command execution
   "@elizaos/plugin-agent-skills",      // skill execution and marketplace runtime
+  "@elizaos/plugin-commands",          // slash command handling (skills auto-register as /commands)
+  "@miladyai/plugin-roles",           // role-based access control (OWNER/ADMIN/NONE)
 ];
 ```
 
@@ -68,7 +70,7 @@ export const OPTIONAL_CORE_PLUGINS: readonly string[] = [
 ];
 ```
 
-Plugins como `@elizaos/plugin-directives`, `@elizaos/plugin-commands`, `@elizaos/plugin-mcp` y `@elizaos/plugin-scheduling` están comentados en el código fuente y podrían activarse en versiones futuras.
+Plugins como `@elizaos/plugin-directives`, `@elizaos/plugin-mcp` y `@elizaos/plugin-scheduling` están comentados en el código fuente y podrían activarse en versiones futuras. Nota: `@elizaos/plugin-commands` ahora está activo e incluido en `CORE_PLUGINS`.
 
 <div id="plugin-hook-points">
 
