@@ -17,7 +17,8 @@
  */
 const { Selector, ClientFunction, RequestMock } = require("testcafe");
 
-const BASE = "http://localhost:2138";
+const MILADY_PORT = process.env.MILADY_PORT || "2138";
+const BASE = `http://localhost:${MILADY_PORT}`;
 const ROOT_READY = Selector("#root");
 const ROOT_TIMEOUT_MS = 20000;
 const NAV_TIMEOUT_MS = 12000;
@@ -51,17 +52,6 @@ fixture`Milady UI — Full View Traversal`.page`about:blank`
   .beforeEach(async (t) => {
     await t.navigateTo(BASE);
     await setupStorage();
-
-    await t.eval(() => {
-      window.__testcafe_error_count = 0;
-      const origError = console.error;
-      console.error = (...args) => {
-        window.__testcafe_error_count =
-          (window.__testcafe_error_count || 0) + 1;
-        origError.apply(console, args);
-      };
-    });
-
     await t.navigateTo(BASE);
     await t
       .expect(ROOT_READY.with({ timeout: ROOT_TIMEOUT_MS }).exists)
