@@ -1,5 +1,5 @@
 ---
-title: Gmail Watch Connector
+title: Gmail Watch
 sidebarTitle: Gmail Watch
 description: Monitor Gmail inboxes using the @elizaos/plugin-gmail-watch package.
 ---
@@ -8,7 +8,11 @@ Monitor Gmail inboxes for incoming messages using Pub/Sub.
 
 ## Overview
 
-The Gmail Watch connector is an elizaOS plugin that monitors Gmail inboxes via Google Cloud Pub/Sub. It watches for new messages and triggers agent events. This connector is enabled via feature flags rather than the `connectors` section. Available from the plugin registry.
+Gmail Watch is an elizaOS **hook plugin** (not a connector) that monitors Gmail inboxes via Google Cloud Pub/Sub. It watches for new messages and triggers agent events. It is enabled via feature flags rather than the `connectors` section.
+
+<Info>
+This plugin is **not bundled** with Milady. It is an elizaOS registry plugin that must be installed manually (`milady plugins install gmail-watch`) before use. Unlike the 19 auto-enabled connectors, Gmail Watch is a hook-based feature plugin enabled via `features.gmailWatch` in config.
+</Info>
 
 ## Package Info
 

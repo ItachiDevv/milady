@@ -41,6 +41,16 @@ describe("register.setup helpers", () => {
     ).toBe("/tmp/profile/.eliza/eliza.json");
   });
 
+  it("respects ELIZA_NAMESPACE for state dir and config filename", () => {
+    const home = os.homedir();
+    const result = toPosix(
+      resolveConfigPath({ ELIZA_NAMESPACE: "milady" }),
+    );
+    expect(result).toBe(
+      toPosix(path.join(home, ".milady", "milady.json")),
+    );
+  });
+
   it("returns an empty object when the config is missing or invalid", () => {
     const dir = createTempDir();
     const missingPath = path.join(dir, "missing.json");

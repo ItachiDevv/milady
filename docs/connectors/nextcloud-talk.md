@@ -8,7 +8,11 @@ Connect your agent to Nextcloud Talk for self-hosted collaboration messaging.
 
 ## Overview
 
-The Nextcloud Talk connector is an elizaOS plugin that bridges your agent to Nextcloud Talk rooms. It supports DM and group conversations on self-hosted Nextcloud instances. This connector is available from the plugin registry.
+The Nextcloud Talk connector is an elizaOS plugin that bridges your agent to Nextcloud Talk rooms. It supports DM and group conversations on self-hosted Nextcloud instances.
+
+<Info>
+This connector is **not bundled** with Milady. It is an elizaOS registry plugin that must be installed manually (`milady plugins install nextcloud-talk`) before use.
+</Info>
 
 ## Package Info
 

@@ -137,9 +137,10 @@ export function resolveConfigPath(env = process.env): string {
     return env.ELIZA_CONFIG_PATH;
   }
 
+  const namespace = env.ELIZA_NAMESPACE?.trim() || "eliza";
   const stateDir =
-    env.ELIZA_STATE_DIR?.trim() || path.join(os.homedir(), ".eliza");
-  return path.join(stateDir, "eliza.json");
+    env.ELIZA_STATE_DIR?.trim() || path.join(os.homedir(), `.${namespace}`);
+  return path.join(stateDir, `${namespace}.json`);
 }
 
 export function loadConfig(configPath: string): Record<string, unknown> {
