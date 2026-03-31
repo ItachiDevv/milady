@@ -267,6 +267,34 @@ Examples:
 
 ---
 
+## Debugging and Diagnostics
+
+These variables help with debugging agent behavior, prompt tuning, and development workflows.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MILADY_PROMPT_TRACE` | Log prompt compaction stats to the console. | `0` |
+| `MILADY_TTS_DEBUG` | Log TTS pipeline traces (`[milady][tts]`): queue/proxy plus playback with a short preview of spoken text. UI picks this up via Vite `define` in dev/build; `VITE_MILADY_TTS_DEBUG` also works for client-only. | `0` |
+| `MILADY_CAPTURE_PROMPTS` | Dump raw prompts to `.tmp/prompt-captures/` (dev-only, contains user messages — do not commit). | `0` |
+| `MILADY_ACTION_COMPACTION` | Enable context-aware action parameter stripping to reduce prompt size. | `1` (enabled) |
+| `MILADY_PROMPT_OPT_MODE` | Prompt optimization mode. Accepted values: `baseline`, `compact`. | `baseline` |
+| `MILADY_HEADLESS` | Run the agent in headless mode (no interactive TUI). | (unset) |
+| `MILADY_USE_PI_AI` | Set to `1` to enable the Pi AI model provider (alias of `ELIZA_USE_PI_AI`). | (unset) |
+
+---
+
+## Wallet Configuration
+
+These variables configure wallet auto-provisioning and secure storage.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MILADY_WALLET_AUTO_PROVISION` | Automatically provision EVM and Solana wallets on startup. | (unset) |
+| `MILADY_WALLET_OS_STORE` | Use the OS keychain/credential store for wallet key storage. | (unset) |
+| `MILADY_STEWARD_AGENT_ID` | Agent ID for Steward wallet integration (alias: `ELIZA_STEWARD_AGENT_ID`). | (unset) |
+
+---
+
 ## Setting Variables
 
 Set environment variables in your shell profile for persistent configuration:
