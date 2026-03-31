@@ -22,7 +22,7 @@ When a user sends a message, the runtime evaluates all registered actions. If th
 
 ## Built-in Actions Reference
 
-Milady registers the following built-in actions from `src/actions/` automatically at runtime.
+Milady registers the following built-in actions automatically at runtime. Actions are split across `packages/agent/src/actions/` and `packages/app-core/src/actions/`.
 
 ### Agent Lifecycle
 
@@ -41,14 +41,7 @@ These actions provide a full plugin ejection workflow. "Ejecting" clones a plugi
 
 ### Core Ejection
 
-Similar to plugin ejection but for the elizaOS core framework itself.
-
-| Action | Description |
-|--------|-------------|
-| `EJECT_CORE` | Clone `@elizaos/core` source locally so edits override the npm package. Triggers restart. |
-| `SYNC_CORE` | Sync an ejected core checkout with upstream and rebuild it. Reports upstream commit count or conflicts. |
-| `REINJECT_CORE` | Remove ejected core source so runtime falls back to npm `@elizaos/core`. Triggers restart. |
-| `CORE_STATUS` | Show whether `@elizaos/core` is running from npm or ejected source, with version and commit hash. |
+Core ejection (for the elizaOS framework itself) is managed through the REST API, not as agent-invocable actions. Use the dashboard or the API endpoints at `/api/core-eject/*` to eject, sync, reinject, or check core status.
 
 ### Communication
 

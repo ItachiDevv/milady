@@ -37,7 +37,7 @@ name: my-hook
 description: Does something useful on session start
 homepage: https://example.com/docs
 metadata:
-  milady:
+  eliza:
     always: false
     hookKey: my-hook
     emoji: "🔧"
@@ -67,7 +67,9 @@ metadata:
 ---
 ```
 
-### Milady Metadata Fields
+> **Important:** The metadata key must be `eliza`, not `milady`. The hook discovery system reads `frontmatter.metadata.eliza`.
+
+### Hook Metadata Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -88,10 +90,12 @@ metadata:
 
 Hooks are discovered from multiple directory sources with a defined precedence order (later sources override earlier ones on name conflicts):
 
-1. **Extra directories** (lowest precedence) -- additional directories specified in config `hooks.load.extraDirs` (must be under `~/.milady/`)
+1. **Extra directories** (lowest precedence) -- additional directories specified in config `hooks.load.extraDirs` (must be under `~/.eliza/`)
 2. **Bundled directory** -- hooks shipped with Milady
-3. **Managed directory** -- `~/.milady/hooks/` for user-installed hooks
+3. **Managed directory** -- `~/.eliza/hooks/` for user-installed hooks
 4. **Workspace directory** (highest precedence) -- `<workspace>/hooks/` for project-specific hooks
+
+> **Note:** Hook directories use the `~/.eliza/` base path regardless of the `ELIZA_NAMESPACE` setting. This differs from the config file (`~/.milady/milady.json`) which respects the namespace.
 
 Within each directory, the discovery system:
 1. Scans for subdirectories
@@ -163,7 +167,7 @@ await triggerHook(event);
 
 ### 1. Create the Hook Directory
 
-Create a new directory under `~/.milady/hooks/my-hook/` with two files:
+Create a new directory under `~/.eliza/hooks/my-hook/` with two files:
 
 **HOOK.md**
 ```yaml
@@ -171,7 +175,7 @@ Create a new directory under `~/.milady/hooks/my-hook/` with two files:
 name: my-hook
 description: Logs a greeting when a new session starts
 metadata:
-  milady:
+  eliza:
     events:
       - session:new
     requires:
@@ -185,7 +189,7 @@ This hook logs a greeting when a new chat session begins.
 
 **handler.ts**
 ```typescript
-import type { HookEvent } from "milady/hooks/types";
+import type { HookEvent } from "@miladyai/agent/hooks/types";
 
 export default async function handler(event: HookEvent): Promise<void> {
   console.log(`New session started: ${event.sessionKey}`);
@@ -216,7 +220,7 @@ The loader returns a summary: total discovered, eligible, registered, skipped (w
 ### 4. Path Safety
 
 Hook handler modules can only be loaded from allowed directories:
-- `~/.milady/hooks/`
+- `~/.eliza/hooks/`
 - The bundled hooks directory
 - `<workspace>/hooks/`
 

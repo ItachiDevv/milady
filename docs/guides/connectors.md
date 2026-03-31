@@ -659,7 +659,7 @@ Connects to iMessage and SMS messaging via the Blooio service with signed webhoo
 - Live chat monitoring and response
 - Channel event handling
 - Audience interaction management
-- Auto-enabled when `clientId` or `accessToken` is configured
+- Auto-enabled when `clientId`, `accessToken`, or `enabled: true` is configured
 
 ---
 
@@ -699,6 +699,8 @@ Connects to iMessage and SMS messaging via the Blooio service with signed webhoo
 ---
 
 ## WeChat
+
+> **Package:** `@miladyai/plugin-wechat` (Milady-local, not an `@elizaos/*` package)
 
 Connects to WeChat via a third-party proxy service using personal account login.
 
@@ -1095,7 +1097,7 @@ Gmail Watch is enabled via the `features.gmailWatch` flag or environment variabl
 
 The typical connector lifecycle follows this pattern:
 
-1. **Install plugin** -- Connector plugins are installed as `@elizaos/plugin-{platform}` packages
+1. **Install plugin** -- Connector plugins are installed as `@elizaos/plugin-{platform}` packages (exception: WeChat uses `@miladyai/plugin-wechat`)
 2. **Configure** -- Add the platform configuration to the `connectors` section of `milady.json`
 3. **Enable** -- Set `enabled: true` in the connector config
 4. **Authenticate** -- Provide credentials (tokens, keys) or complete auth flow (QR code scan)

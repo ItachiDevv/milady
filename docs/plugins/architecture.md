@@ -30,7 +30,9 @@ export const CORE_PLUGINS: readonly string[] = [
   "@elizaos/plugin-agent-orchestrator",// multi-agent orchestration (PTY, SwarmCoordinator, workspace provisioning)
   "@elizaos/plugin-cron",              // scheduled jobs and automation
   "@elizaos/plugin-shell",             // shell command execution
+  "@elizaos/plugin-commands",          // slash command handling
   "@elizaos/plugin-agent-skills",      // skill execution and marketplace runtime
+  "@miladyai/plugin-roles",            // role-based access control
 ];
 ```
 
@@ -60,7 +62,7 @@ export const OPTIONAL_CORE_PLUGINS: readonly string[] = [
 ];
 ```
 
-Plugins such as `@elizaos/plugin-directives`, `@elizaos/plugin-commands`, `@elizaos/plugin-mcp`, and `@elizaos/plugin-scheduling` are commented out in the source and may be activated in future releases.
+Plugins such as `@elizaos/plugin-directives`, `@elizaos/plugin-mcp`, and `@elizaos/plugin-scheduling` are commented out in the source and may be activated in future releases. (`@elizaos/plugin-commands` has been promoted to the core list above.)
 
 ## Plugin Hook Points
 

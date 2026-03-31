@@ -116,7 +116,7 @@ async function updateAction(opts: {
   );
 
   if (opts.check) {
-    console.log(theme.muted("  Run `eliza update` to install the update.\n"));
+    console.log(theme.muted("  Run `milady update` to install the update.\n"));
     return;
   }
 
@@ -226,7 +226,7 @@ async function channelAction(channelArg: string | undefined): Promise<void> {
       );
     }
     console.log(
-      `\n  ${theme.muted("Switch with: eliza update channel <stable|beta|nightly>")}\n`,
+      `\n  ${theme.muted("Switch with: milady update channel <stable|beta|nightly>")}\n`,
     );
     return;
   }
@@ -255,7 +255,7 @@ async function channelAction(channelArg: string | undefined): Promise<void> {
   );
   console.log(theme.muted(`  ${CHANNEL_DESCRIPTIONS[newChannel]}`));
   console.log(
-    `\n  ${theme.muted("Run `eliza update` to fetch the latest version from this channel.")}\n`,
+    `\n  ${theme.muted("Run `milady update` to fetch the latest version from this channel.")}\n`,
   );
 }
 

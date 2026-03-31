@@ -197,7 +197,7 @@ export function checkConfigFile(
       category: "config",
       status: "warn",
       detail: `Not found: ${resolved}`,
-      fix: "eliza setup",
+      fix: "milady setup",
       autoFixable: true,
     };
   }
@@ -253,7 +253,7 @@ export function checkModelKey(
     category: "config",
     status: "fail",
     detail: "No model provider API key found",
-    fix: "eliza setup",
+    fix: "milady setup",
     autoFixable: true,
   };
 }

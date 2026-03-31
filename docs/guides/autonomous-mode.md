@@ -63,7 +63,7 @@ Response:
 When `enabled` is `true`, the service calls `enableAutonomy()` on the Autonomy Service. When `false`, it calls `disableAutonomy()`.
 
 <Info>
-The autonomy routes are implemented in `src/api/autonomy-routes.ts`. The `getAutonomyState()` helper determines the canonical enabled/thinking state by checking the service status first, then falling back to runtime flags.
+The autonomy routes are implemented in `packages/agent/src/api/agent-lifecycle-routes.ts`. The canonical enabled/thinking state is determined by checking the Autonomy Service status first, then falling back to runtime flags.
 </Info>
 
 ### Dashboard Toggle
@@ -74,26 +74,17 @@ The Autonomous Panel in the dashboard UI provides a visual toggle for enabling a
 
 At the elizaOS runtime level, autonomy is controlled by the `runtime.enableAutonomy` boolean. This flag is checked by actions like the trigger creation action (`CREATE_TRIGGER`) to validate whether autonomous features should be available.
 
-## Autonomous State Provider
+## Autonomous State Tracking
 
-The `miladyAutonomousState` provider bridges context between autonomous loop iterations. It is a dynamic elizaOS provider (position 10) that injects a snapshot of recent autonomous activity into the agent's context on every reasoning cycle.
-
-### Provider Configuration
-
-| Property | Value |
-|----------|-------|
-| **Name** | `miladyAutonomousState` |
-| **Type** | Dynamic provider |
-| **Position** | 10 |
-| **Source** | `src/providers/autonomous-state.ts` |
+The autonomous system bridges context between loop iterations by tracking recent activity through the `AGENT_EVENT` service. Events (thoughts, actions, tool calls) and heartbeats are cached in memory and injected into the agent's context on every reasoning cycle.
 
 ### How It Works
 
-1. **Event Subscription** -- `ensureAutonomousStateTracking()` subscribes to the `AGENT_EVENT` service for the current agent. All events (thoughts, actions, tool calls) and heartbeats are cached in memory.
+1. **Event Subscription** -- The system subscribes to the `AGENT_EVENT` service for the current agent. All events and heartbeats are cached in memory.
 
-2. **Event Cache** -- Up to 240 events are cached per agent in a circular buffer (`MAX_CACHED_EVENTS = 240`). When the buffer is full, the oldest events are evicted via `splice`. Each agent maintains its own cache, keyed by agent ID.
+2. **Event Cache** -- Events are cached per agent in a circular buffer. When the buffer is full, the oldest events are evicted. Each agent maintains its own cache, keyed by agent ID.
 
-3. **Context Injection** -- On each provider call, the provider fetches the 24 most recent events from the cache, filters to only `assistant`, `action`, and `tool` streams, takes the 10 most recent of those, and renders them as text lines:
+3. **Context Injection** -- On each reasoning cycle, recent events are filtered to `assistant`, `action`, and `tool` streams and rendered as text lines injected into the agent's context:
 
 ```
 Autonomous state snapshot:
@@ -103,28 +94,7 @@ Autonomous state snapshot:
 - [heartbeat/idle] to discord -- monitoring channel
 ```
 
-If no events exist, the provider returns: `Autonomous state snapshot: no recent thought/action events.`
-
-4. **Provider Result** -- The provider returns structured data including:
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `text` | `string` | Rendered snapshot text injected into agent context |
-| `values.hasAutonomousState` | `boolean` | Whether any events exist |
-| `values.autonomousEventsCount` | `number` | Total cached events (up to 24 recent) |
-| `values.heartbeatStatus` | `string` | Last heartbeat status string |
-| `data.events` | `array` | Last 10 event summaries (`runId`, `seq`, `stream`, `ts`) |
-| `data.heartbeat` | `object \| null` | Last heartbeat (`status`, `ts`, `to`) |
-
-### Lifecycle Management
-
-When `ensureAutonomousStateTracking()` is called:
-
-1. If a cache already exists for the agent with the same runtime reference, it is reused (no-op).
-2. If a cache exists but with a different runtime (e.g., after restart), the old subscriptions are detached, the cache is cleared, and new subscriptions are created.
-3. If no cache exists, new event and heartbeat subscriptions are created.
-
-This ensures clean teardown and re-initialization across agent restarts.
+If no events exist, the context reads: `Autonomous state snapshot: no recent thought/action events.`
 
 ## Activity Stream
 
@@ -254,7 +224,7 @@ When a trigger fires, the `injectAutonomousInstruction()` method on the Autonomy
 
 | Limit | Value | Purpose |
 |-------|-------|---------|
-| **Event buffer cap** | 240 events per agent | Bounds memory usage for the autonomous state cache |
+| **Event buffer cap** | Bounded per agent | Bounds memory usage for the autonomous state cache |
 | **Max active triggers** | 100 per creator (default) | Prevents runaway trigger creation. Configurable via `MAX_ACTIVE_TRIGGERS` env var. |
 | **Trigger maxRuns** | Per-trigger configurable | Limits how many times a trigger can execute before auto-deletion |
 
@@ -272,12 +242,13 @@ Custom actions executed during autonomous mode enforce the same SSRF guards as u
     Send a POST request to `/api/agent/autonomy`:
     ```bash
     # Disable autonomy
-    curl -X POST http://localhost:2138/api/agent/autonomy \
+    # Disable autonomy (use port 31337 in dev, 2138 in production)
+    curl -X POST http://localhost:31337/api/agent/autonomy \
       -H "Content-Type: application/json" \
       -d '{"enabled": false}'
 
     # Enable autonomy
-    curl -X POST http://localhost:2138/api/agent/autonomy \
+    curl -X POST http://localhost:31337/api/agent/autonomy \
       -H "Content-Type: application/json" \
       -d '{"enabled": true}'
     ```

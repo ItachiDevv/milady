@@ -73,11 +73,11 @@ function printGrouped(results: CheckResult[]): void {
 function attemptFix(result: CheckResult): boolean {
   if (!result.fix || !result.autoFixable) return false;
 
-  // Only auto-run eliza sub-commands — don't blindly shell out to arbitrary
+  // Only auto-run milady sub-commands — don't blindly shell out to arbitrary
   // fix strings (e.g. chmod commands require explicit user confirmation).
-  if (!result.fix.startsWith("eliza ")) return false;
+  if (!result.fix.startsWith("milady ")) return false;
 
-  const args = result.fix.split(/\s+/).slice(1); // strip "eliza"
+  const args = result.fix.split(/\s+/).slice(1); // strip "milady"
   console.log(
     `\n  ${theme.muted("→ auto-fix:")} ${theme.command(result.fix)}\n`,
   );
@@ -135,12 +135,12 @@ export function registerDoctorCommand(program: Command) {
         console.log();
         if (failures.length === 0 && warnings.length === 0) {
           console.log(
-            `  ${theme.success("Everything looks good.")} Ready to run ${theme.command("eliza start")}.`,
+            `  ${theme.success("Everything looks good.")} Ready to run ${theme.command("milady start")}.`,
           );
         } else if (failures.length > 0) {
           const plural = failures.length === 1 ? "issue" : "issues";
           console.log(
-            `  ${theme.error(`${failures.length} ${plural} found.`)}${opts.fix ? "" : ` Run ${theme.command("eliza doctor --fix")} to auto-remediate.`}`,
+            `  ${theme.error(`${failures.length} ${plural} found.`)}${opts.fix ? "" : ` Run ${theme.command("milady doctor --fix")} to auto-remediate.`}`,
           );
         } else {
           console.log(

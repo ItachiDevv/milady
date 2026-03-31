@@ -56,7 +56,7 @@ export function registerDbCommand(program: Command) {
         fs.rmSync(dbDir, { recursive: true, force: true });
         console.log(`${theme.success("✓")} Database deleted: ${dbDir}`);
         console.log(
-          `${theme.muted("→")} Run ${theme.command("eliza start")} to initialize a fresh database.`,
+          `${theme.muted("→")} Run ${theme.command("milady start")} to initialize a fresh database.`,
         );
       });
     });

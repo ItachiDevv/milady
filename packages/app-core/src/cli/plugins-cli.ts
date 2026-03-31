@@ -247,10 +247,10 @@ export function registerPluginsCli(program: Command): void {
         }
 
         console.log(
-          chalk.dim("Install a plugin: eliza plugins install <name>"),
+          chalk.dim("Install a plugin: milady plugins install <name>"),
         );
         console.log(
-          chalk.dim("Search:           eliza plugins list -q <keyword>"),
+          chalk.dim("Search:           milady plugins list -q <keyword>"),
         );
         console.log();
       } catch (err) {
@@ -323,7 +323,7 @@ export function registerPluginsCli(program: Command): void {
           console.log(`\n${chalk.red("Not found:")} ${normalizedName}`);
           console.log(
             chalk.dim(
-              "Run 'eliza plugins search <keyword>' to find plugins.\n",
+              "Run 'milady plugins search <keyword>' to find plugins.\n",
             ),
           );
           return;
@@ -484,7 +484,7 @@ export function registerPluginsCli(program: Command): void {
 
         if (plugins.length === 0) {
           console.log("\nNo plugins installed from the registry.\n");
-          console.log(chalk.dim("Install one: eliza plugins install <name>\n"));
+          console.log(chalk.dim("Install one: milady plugins install <name>\n"));
           return;
         }
 
@@ -842,7 +842,7 @@ export function registerPluginsCli(program: Command): void {
         if (!plugin) {
           console.log(`\n${chalk.red("Not found:")} ${name}`);
           console.log(
-            chalk.dim("Run 'eliza plugins list' to see available plugins.\n"),
+            chalk.dim("Run 'milady plugins list' to see available plugins.\n"),
           );
           process.exitCode = 1;
           return;

@@ -28,8 +28,9 @@ bunx miladyai
 | `--dev` | Shorthand for `--profile dev` (also sets the gateway port to `19001`) |
 | `--verbose` | Enable informational runtime logs |
 | `--debug` | Enable debug-level runtime logs |
-| `--connection-key [key]` | Set or auto-generate a connection key for remote access |
 | `--no-color` | Disable ANSI colors |
+
+> **Note:** The `--connection-key [key]` flag is available on the `start` and `run` commands (not globally). It sets or auto-generates a connection key for remote access.
 
 ## Commands
 

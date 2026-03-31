@@ -63,13 +63,13 @@ Milady can download and run AI models locally for vision, text generation, text-
 
 ## Storage
 
-Models are cached at `~/.cache/milady/models/`. A `manifest.json` file tracks all downloaded models:
+Models are cached at `~/.cache/eliza/models/`. A `manifest.json` file tracks all downloaded models:
 
 ```json
 {
   "Salesforce/blip-image-captioning-base": {
     "downloadedAt": "2026-01-15T10:00:00.000Z",
-    "path": "/Users/name/.cache/milady/models/Salesforce_blip-image-captioning-base"
+    "path": "/Users/name/.cache/eliza/models/Salesforce_blip-image-captioning-base"
   },
   "ollama/llama3.2:1b": {
     "downloadedAt": "2026-01-15T10:00:00.000Z",
@@ -96,7 +96,7 @@ import {
   downloadRecommendedModel,
   getLocalModelStatuses,
   ensureLocalModel,
-} from "milady/providers/local-models";
+} from "@miladyai/app-core/providers/local-models";
 
 // Get the singleton manager
 const manager = getLocalModelManager();
