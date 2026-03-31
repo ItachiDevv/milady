@@ -758,4 +758,89 @@ describe("AgentProvider", () => {
     expect(result?.getByTestId("error").textContent).toBe("");
     expect(result?.getByTestId("count").textContent).toBe("1");
   });
+
+  it("polls every 5 s while any agent is provisioning", async () => {
+    setToken("test-key");
+    let callCount = 0;
+
+    mockFetch.mockImplementation((url: string) => {
+      if (url.includes("/api/v1/milady/agents")) {
+        callCount++;
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () =>
+            Promise.resolve({
+              success: true,
+              data: [{ id: "p1", agentName: "Prov Agent", status: "creating" }],
+            }),
+        });
+      }
+      return Promise.reject(new Error("offline"));
+    });
+
+    await act(async () => {
+      render(
+        <AgentProvider>
+          <TestConsumer />
+        </AgentProvider>,
+      );
+      await vi.advanceTimersByTimeAsync(100);
+    });
+
+    const afterInit = callCount;
+
+    // Advance 5 s — should trigger a poll because agent is provisioning
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5000);
+    });
+
+    expect(callCount).toBeGreaterThan(afterInit);
+  });
+
+  it("polls every 30 s when no agent is provisioning", async () => {
+    setToken("test-key");
+    let callCount = 0;
+
+    mockFetch.mockImplementation((url: string) => {
+      if (url.includes("/api/v1/milady/agents")) {
+        callCount++;
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () =>
+            Promise.resolve({
+              success: true,
+              data: [{ id: "r1", agentName: "Running Agent", status: "active" }],
+            }),
+        });
+      }
+      return Promise.reject(new Error("offline"));
+    });
+
+    await act(async () => {
+      render(
+        <AgentProvider>
+          <TestConsumer />
+        </AgentProvider>,
+      );
+      await vi.advanceTimersByTimeAsync(100);
+    });
+
+    const afterInit = callCount;
+
+    // Advance only 5 s — should NOT trigger a poll (interval is 30 s)
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5000);
+    });
+
+    expect(callCount).toBe(afterInit);
+
+    // Advance the remaining 25 s — now the 30 s interval fires
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(25000);
+    });
+
+    expect(callCount).toBeGreaterThan(afterInit);
+  });
 });
