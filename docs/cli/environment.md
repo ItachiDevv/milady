@@ -15,8 +15,6 @@ These variables control where Milady stores its state, config, and credentials.
 | `MILADY_STATE_DIR` | Override the state directory. All resolved paths default to subdirectories of this directory. | `~/.milady/` |
 | `MILADY_CONFIG_PATH` | Override the config file path. Takes precedence over `MILADY_STATE_DIR` for config resolution. | `~/.milady/milady.json` |
 | `MILADY_PROFILE` | Active configuration profile name. When set, the state directory becomes `~/.milady-<profile>/`. Equivalent to the `--profile` CLI flag. | (none) |
-| `MILADY_OAUTH_DIR` | Override the OAuth credentials directory. | `~/.milady/credentials/` |
-| `MILADY_WORKSPACE_ROOT` | Override the workspace root directory used by the registry client. | (auto-resolved from config) |
 
 ### Path Resolution
 
@@ -108,14 +106,6 @@ These variables configure access to AI model providers. Set at least one to enab
 Use `milady models` to check which providers are currently configured.
 
 ---
-
-## Authentication and Credentials
-
-These variables affect how Milady stores and applies credentials.
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `MILADY_HOME` | Base directory for credentials storage used by the auth layer. | `~/.milady/` |
 
 ---
 

@@ -623,7 +623,6 @@ These environment variables affect plugin paths and behavior. They are defined i
 |----------|---------|-------------|
 | `MILADY_STATE_DIR` | `~/.milady` | Override the state directory. Changes where plugins, config, and credentials are stored. |
 | `MILADY_CONFIG_PATH` | `~/.milady/milady.json` | Override the config file path directly. |
-| `MILADY_OAUTH_DIR` | `~/.milady/credentials` | Override the OAuth credentials directory. |
 | `LOG_LEVEL` | `error` | Set log verbosity: `debug`, `info`, `warn`, `error`. |
 | `MILADY_DISABLE_WORKSPACE_PLUGIN_OVERRIDES` | unset | Set to `1` to disable workspace plugin overrides (dev-only mechanism). |
 | `ELIZAOS_CONFIG_DIR` | unset | Override the elizaOS core config directory. Useful for running multiple agent instances with different plugin configurations. |

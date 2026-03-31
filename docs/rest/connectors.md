@@ -1,10 +1,47 @@
 ---
 title: "Connectors API"
 sidebarTitle: "Connectors"
-description: "REST API endpoints for managing platform connectors — Telegram, Discord, WhatsApp, and other messaging integrations."
+description: "REST API endpoints for managing platform connectors — Telegram, Discord, WhatsApp, and 16 other messaging integrations."
 ---
 
-The connectors API manages the agent's platform connector configurations. Connectors bridge the agent to external messaging platforms (Telegram, Discord, WhatsApp, Twilio, etc.). Configuration is persisted to the Milady config file. Changes typically require a restart to take effect.
+The connectors API manages the agent's platform connector configurations. Connectors bridge the agent to external messaging platforms. Configuration is persisted to the Milady config file. Changes typically require a restart to take effect.
+
+## Supported Connector Types
+
+Milady auto-enables connector plugins when their configuration block is present under `connectors.<name>` in `milady.json`. The 19 auto-enabled connectors are:
+
+| Name | Plugin | Primary Config Key |
+|------|--------|--------------------|
+| `telegram` | `@elizaos/plugin-telegram` | `botToken` |
+| `discord` | `@elizaos/plugin-discord` | `token` |
+| `slack` | `@elizaos/plugin-slack` | `botToken` |
+| `twitter` | `@elizaos/plugin-twitter` | `token` |
+| `whatsapp` | `@elizaos/plugin-whatsapp` | `authDir` |
+| `signal` | `@elizaos/plugin-signal` | `authDir` |
+| `bluebubbles` | `@elizaos/plugin-bluebubbles` | `serverUrl` |
+| `imessage` | `@elizaos/plugin-imessage` | `applescriptPath` |
+| `farcaster` | `@elizaos/plugin-farcaster` | `token` |
+| `lens` | `@elizaos/plugin-lens` | `token` |
+| `msteams` | `@elizaos/plugin-msteams` | `botToken` |
+| `mattermost` | `@elizaos/plugin-mattermost` | `serverUrl` |
+| `googlechat` | `@elizaos/plugin-google-chat` | `token` |
+| `feishu` | `@elizaos/plugin-feishu` | `appId` |
+| `matrix` | `@elizaos/plugin-matrix` | `serverUrl` |
+| `nostr` | `@elizaos/plugin-nostr` | `token` |
+| `blooio` | `@elizaos/plugin-blooio` | `apiKey` |
+| `twitch` | `@elizaos/plugin-twitch` | `token` |
+| `wechat` | `@miladyai/plugin-wechat` | `apiKey` |
+
+Additional connectors (Bluesky, Instagram, LINE, Zalo, Twilio, GitHub, Gmail Watch, Nextcloud Talk, Tlon) are available from the [elizaOS plugin registry](/plugins/registry) via `milady plugins install`.
+
+All connectors share these common config options:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `enabled` | boolean | Explicitly enable or disable the connector |
+| `dmPolicy` | string | Direct message policy |
+| `allowFrom` | string[] | Allowed sender IDs |
+| `groupPolicy` | string | Group message policy |
 
 ## Endpoints
 
