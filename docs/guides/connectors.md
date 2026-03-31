@@ -46,7 +46,7 @@ Connectors are platform bridges that allow your agent to communicate across mess
 
 ## Supported Platforms
 
-Connectors marked **Auto** load automatically when their config is present in `milady.json`. Connectors marked **Registry** must be installed first with `milady plugins install <package>`.
+Connectors marked **Auto** load automatically when their config is present in `milady.json`. Connectors marked **Registry** must be installed first with `milady plugins install <package>`. †Gmail Watch is technically a **feature plugin** (auto-enabled via `hooks.gmail.account` in config, not via the `connectors` section).
 
 | Platform | Auth Method | DM Support | Group Support | Multi-Account | Availability |
 |----------|------------|------------|---------------|---------------|-------------|
@@ -75,7 +75,7 @@ Connectors marked **Auto** load automatically when their config is present in `m
 | Zalo | Access token | Yes | Yes | No | Registry |
 | Twilio | Account SID + auth token | SMS/Voice | N/A | No | Registry |
 | GitHub | API token | Issues/PRs | Yes (repos) | No | Registry |
-| Gmail Watch | Service account / OAuth | N/A | N/A | No | Registry |
+| Gmail Watch | Service account / OAuth | N/A | N/A | No | Feature† |
 | Nextcloud Talk | Server credentials | Yes | Yes (rooms) | No | Registry |
 | Tlon | Ship credentials | Yes | Yes (Urbit chats) | No | Registry |
 

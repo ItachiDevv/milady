@@ -349,6 +349,16 @@ where to get the credentials, minimum required fields, and tips for optional fie
 3. Get your API key from Neynar dashboard
 **Tips:** Neynar is required — it's the indexer that makes Farcaster data accessible via API.
 
+### Lens
+**Plugin:** `@elizaos/plugin-lens`
+**Minimum required:** `connectors.lens` configured with an API key or token in `milady.json`
+**Config fields** (set in `connectors.lens`):
+- `apiKey` or `token` or `botToken` — API credentials for the Lens connector
+**Setup steps:**
+1. Configure `connectors.lens` in `milady.json` with your credentials
+2. The plugin auto-enables when `connectors.lens` is configured and a valid credential field is present
+**Tips:** Lens is a decentralized social protocol. The connector auto-enables like other platform connectors — no manual `plugins.allow` entry needed.
+
 ### WeChat
 **Get credentials:** From your WeChat proxy service provider
 **Minimum required:** `WECHAT_API_KEY` + proxy URL in config
@@ -623,9 +633,19 @@ On-chain chat via Solana blockchain.
 - `IQ_CHATROOMS` — Additional chatrooms (comma-separated)
 
 ### Gmail Watch
-Monitors Gmail via Google Pub/Sub push notifications.
+Monitors Gmail via Google Pub/Sub push notifications. Note: Gmail Watch is technically a **feature plugin** (auto-enabled via `hooks.gmail.account` in config), not a connector plugin.
 **Setup:** Requires Google Cloud service account with Gmail API access.
 **Tips:** Uses `gog gmail watch serve` internally. Requires Google Cloud project with Gmail API enabled and Pub/Sub configured.
+
+### Steward Wallet
+**Plugin:** `@stwd/eliza-plugin` (Milady-specific)
+**Minimum required:** `STEWARD_API_URL`
+**Variables:**
+- `STEWARD_API_URL` — URL of the Steward wallet API endpoint
+**Setup steps:**
+1. Set `STEWARD_API_URL` in your environment or `~/.milady/.env`
+2. The plugin auto-enables when the environment variable is set (non-empty)
+**Tips:** This is a Milady-specific plugin for Steward wallet integration. It is not part of the upstream elizaOS auto-enable system — it is added by Milady's app-core layer.
 
 ---
 

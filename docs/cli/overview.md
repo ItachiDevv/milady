@@ -81,6 +81,10 @@ bunx miladyai
   Check environment health and diagnose common issues.
 </Card>
 
+<Card title="benchmark" icon="gauge-high">
+  Run agent benchmark tasks for performance evaluation. Options: `--task <path>`, `--server`, `--timeout <ms>`.
+</Card>
+
 </CardGroup>
 
 ## Quick Reference
@@ -115,6 +119,9 @@ milady db reset
 
 # Run health checks
 milady doctor
+
+# Run benchmark tasks
+milady benchmark --task path/to/task.json
 ```
 
 ## Environment Variables

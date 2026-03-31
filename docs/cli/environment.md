@@ -41,6 +41,7 @@ These variables control the API server and network behavior.
 | `MILADY_API_PORT` | API server port in dev mode (used by `bun run dev`). In production (`milady start`), the API shares `MILADY_PORT`. | `31337` |
 | `MILADY_ALLOWED_ORIGINS` | Comma-separated list of additional CORS origins allowed by the API server. | (unset) |
 | `MILADY_ALLOW_NULL_ORIGIN` | When set to `1`, allows the `null` origin in CORS (useful for file:// or desktop clients). | (unset) |
+| `MILADY_DISABLE_AUTO_API_TOKEN` | When set to `1`, prevents auto-generation of an API token when the server binds to a non-loopback address. Alias: `ELIZA_DISABLE_AUTO_API_TOKEN`. | (unset) |
 | `MILADY_WALLET_EXPORT_TOKEN` | Auth token for the wallet export API endpoint. When unset, wallet exports are disabled. | (unset) |
 | `MILADY_HOME_PORT` | Home dashboard port. | `2142` |
 | `MILADY_WECHAT_WEBHOOK_PORT` | WeChat webhook receiver port. | `18790` |
@@ -69,7 +70,7 @@ These variables affect the CLI output and banner behavior.
 | `ELIZA_HIDE_BANNER` | When set to `1`, suppresses the Milady ASCII banner that normally prints before each command. The banner is also suppressed for the `update` and `completion` commands regardless of this variable. | (unset) |
 | `FORCE_COLOR` | Force colored terminal output even when stdout is not a TTY. Set to any non-empty, non-`0` string to enable. | (unset) |
 | `NO_COLOR` | Disable all ANSI colors when set (any value). Standard convention; takes effect before `FORCE_COLOR`. | (unset) |
-| `LOG_LEVEL` | Set the logging verbosity level. Accepted values: `debug`, `info`, `warn`, `error`. | `info` |
+| `LOG_LEVEL` | Set the logging verbosity level. Accepted values: `debug`, `info`, `warn`, `error`. The CLI sets this to `debug` with `--debug`, `info` with `--verbose`, and `error` otherwise. | `error` |
 | `NODE_NO_WARNINGS` | Suppresses Node.js runtime warnings. Automatically set to `1` by the CLI when `--verbose` / `--debug` is not active. | (auto-set) |
 
 ---
@@ -104,6 +105,7 @@ These variables configure access to AI model providers. Set at least one to enab
 | `ELIZAOS_CLOUD_ENABLED` | elizaOS Cloud | Set to `1` to enable elizaOS Cloud (requires API key) |
 | `ELIZAOS_CLOUD_BASE_URL` | elizaOS Cloud | Override the elizaOS Cloud endpoint URL. Set automatically from config when cloud is enabled. |
 | `ELIZA_USE_PI_AI` | Pi AI | Set to `1` to enable the Pi AI model provider |
+| `MILADY_USE_PI_AI` | Pi AI | Alias for `ELIZA_USE_PI_AI` |
 
 Use `milady models` to check which providers are currently configured.
 
