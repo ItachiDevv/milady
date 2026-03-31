@@ -188,7 +188,7 @@ export async function handleCloudCompatRoute(
   // /api/cloud/compat/* → /api/compat/*  (existing mapping)
   // /api/cloud/v1/*    → /api/v1/*       (milady v1 endpoints, e.g. pairing-token)
   const compatPath = isV1Route
-    ? pathname.slice("/api/cloud".length)
+    ? `/api${pathname.slice("/api/cloud".length)}`
     : pathname.replace("/api/cloud", "/api");
   const fullUrl = req.url ?? pathname;
   const qsIndex = fullUrl.indexOf("?");
