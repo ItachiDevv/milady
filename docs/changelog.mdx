@@ -3,6 +3,36 @@ title: Changelog
 description: What's new in Milady — features, improvements, and fixes.
 ---
 
+<Update label="2026-03-31" description="Week of March 30–31; tasks panel, CDN assets, cloud provisioning fixes" tags={["Feature", "Update", "Fix"]}>
+## Tasks and events panel
+
+A new collapsible panel in the [chat](/dashboard/chat) view shows live coding agent sessions and WebSocket event activity side by side. Click the tasks icon in the chat header to open it. On mobile, the panel opens as a bottom drawer. You can also create coding or research tasks directly from a new popover in the chat composer, with agent type selection built in.
+
+## CDN asset delivery and faster avatar loading
+
+VRM avatars and static assets are now served from a CDN by default, using GitHub's raw content delivery. The character selection page no longer eagerly downloads all avatar models upfront — only thumbnails load initially, and full VRM files are fetched on demand with an in-memory cache. Switching between previously loaded avatars is now near-instant. Docker image sizes are also smaller since heavy asset directories are no longer bundled.
+
+## Swarm orchestrator improvements
+
+The coding agent [swarm orchestrator](/guides/coding-swarms) plugin has been updated with several reliability improvements. Turn-complete signals are now coalesced with a debounce to avoid premature task completion. Failed completions retry automatically with exponential backoff. Swarm session history is now persisted to disk, and pull request creation signals skip unnecessary LLM calls for faster completion. Stale sessions are filtered out automatically.
+
+## Updates
+
+- **Prompt optimization hardened** — The [prompt optimization](/changelog#smart-prompt-optimization) system shipped last week now handles edge cases more gracefully. Malformed prompts without expected section headers are returned unchanged instead of being incorrectly truncated.
+- **Dark mode and accessibility pass** — Seven dark mode bugs have been fixed across the dashboard, including hardcoded white backgrounds in toggles, the connection failure banner, and the loading screen. The homepage now shares the same color token system as the dashboard, and includes Open Graph meta tags and proper heading hierarchy for accessibility.
+- **Onboarding provider persistence** — Your model provider selection during [onboarding](/guides/beginners-user-guide) is now saved as the authoritative active provider and stays consistent across restarts, settings changes, and config reloads.
+- **Cloud agent provisioning feedback** — The "Open Web UI" button on cloud agent cards is now disabled while an agent is still provisioning or stopped, preventing you from opening a broken UI. Polling speeds up to every 5 seconds while any agent is provisioning and slows back down once all agents are running.
+
+## Bug fixes
+
+- Fixed cloud agents created through the onboarding wizard never actually provisioning a container — the agent appeared "live" immediately but had no running runtime behind it
+- Fixed cloud-provisioned containers rejecting all API requests with 401 errors due to a token generation deadlock when auto-token creation was disabled
+- Fixed a "restart already in progress" error during onboarding on slower machines — concurrent restart requests are now serialized and waited on properly
+- Fixed Docker containers failing to start due to missing internal workspace module links — the runtime image now preserves Bun workspace dependencies correctly
+- Fixed the homepage dark theme breaking after a frontend cleanup pass
+
+</Update>
+
 <Update label="2026-03-30" description="Week of March 29–30; cloud dashboard polish, live metrics, billing" tags={["Update"]}>
 ## Cloud dashboard overhaul
 
