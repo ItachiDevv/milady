@@ -133,6 +133,54 @@ async function exchangeCloudLaunchSession(
   throw lastError ?? new Error("Launch session exchange failed");
 }
 
+/**
+ * Exchange a one-time cloud pairing token for the agent's inbound API token.
+ *
+ * WHY: When the Eliza Cloud dashboard opens the Web UI via the pairing-token
+ * flow, the browser lands on `https://<agentId>.waifu.fun/pair?token=<oneTimeToken>`.
+ * The SPA has no API token yet — the one-time token must be exchanged at the
+ * cloud's /api/auth/pair endpoint (which validates origin + token against the DB)
+ * to obtain the agent's persistent MILADY_API_TOKEN.  Without this exchange every
+ * authenticated API call fails with 401, leaving the browser in a perpetual
+ * loading state or showing a startup error.
+ */
+async function exchangeCloudPairingToken(
+  oneTimeToken: string,
+  cloudApiBase: string,
+): Promise<string | null> {
+  if (!oneTimeToken || !cloudApiBase) return null;
+
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : null;
+  if (!origin) return null;
+
+  try {
+    const response = await fetch(`${cloudApiBase}/api/auth/pair`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Origin: origin,
+      },
+      body: JSON.stringify({ token: oneTimeToken }),
+      redirect: "manual",
+      signal: AbortSignal.timeout(10_000),
+    });
+
+    if (!response.ok) return null;
+
+    const payload = (await response.json().catch(() => null)) as {
+      apiKey?: string | null;
+    } | null;
+
+    const apiKey = payload?.apiKey?.trim();
+    return apiKey || null;
+  } catch {
+    // Non-fatal — caller will fall through to unauthenticated startup.
+    return null;
+  }
+}
+
 export async function applyLaunchConnectionFromUrl(): Promise<boolean> {
   if (typeof window === "undefined") return false;
 
@@ -153,6 +201,40 @@ export async function applyLaunchConnectionFromUrl(): Promise<boolean> {
 
   const apiBase = params.get("apiBase")?.trim();
   if (!apiBase) {
+    // No explicit API base — check for a cloud pairing token.
+    // This covers the Eliza Cloud dashboard "Open Web UI" flow where the
+    // browser lands on `https://<agentId>.waifu.fun/pair?token=<oneTimeToken>`.
+    // The one-time token must be exchanged at the cloud's /api/auth/pair
+    // endpoint to obtain the agent's inbound API key.
+    const pairToken = params.get("token")?.trim();
+    if (pairToken) {
+      // Read the cloud API base from a window global injected by the host
+      // app, falling back to the production default. Avoids importing the
+      // React-heavy boot-config module inside this platform utility.
+      const injectedCloudBase =
+        typeof window !== "undefined"
+          ? (
+              (window as Record<string, unknown>)
+                .__ELIZA_CLOUD_API_BASE__ as string | undefined
+            )?.trim()
+          : undefined;
+      const cloudApiBase = (
+        injectedCloudBase ?? "https://www.elizacloud.ai"
+      ).replace(/\/+$/, "");
+      const agentApiKey = await exchangeCloudPairingToken(
+        pairToken,
+        cloudApiBase,
+      );
+      if (agentApiKey) {
+        client.setToken(agentApiKey);
+        // Strip the one-time token from the URL so a reload does not
+        // attempt to re-exchange an already-consumed token.
+        const url = new URL(window.location.href);
+        url.searchParams.delete("token");
+        window.history.replaceState({}, "", url.toString());
+        return true;
+      }
+    }
     return false;
   }
 
