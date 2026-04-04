@@ -63,4 +63,16 @@ describe("releaseData structure", () => {
     const diffDays = diffMs / (1000 * 60 * 60 * 24);
     expect(diffDays).toBeLessThan(30);
   });
+
+  it("release is not a prerelease", () => {
+    expect(releaseData.release.prerelease).toBe(false);
+  });
+
+  it("cdn tagName matches release tagName", () => {
+    expect(releaseData.cdn.tagName).toBe(releaseData.release.tagName);
+  });
+
+  it("release URL references the release tagName", () => {
+    expect(releaseData.release.url).toContain(releaseData.release.tagName);
+  });
 });
