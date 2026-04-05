@@ -165,6 +165,26 @@ export default defineConfig({
           ]),
       // @miladyai/shared — always resolve subpath imports from source
       {
+        find: /^@miladyai\/plugin-eztexting\/(.*)/,
+        replacement: path.join(
+          repoRoot,
+          "packages",
+          "plugin-eztexting",
+          "src",
+          "$1",
+        ),
+      },
+      {
+        find: "@miladyai/plugin-eztexting",
+        replacement: path.join(
+          repoRoot,
+          "packages",
+          "plugin-eztexting",
+          "src",
+          "index.ts",
+        ),
+      },
+      {
         find: /^@miladyai\/plugin-selfcontrol\/(.*)/,
         replacement: path.join(
           repoRoot,
@@ -242,6 +262,7 @@ export default defineConfig({
       "packages/app-core/src/**/*.test.tsx",
       "packages/plugin-selfcontrol/src/**/*.test.ts",
       "packages/plugin-selfcontrol/src/**/*.test.ts",
+      "packages/plugin-eztexting/src/**/*.test.ts",
       "packages/plugin-wechat/src/**/*.test.ts",
       "src/**/*.test.ts",
       "scripts/**/*.test.ts",
