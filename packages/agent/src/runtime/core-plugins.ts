@@ -33,6 +33,7 @@ export const CORE_PLUGINS: readonly string[] = [
  */
 export const OPTIONAL_CORE_PLUGINS: readonly string[] = [
   "@miladyai/plugin-selfcontrol", // macOS SelfControl website blocking
+  "@miladyai/plugin-eztexting", // EZTexting SMS messaging
   "@elizaos/plugin-pdf", // PDF processing (published bundle broken in alpha.15)
   "@elizaos/plugin-cua", // CUA computer-use agent (cloud sandbox automation)
   "@elizaos/plugin-obsidian", // Obsidian vault CLI integration

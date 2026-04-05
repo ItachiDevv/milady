@@ -98,6 +98,8 @@ export const OPTIONAL_PLUGIN_MAP: Readonly<Record<string, string>> = {
   selfcontrol: "@miladyai/plugin-selfcontrol",
   "website-blocker": "@miladyai/plugin-selfcontrol",
   websiteBlocker: "@miladyai/plugin-selfcontrol",
+  eztexting: "@miladyai/plugin-eztexting",
+  sms: "@miladyai/plugin-eztexting",
   cron: "@elizaos/plugin-cron",
   cua: "@elizaos/plugin-cua",
   computeruse: "@elizaos/plugin-computeruse",

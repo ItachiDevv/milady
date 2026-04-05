@@ -17,6 +17,10 @@
     "useDefineForClassFields": false,
     "baseUrl": ".",
     "paths": {
+      "@miladyai/plugin-eztexting": [
+        "./packages/plugin-eztexting/src/index.ts"
+      ],
+      "@miladyai/plugin-eztexting/*": ["./packages/plugin-eztexting/src/*"],
       "@miladyai/plugin-selfcontrol": [
         "./packages/plugin-selfcontrol/src/index.ts"
       ],
