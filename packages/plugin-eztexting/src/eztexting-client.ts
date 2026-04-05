@@ -138,10 +138,6 @@ export async function getInboxMessages(
   const url = `${credentials.baseUrl}/incoming-messages?format=json&FolderID=${folderParam}`;
 
   try {
-    const formBody = new URLSearchParams();
-    formBody.append("User", credentials.username);
-    formBody.append("Password", credentials.password);
-
     const response = await fetch(url, {
       method: "GET",
       headers: {
