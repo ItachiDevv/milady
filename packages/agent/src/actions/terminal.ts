@@ -1,29 +1,23 @@
 /**
  * RUN_IN_TERMINAL action — runs a shell command on the server.
  *
- * When triggered the action:
- *   1. Extracts the command from the parameters, NL text, or MCP-style JSON
- *   2. POSTs to the local API server to execute it
- *   3. The API broadcasts output via WebSocket for real-time display
- *   4. Returns a descriptive text response
- *
  * @module actions/terminal
  */
 
 import type { Action, HandlerOptions, Memory } from "@elizaos/core";
 
-/** API port for posting terminal requests. */
 const API_PORT = process.env.API_PORT || process.env.SERVER_PORT || "2138";
-
 const FAIL = { success: false, text: "" } as const;
 
 /**
  * Extract a command from handler options and message text.
  *
  * Resolution order:
- *   1. `parameters.command` — explicit parameter
- *   2. `parameters.arguments` — MCP-style JSON string like `{"command":"ls"}`
- *   3. Natural language extraction from message text
+ *   1. `parameters.command` — explicit parameter from TOON/XML parsing
+ *   2. `parameters.arguments` — MCP-style JSON string
+ *   3. Natural language regex extraction ("run X", "execute X")
+ *   4. Backtick-wrapped command in message text
+ *   5. Code-fenced command block in message text
  */
 function getCommand(
   options?: HandlerOptions,
@@ -33,34 +27,40 @@ function getCommand(
     | { command?: string; arguments?: string }
     | undefined;
 
-  // 1. Explicit command parameter
   if (params?.command) return params.command;
 
-  // 2. MCP-style JSON arguments
   if (typeof params?.arguments === "string") {
     try {
       const parsed = JSON.parse(params.arguments);
       if (parsed?.command) return parsed.command;
     } catch {
-      // Not valid JSON — fall through
+      // fall through
     }
   }
 
-  // 3. Extract from natural language (look for common CLI patterns)
   const text = message?.content?.text;
-  if (typeof text === "string" && text.length > 0) {
-    // Match common shell commands after phrases like "run", "execute", etc.
-    // Two-step: capture the phrase, then trim trailing prepositions
-    // (e.g. "in the shell", "on the server").
-    const match = text.match(
-      /(?:run|execute|start|do)\s+(?:the\s+command\s+)?[`'"]*(.+?)[`'"]*[?.!]?\s*$/i,
-    );
-    if (match?.[1]) {
-      const trimmed = match[1]
-        .replace(/\s+(?:in|on|from|to|for|at)\s+(?:the\s+)?[\w\s]+$/i, "")
-        .trim();
-      if (trimmed) return trimmed;
-    }
+  if (typeof text !== "string" || text.length === 0) return undefined;
+
+  // "run X", "execute X", "start X", "do X"
+  const match = text.match(
+    /(?:run|execute|start|do)\s+(?:the\s+command\s+)?[`'"]*(.+?)[`'"]*[?.!]?\s*$/i,
+  );
+  if (match?.[1]) {
+    const trimmed = match[1]
+      .replace(/\s+(?:in|on|from|to|for|at)\s+(?:the\s+)?[\w\s]+$/i, "")
+      .trim();
+    if (trimmed) return trimmed;
+  }
+
+  // Single backtick-wrapped command
+  const backtickMatch = text.match(/`([^`]+)`/);
+  if (backtickMatch?.[1]) return backtickMatch[1];
+
+  // Triple-backtick code fence
+  const fenceMatch = text.match(/```(?:sh|bash|shell)?\n?([\s\S]+?)```/);
+  if (fenceMatch?.[1]) {
+    const cmd = fenceMatch[1].trim();
+    if (cmd) return cmd;
   }
 
   return undefined;
@@ -132,4 +132,3 @@ export const terminalAction: Action = {
     },
   ],
 };
-
