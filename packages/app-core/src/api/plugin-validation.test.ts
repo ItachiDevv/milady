@@ -212,7 +212,7 @@ describe("validatePluginConfig", () => {
       ).toBe(true);
     });
 
-    it("fails when one required param missing", () => {
+    it("accepts a Discord bot token without application id because runtime auto-resolves it", () => {
       process.env.DISCORD_API_TOKEN = "MTE1MDY2NjQwOTA3MTQzODg5MA.token";
       const result = validatePluginConfig(
         "discord",
@@ -222,9 +222,22 @@ describe("validatePluginConfig", () => {
         undefined,
         discordParams,
       );
-      expect(result.valid).toBe(false);
-      expect(result.errors.length).toBe(1);
-      expect(result.errors[0].field).toBe("DISCORD_APPLICATION_ID");
+      expect(result.valid).toBe(true);
+      expect(result.errors).toEqual([]);
+    });
+
+    it("accepts DISCORD_BOT_TOKEN as an alias for DISCORD_API_TOKEN", () => {
+      process.env.DISCORD_BOT_TOKEN = "MTE1MDY2NjQwOTA3MTQzODg5MA.token";
+      const result = validatePluginConfig(
+        "discord",
+        "connector",
+        "DISCORD_API_TOKEN",
+        ["DISCORD_API_TOKEN", "DISCORD_APPLICATION_ID"],
+        undefined,
+        discordParams,
+      );
+      expect(result.valid).toBe(true);
+      expect(result.errors).toEqual([]);
     });
 
     it("passes when all required params set", () => {

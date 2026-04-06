@@ -62,6 +62,47 @@ const KEY_PREFIX_HINTS: Readonly<
   OPENROUTER_API_KEY: { prefix: "sk-or-", label: "OpenRouter" },
 };
 
+const ENV_KEY_ALIASES: Readonly<Record<string, readonly string[]>> = {
+  DISCORD_API_TOKEN: ["DISCORD_BOT_TOKEN"],
+};
+
+function resolveEnvValue(
+  key: string,
+  providedConfig?: Record<string, string>,
+): string | undefined {
+  const direct = providedConfig?.[key] ?? process.env[key];
+  if (typeof direct === "string") {
+    return direct;
+  }
+
+  const aliases = ENV_KEY_ALIASES[key];
+  if (!aliases) {
+    return undefined;
+  }
+
+  for (const alias of aliases) {
+    const value = providedConfig?.[alias] ?? process.env[alias];
+    if (typeof value === "string") {
+      return value;
+    }
+  }
+
+  return undefined;
+}
+
+function isDiscordApplicationIdSatisfied(
+  value: string | undefined,
+  providedConfig?: Record<string, string>,
+): boolean {
+  if (typeof value === "string" && value.trim()) {
+    return true;
+  }
+
+  // Discord Application ID is auto-resolved by the runtime when a bot token is
+  // available, so treat a present token as satisfying this prerequisite.
+  return Boolean(resolveEnvValue("DISCORD_API_TOKEN", providedConfig)?.trim());
+}
+
 // ---------------------------------------------------------------------------
 // Validation logic
 // ---------------------------------------------------------------------------
@@ -119,8 +160,14 @@ export function validatePluginConfig(
     for (const param of paramDefs) {
       if (!param.required) continue;
 
-      // Value source: provided config > process.env > undefined
-      const value = providedConfig?.[param.key] ?? process.env[param.key];
+      const value = resolveEnvValue(param.key, providedConfig);
+
+      if (
+        param.key === "DISCORD_APPLICATION_ID" &&
+        isDiscordApplicationIdSatisfied(value, providedConfig)
+      ) {
+        continue;
+      }
 
       if (!value || !value.trim()) {
         // Required param with a default is a warning, not an error
@@ -157,7 +204,7 @@ export function validatePluginConfig(
     }
   } else if (envKey) {
     // Fallback: no param definitions, but we know the primary env key
-    const currentValue = providedConfig?.[envKey] ?? process.env[envKey];
+    const currentValue = resolveEnvValue(envKey, providedConfig);
     if (!currentValue || !currentValue.trim()) {
       errors.push({
         field: envKey,
