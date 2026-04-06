@@ -20,6 +20,7 @@ vi.mock("../../services/steward-evm-bridge.js", () => ({
 
 import { resolveWalletRpcReadiness } from "../wallet-rpc.js";
 import { isStewardEvmBridgeActive } from "../../services/steward-evm-bridge.js";
+import { STEWARD_EVM_DUMMY_PRIVATE_KEY } from "../../services/steward-evm-account.js";
 import { resolveWalletCapabilityStatus } from "../wallet-capability.js";
 
 const mockedResolveWalletRpcReadiness = vi.mocked(resolveWalletRpcReadiness);
@@ -77,5 +78,25 @@ describe("resolveWalletCapabilityStatus", () => {
 
     expect(capability.pluginEvmLoaded).toBe(true);
     expect(capability.executionReady).toBe(true);
+  });
+
+  it("does not treat the Steward dummy key as a local signer", () => {
+    process.env.EVM_PRIVATE_KEY = STEWARD_EVM_DUMMY_PRIVATE_KEY;
+
+    const capability = resolveWalletCapabilityStatus({
+      config: {},
+      runtime: {
+        plugins: [],
+        getService: vi.fn(() => null),
+      } as never,
+      getWalletAddresses: () => ({
+        evmAddress: "0x3333333333333333333333333333333333333333",
+        solanaAddress: null,
+      }),
+    });
+
+    expect(capability.localSignerAvailable).toBe(false);
+    expect(capability.walletSource).toBe("managed");
+    expect(capability.pluginEvmRequired).toBe(true);
   });
 });

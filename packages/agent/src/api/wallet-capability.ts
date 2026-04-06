@@ -1,5 +1,6 @@
 import type { AgentRuntime } from "@elizaos/core";
 import type { ElizaConfig } from "../config/config.js";
+import { hasUsableLocalEvmPrivateKey } from "../services/steward-evm-account.js";
 import { isStewardEvmBridgeActive } from "../services/steward-evm-bridge.js";
 import { getWalletAddresses } from "./wallet.js";
 import { resolveWalletRpcReadiness } from "./wallet-rpc.js";
@@ -89,7 +90,9 @@ export function resolveWalletCapabilityStatus(state: {
   const addrs = (state.getWalletAddresses ?? getWalletAddresses)();
   const rpcReadiness = resolveWalletRpcReadiness(state.config);
   const automationMode = resolveWalletAutomationMode(state.config);
-  const localSignerAvailable = Boolean(process.env.EVM_PRIVATE_KEY?.trim());
+  const localSignerAvailable = hasUsableLocalEvmPrivateKey(
+    process.env.EVM_PRIVATE_KEY,
+  );
   const hasWallet = Boolean(addrs.evmAddress || addrs.solanaAddress);
   const hasEvm = Boolean(addrs.evmAddress);
   const pluginEvmLoaded = resolvePluginEvmLoaded(state.runtime);

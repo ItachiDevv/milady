@@ -17,13 +17,8 @@ import type { IAgentRuntime } from "@elizaos/core";
 import {
   initStewardEvmAccount,
   isStewardCloudProvisioned,
+  STEWARD_EVM_DUMMY_PRIVATE_KEY,
 } from "./steward-evm-account";
-
-// A dummy private key that satisfies validation but won't be used for actual signing.
-// This is a well-known "zero" key — funds sent to its address are unrecoverable.
-// It's only used as a placeholder so initWalletProvider doesn't generate a random key.
-const DUMMY_PRIVATE_KEY =
-  "0x0000000000000000000000000000000000000000000000000000000000000001";
 
 /** Stash the account globally so we can retrieve it in the post-start hook. */
 let _stewardAccount: Awaited<ReturnType<typeof initStewardEvmAccount>> = null;
@@ -48,7 +43,7 @@ export async function stewardEvmPreBoot(runtime: IAgentRuntime): Promise<void> {
       // and doesn't try to persist it to the database
       const existing = runtime.getSetting("EVM_PRIVATE_KEY");
       if (!existing) {
-        runtime.setSetting("EVM_PRIVATE_KEY", DUMMY_PRIVATE_KEY);
+        runtime.setSetting("EVM_PRIVATE_KEY", STEWARD_EVM_DUMMY_PRIVATE_KEY);
         console.log("[StewardEvmBridge] Set dummy EVM_PRIVATE_KEY placeholder");
       }
       // Expose the steward-managed address so getWalletAddresses() and

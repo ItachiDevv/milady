@@ -48,6 +48,10 @@ interface StewardApiResponse<T = unknown> {
   error?: string;
 }
 
+// Matches the dummy key injected by steward-evm-bridge to suppress random key generation.
+export const STEWARD_EVM_DUMMY_PRIVATE_KEY =
+  "0x0000000000000000000000000000000000000000000000000000000000000001";
+
 // ─── Steward API Client (minimal, signing-only) ──────────────────────────────
 
 class StewardSigningClient {
@@ -307,10 +311,24 @@ export function createStewardEvmAccount(config: StewardEvmAccountConfig): Accoun
  */
 export function isStewardCloudProvisioned(): boolean {
   return (
-    process.env.MILADY_CLOUD_PROVISIONED === "1" &&
-    !!process.env.STEWARD_AGENT_TOKEN &&
-    !!process.env.STEWARD_API_URL
+    (process.env.MILADY_CLOUD_PROVISIONED === "1" ||
+      process.env.ELIZA_CLOUD_PROVISIONED === "1") &&
+    Boolean(process.env.STEWARD_AGENT_TOKEN?.trim()) &&
+    Boolean(process.env.STEWARD_API_URL?.trim())
   );
+}
+
+export function isStewardPlaceholderPrivateKey(
+  privateKey: string | null | undefined,
+): boolean {
+  return privateKey?.trim() === STEWARD_EVM_DUMMY_PRIVATE_KEY;
+}
+
+export function hasUsableLocalEvmPrivateKey(
+  privateKey: string | null | undefined,
+): boolean {
+  const trimmed = privateKey?.trim();
+  return Boolean(trimmed) && !isStewardPlaceholderPrivateKey(trimmed);
 }
 
 /**

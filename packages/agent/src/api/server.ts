@@ -305,6 +305,7 @@ import {
 import { resolveWalletRpcReadiness } from "./wallet-rpc.js";
 import { discoverSkills } from "./skill-discovery-helpers.js";
 import { handleWalletTradeExecuteRoute } from "./wallet-trade-routes.js";
+import { hasUsableLocalEvmPrivateKey } from "../services/steward-evm-account.js";
 import {
   loadWalletTradingProfile,
   recordWalletTradeLedgerEntry,
@@ -1170,7 +1171,9 @@ function buildWalletContextPrompt(
     process.env.MILADY_WALLET_NETWORK?.trim().toLowerCase() === "testnet"
       ? "testnet"
       : "mainnet";
-  const localSignerAvailable = Boolean(process.env.EVM_PRIVATE_KEY?.trim());
+  const localSignerAvailable = hasUsableLocalEvmPrivateKey(
+    process.env.EVM_PRIVATE_KEY,
+  );
   const pluginEvmLoaded = resolvePluginEvmLoaded(runtime);
   const rpcReady = Boolean(
     process.env.BSC_RPC_URL?.trim() ||

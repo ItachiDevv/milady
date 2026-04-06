@@ -22,6 +22,7 @@ import { extractCompatTextContent } from "./compat-utils.js";
 import { getKnowledgeService } from "./knowledge-service-loader.js";
 import { resolvePluginEvmLoaded } from "./wallet-capability.js";
 import { getWalletAddresses } from "./wallet.js";
+import { hasUsableLocalEvmPrivateKey } from "../services/steward-evm-account.js";
 import {
   normalizeCharacterLanguage,
 } from "../onboarding-presets.js";
@@ -235,7 +236,9 @@ export async function buildAgentAwarenessContextPrompt(
     process.env.MILADY_WALLET_NETWORK?.trim().toLowerCase() === "testnet"
       ? "testnet"
       : "mainnet";
-  const localSignerAvailable = Boolean(process.env.EVM_PRIVATE_KEY?.trim());
+  const localSignerAvailable = hasUsableLocalEvmPrivateKey(
+    process.env.EVM_PRIVATE_KEY,
+  );
   const pluginEvmLoaded = resolvePluginEvmLoaded(runtime);
   const rpcReady = Boolean(
     process.env.BSC_RPC_URL?.trim() ||

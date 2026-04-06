@@ -11,6 +11,7 @@ import crypto from "node:crypto";
 import { logger } from "@elizaos/core";
 import { secp256k1 } from "@noble/curves/secp256k1.js";
 import { ethers } from "ethers";
+import { isStewardPlaceholderPrivateKey } from "../services/steward-evm-account.js";
 import type {
   KeyValidationResult,
   SolanaTokenBalance,
@@ -461,7 +462,11 @@ export function getWalletAddresses(): WalletAddresses {
   // ── 2. Local private key derivation (fallback) ─────────────────────
   if (!evmAddress) {
     const evmKey = process.env.EVM_PRIVATE_KEY;
-    if (evmKey && !PLACEHOLDER_RE.test(evmKey)) {
+    if (
+      evmKey &&
+      !PLACEHOLDER_RE.test(evmKey) &&
+      !isStewardPlaceholderPrivateKey(evmKey)
+    ) {
       try {
         evmAddress = deriveEvmAddress(evmKey);
       } catch (e) {
