@@ -1,5 +1,5 @@
 import { ChannelType, createMessageMemory } from "@elizaos/core";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildAgentAwarenessContextPrompt,
   maybeAugmentChatMessageWithAgentAwareness,
@@ -33,27 +33,36 @@ function makeRuntime(overrides?: {
   model?: string;
   plugins?: string[];
   cloudBalance?: number;
+  cloudGet?: () => Promise<Record<string, unknown>>;
 }): RuntimeStub {
   const cloudBalance = overrides?.cloudBalance;
+  const cloudGet = overrides?.cloudGet;
   return {
-    plugins: (overrides?.plugins ?? [
-      "@elizaos/plugin-anthropic",
-      "@elizaos/plugin-evm",
-      "@elizaos/plugin-discord",
-    ]).map((name) => ({ name })),
+    plugins: (
+      overrides?.plugins ?? [
+        "@elizaos/plugin-anthropic",
+        "@elizaos/plugin-evm",
+        "@elizaos/plugin-discord",
+      ]
+    ).map((name) => ({ name })),
     character: {
       settings: {
         model: overrides?.model ?? "anthropic/claude-sonnet-4.6",
       },
     },
     getService: (name: string) => {
-      if (name !== "CLOUD_AUTH" || typeof cloudBalance !== "number") {
+      if (name !== "CLOUD_AUTH") {
         return null;
       }
+      if (typeof cloudBalance !== "number" && !cloudGet) return null;
       return {
         isAuthenticated: () => true,
         getClient: () => ({
-          get: async () => ({ balance: cloudBalance }),
+          get:
+            cloudGet ??
+            (async () => ({
+              balance: cloudBalance,
+            })),
         }),
       };
     },
@@ -61,10 +70,12 @@ function makeRuntime(overrides?: {
 }
 
 beforeEach(() => {
+  vi.useRealTimers();
   for (const key of ENV_KEYS) delete process.env[key];
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   for (const key of ENV_KEYS) {
     const value = ORIGINAL_ENV[key];
     if (value === undefined) delete process.env[key];
@@ -105,6 +116,61 @@ describe("agent awareness chat augmentation", () => {
     expect(prompt).toContain("- executionReady: true");
   });
 
+  it("reuses cached cloud credits for repeated prompts", async () => {
+    vi.useFakeTimers();
+    const cloudGet = vi.fn(async () => ({ balance: 12.34 }));
+    const runtime = makeRuntime({ cloudGet }) as never;
+
+    const first = await buildAgentAwarenessContextPrompt(
+      runtime,
+      "what model are you on?",
+    );
+    const second = await buildAgentAwarenessContextPrompt(
+      runtime,
+      "what plugins do you have?",
+    );
+
+    expect(first).toContain("- cloudCredits: 12.34");
+    expect(second).toContain("- cloudCredits: 12.34");
+    expect(cloudGet).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(30_001);
+
+    await buildAgentAwarenessContextPrompt(
+      runtime,
+      "what cloud credits remain?",
+    );
+    expect(cloudGet).toHaveBeenCalledTimes(2);
+  });
+
+  it("shares the in-flight cloud credits lookup across concurrent prompts", async () => {
+    let resolveBalance: ((value: Record<string, unknown>) => void) | null =
+      null;
+    const cloudGet = vi.fn(
+      () =>
+        new Promise<Record<string, unknown>>((resolve) => {
+          resolveBalance = resolve;
+        }),
+    );
+    const runtime = makeRuntime({ cloudGet }) as never;
+
+    const firstPromise = buildAgentAwarenessContextPrompt(
+      runtime,
+      "what model are you on?",
+    );
+    const secondPromise = buildAgentAwarenessContextPrompt(
+      runtime,
+      "what plugins do you have?",
+    );
+
+    expect(cloudGet).toHaveBeenCalledTimes(1);
+    resolveBalance?.({ balance: 7.89 });
+
+    const [first, second] = await Promise.all([firstPromise, secondPromise]);
+    expect(first).toContain("- cloudCredits: 7.89");
+    expect(second).toContain("- cloudCredits: 7.89");
+  });
+
   it("augments matching self-status questions", async () => {
     process.env.ELIZA_MANAGED_EVM_ADDRESS =
       "0x1111111111111111111111111111111111111111";
@@ -126,8 +192,12 @@ describe("agent awareness chat augmentation", () => {
       message,
     );
 
-    expect(augmented.content.text).toContain("Server-verified agent self-awareness:");
-    expect(augmented.content.text).toContain("- model: anthropic/claude-sonnet-4.6");
+    expect(augmented.content.text).toContain(
+      "Server-verified agent self-awareness:",
+    );
+    expect(augmented.content.text).toContain(
+      "- model: anthropic/claude-sonnet-4.6",
+    );
   });
 
   it("does not augment unrelated prompts for non-cloud sessions", async () => {
@@ -172,7 +242,9 @@ describe("agent awareness chat augmentation", () => {
       message,
     );
 
-    expect(augmented.content.text).toContain("Server-verified agent self-awareness:");
+    expect(augmented.content.text).toContain(
+      "Server-verified agent self-awareness:",
+    );
     expect(augmented.content.text).toContain("Original self-status request");
   });
 });

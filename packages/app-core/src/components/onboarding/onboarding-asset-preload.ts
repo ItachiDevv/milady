@@ -46,7 +46,6 @@ interface NetworkProfile {
   connectionLabel: string;
   imageConcurrency: number;
   vrmConcurrency: number;
-  voiceConcurrency: number;
   waitForVrmsBeforeReady: boolean;
 }
 
@@ -138,7 +137,6 @@ function getNetworkProfile(): NetworkProfile {
       connectionLabel: saveData ? "data-saver" : effectiveType || "slow",
       imageConcurrency: 2,
       vrmConcurrency: 1,
-      voiceConcurrency: 1,
       waitForVrmsBeforeReady: false,
     };
   }
@@ -148,7 +146,6 @@ function getNetworkProfile(): NetworkProfile {
       connectionLabel: effectiveType,
       imageConcurrency: 4,
       vrmConcurrency: 2,
-      voiceConcurrency: 2,
       waitForVrmsBeforeReady: false,
     };
   }
@@ -157,7 +154,6 @@ function getNetworkProfile(): NetworkProfile {
     connectionLabel: effectiveType || "fast",
     imageConcurrency: 6,
     vrmConcurrency: 3,
-    voiceConcurrency: 3,
     waitForVrmsBeforeReady: true,
   };
 }
@@ -254,13 +250,6 @@ function buildProgressItems(
       kind: "vrm",
       critical: waitForVrmsBeforeReady,
     });
-    if (entry.catchphrase?.trim()) {
-      items.push({
-        key: `voice:${entry.id}`,
-        kind: "voice",
-        critical: false,
-      });
-    }
   }
 
   return items;
@@ -460,20 +449,9 @@ function createSession(
       if (item) markComplete(item, success);
     });
 
-    const voiceTasks = entries
-      .filter((entry) => entry.catchphrase?.trim())
-      .map((entry) => async () => {
-        const item = items.find(
-          (candidate) => candidate.key === `voice:${entry.id}`,
-        );
-        const success = Boolean(await getOnboardingVoicePreviewBlob(entry));
-        if (item) markComplete(item, success);
-      });
-
     await Promise.all([
       runWithConcurrency(imageTasks, profile.imageConcurrency),
       runWithConcurrency(vrmTasks, profile.vrmConcurrency),
-      runWithConcurrency(voiceTasks, profile.voiceConcurrency),
     ]);
 
     window.clearTimeout(timeoutId);

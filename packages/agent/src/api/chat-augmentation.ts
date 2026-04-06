@@ -9,22 +9,20 @@ import crypto from "node:crypto";
 
 import {
   type AgentRuntime,
-  ChannelType,
+  type ChannelType,
   type Content,
   ContentType,
   createMessageMemory,
   type Media,
   type UUID,
 } from "@elizaos/core";
+import { normalizeCharacterLanguage } from "../onboarding-presets.js";
 import { detectRuntimeModel, resolveProviderFromModel } from "./agent-model.js";
 import { isCloudProvisionedContainer } from "./cloud-provisioning.js";
 import { extractCompatTextContent } from "./compat-utils.js";
 import { getKnowledgeService } from "./knowledge-service-loader.js";
-import { resolvePluginEvmLoaded } from "./wallet-capability.js";
 import { getWalletAddresses } from "./wallet.js";
-import {
-  normalizeCharacterLanguage,
-} from "../onboarding-presets.js";
+import { resolvePluginEvmLoaded } from "./wallet-capability.js";
 
 // ---------------------------------------------------------------------------
 // Language augmentation
@@ -65,7 +63,10 @@ export function maybeAugmentChatMessageWithLanguage(
 // Error message helper
 // ---------------------------------------------------------------------------
 
-export function getErrorMessage(err: unknown, fallback = "generation failed"): string {
+export function getErrorMessage(
+  err: unknown,
+  fallback = "generation failed",
+): string {
   if (err instanceof Error) return err.message;
   if (typeof err === "string") return err;
   return fallback;
@@ -91,7 +92,9 @@ export function getChatKnowledgeTimeoutMs(): number {
   return Math.min(parsed, MAX_CHAT_KNOWLEDGE_TIMEOUT_MS);
 }
 
-export function shouldAugmentChatMessageWithKnowledge(userPrompt: string): boolean {
+export function shouldAugmentChatMessageWithKnowledge(
+  userPrompt: string,
+): boolean {
   const normalizedPrompt = userPrompt.toLowerCase();
   return [
     "uploaded",
@@ -163,6 +166,7 @@ const AGENT_AWARENESS_INTENT_RE =
   /\b(model|provider|wallet|address|balance|swap|trade|transfer|send|token|bnb|eth|sol|onchain|on-chain|plugin|plugins|capabilit(?:y|ies)|cloud|credits|hosted|hosting|runtime|what are you running)\b/i;
 
 const AGENT_AWARENESS_CLOUD_CREDITS_TIMEOUT_MS = 1_500;
+const AGENT_AWARENESS_CLOUD_CREDITS_CACHE_MS = 30_000;
 const MAX_EXPOSED_PLUGIN_NAMES = 12;
 
 interface CloudAuthAwarenessService {
@@ -171,6 +175,20 @@ interface CloudAuthAwarenessService {
   getUserId?: () => string | undefined;
   getOrganizationId?: () => string | undefined;
 }
+
+interface CachedCloudCreditsBalance {
+  expiresAt: number;
+  value: string;
+}
+
+const cloudCreditsBalanceCache = new WeakMap<
+  AgentRuntime,
+  CachedCloudCreditsBalance
+>();
+const cloudCreditsBalanceInFlight = new WeakMap<
+  AgentRuntime,
+  Promise<string>
+>();
 
 function formatActivePluginList(runtime: AgentRuntime): string {
   const pluginNames = Array.isArray(runtime.plugins)
@@ -199,31 +217,53 @@ async function resolveCloudCreditsBalance(
     return "unavailable";
   }
 
-  try {
-    const client = cloudAuth.getClient();
-    const response = (await Promise.race([
-      client.get<Record<string, unknown>>("/credits/balance"),
-      new Promise<never>((_resolve, reject) => {
-        setTimeout(() => {
-          reject(new Error("cloud credits lookup timed out"));
-        }, AGENT_AWARENESS_CLOUD_CREDITS_TIMEOUT_MS);
-      }),
-    ])) as Record<string, unknown>;
-
-    const rawBalance =
-      typeof response.balance === "number"
-        ? response.balance
-        : typeof (response.data as Record<string, unknown> | undefined)
-              ?.balance === "number"
-          ? ((response.data as Record<string, unknown>).balance as number)
-          : null;
-
-    return typeof rawBalance === "number"
-      ? rawBalance.toFixed(2)
-      : "unavailable";
-  } catch {
-    return "unavailable";
+  const now = Date.now();
+  const cached = cloudCreditsBalanceCache.get(runtime);
+  if (cached && cached.expiresAt > now) {
+    return cached.value;
   }
+
+  const pending = cloudCreditsBalanceInFlight.get(runtime);
+  if (pending) {
+    return pending;
+  }
+
+  const lookup = (async () => {
+    try {
+      const client = cloudAuth.getClient();
+      const response = (await Promise.race([
+        client.get<Record<string, unknown>>("/credits/balance"),
+        new Promise<never>((_resolve, reject) => {
+          setTimeout(() => {
+            reject(new Error("cloud credits lookup timed out"));
+          }, AGENT_AWARENESS_CLOUD_CREDITS_TIMEOUT_MS);
+        }),
+      ])) as Record<string, unknown>;
+
+      const rawBalance =
+        typeof response.balance === "number"
+          ? response.balance
+          : typeof (response.data as Record<string, unknown> | undefined)
+                ?.balance === "number"
+            ? ((response.data as Record<string, unknown>).balance as number)
+            : null;
+
+      const value =
+        typeof rawBalance === "number" ? rawBalance.toFixed(2) : "unavailable";
+      cloudCreditsBalanceCache.set(runtime, {
+        value,
+        expiresAt: now + AGENT_AWARENESS_CLOUD_CREDITS_CACHE_MS,
+      });
+      return value;
+    } catch {
+      return "unavailable";
+    } finally {
+      cloudCreditsBalanceInFlight.delete(runtime);
+    }
+  })();
+
+  cloudCreditsBalanceInFlight.set(runtime, lookup);
+  return lookup;
 }
 
 export async function buildAgentAwarenessContextPrompt(
@@ -258,8 +298,7 @@ export async function buildAgentAwarenessContextPrompt(
   const cloudAuth = runtime.getService?.("CLOUD_AUTH") as
     | CloudAuthAwarenessService
     | undefined;
-  const cloudConnected =
-    cloudHosted || Boolean(cloudAuth?.isAuthenticated?.());
+  const cloudConnected = cloudHosted || Boolean(cloudAuth?.isAuthenticated?.());
   const cloudCredits = cloudConnected
     ? await resolveCloudCreditsBalance(runtime)
     : "not connected";
@@ -296,8 +335,7 @@ export async function maybeAugmentChatMessageWithAgentAwareness(
   if (!userPrompt) return message;
 
   const shouldInject =
-    AGENT_AWARENESS_INTENT_RE.test(userPrompt) ||
-    isCloudProvisionedContainer();
+    AGENT_AWARENESS_INTENT_RE.test(userPrompt) || isCloudProvisionedContainer();
   if (!shouldInject) return message;
 
   return {
