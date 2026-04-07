@@ -133,16 +133,17 @@ export async function routeAutonomyTextToUser(
 
   const messageId = crypto.randomUUID() as UUID;
 
+  const agentMessage = createMessageMemory({
+    id: messageId,
+    entityId: runtime.agentId,
+    roomId: conv.roomId,
+    content: {
+      text: normalizedText,
+      source,
+    },
+  });
+
   if (!ephemeralSources.has(source)) {
-    const agentMessage = createMessageMemory({
-      id: messageId,
-      entityId: runtime.agentId,
-      roomId: conv.roomId,
-      content: {
-        text: normalizedText,
-        source,
-      },
-    });
     await runtime.createMemory(agentMessage, "messages");
   }
   conv.updatedAt = new Date().toISOString();
@@ -159,6 +160,16 @@ export async function routeAutonomyTextToUser(
       source,
     },
   });
+
+  // Emit MESSAGE_SENT so connector plugins (Discord, Telegram, etc.)
+  // deliver the message to the user on the original platform.
+  if (!ephemeralSources.has(source) && typeof runtime.emitEvent === "function") {
+    await runtime.emitEvent("MESSAGE_SENT", {
+      runtime,
+      message: agentMessage,
+      source,
+    }).catch(() => {});
+  }
 }
 
 // ---------------------------------------------------------------------------
