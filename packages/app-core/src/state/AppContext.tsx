@@ -322,6 +322,7 @@ import {
   usePrompt,
 } from "@miladyai/ui";
 import { buildWalletRpcUpdateRequest } from "../wallet-rpc";
+import { StewardAuthBridgeProvider } from "../components/StewardAuthBridge";
 
 const ELIZA_CLOUD_LOGIN_POLL_INTERVAL_MS = 1000;
 const ELIZA_CLOUD_LOGIN_TIMEOUT_MS = 300_000;
@@ -8341,11 +8342,28 @@ function AppProviderInner({
     [brandingOverride],
   );
 
+  const handleStewardTokenChange = useCallback(
+    (token: string | null) => {
+      // When Steward auth provides a JWT, use it for API calls.
+      // This runs alongside (not replacing) existing ElizaCloud token management —
+      // if Steward is configured, the Steward JWT takes precedence.
+      if (token) {
+        client.setToken(token);
+      }
+      // Note: on sign-out we intentionally do not clear the token here because
+      // the ElizaCloud flow may have already set a valid token. Sign-out from
+      // Steward should not disconnect an active ElizaCloud session.
+    },
+    [],
+  );
+
   return (
     <BrandingContext.Provider value={mergedBranding}>
       <CompanionSceneConfigCtx.Provider value={companionSceneConfig}>
         <AppContext.Provider value={value}>
-          {children}
+          <StewardAuthBridgeProvider onTokenChange={handleStewardTokenChange}>
+            {children}
+          </StewardAuthBridgeProvider>
           <ConfirmDialog {...modalProps} />
           <PromptDialog {...promptModalProps} />
         </AppContext.Provider>

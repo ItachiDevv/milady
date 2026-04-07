@@ -12,8 +12,10 @@ import {
   Input,
   Label,
 } from "@miladyai/ui";
+import { StewardLogin } from "@stwd/react";
 import { appNameInterpolationVars, useBranding } from "../config/branding";
 import { useApp } from "../state";
+import { useStewardAuthBridge } from "./StewardAuthBridge";
 
 const SCREEN_SHELL_CLASS =
   "relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-bg px-4 py-6 font-body text-txt sm:px-6";
@@ -35,6 +37,8 @@ export function PairingView() {
   } = useApp();
   const branding = useBranding();
   const pairingCode = pairingCodeInput.trim();
+  const { isConfigured: stewardConfigured, session: stewardSession } =
+    useStewardAuthBridge();
 
   function formatExpiry(timestamp: number | null): string {
     if (!timestamp) return "";
@@ -93,6 +97,7 @@ export function PairingView() {
 
         <CardContent className="pt-6">
           {pairingEnabled ? (
+            <div className="space-y-5">
             <form
               onSubmit={handleSubmit}
               aria-busy={pairingBusy}
@@ -170,6 +175,27 @@ export function PairingView() {
                 </Button>
               </div>
             </form>
+
+            {/* Optional Steward sign-in for local mode: shown when STEWARD_API_URL is set */}
+            {stewardConfigured && !stewardSession && (
+              <div className="border-t border-border/40 pt-5">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+                  {t("pairingview.OrSignInWith", { defaultValue: "Or sign in with Steward" })}
+                </p>
+                <StewardLogin
+                  showPasskey
+                  showEmail
+                  onSuccess={() => {
+                    // Session handled by StewardAuthBridgeProvider;
+                    // token forwarded to client.setToken via onTokenChange
+                  }}
+                  onError={(err) => {
+                    console.error("[steward-auth] pairing login error:", err);
+                  }}
+                />
+              </div>
+            )}
+            </div>
           ) : (
             <div className="space-y-5 text-sm">
               <div className="rounded-xl border border-border/60 bg-bg/40 px-4 py-3.5 text-muted">

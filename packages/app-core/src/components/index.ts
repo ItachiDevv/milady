@@ -110,6 +110,7 @@ export * from "./SystemWarningBanner";
 export * from "./TasksEventsPanel";
 export { useSharedCompanionScene } from "./shared-companion-scene-context";
 export * from "./steward";
+export { useStewardAuthBridge } from "./StewardAuthBridge";
 export * from "./ThemeToggle";
 export * from "./TrajectoriesView";
 export * from "./TrajectoryDetailView";

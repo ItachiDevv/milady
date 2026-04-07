@@ -7,6 +7,7 @@
 
 import type { StewardStatusResponse } from "@miladyai/app-core/api";
 import { useApp } from "@miladyai/app-core/state";
+import { useStewardAuthBridge } from "./StewardAuthBridge";
 import {
   Button,
   Dialog,
@@ -257,6 +258,9 @@ function isInventorySortKey(value: string): value is InventorySortKey {
 }
 
 export function InventoryView() {
+  const { session: stewardAuthSession } = useStewardAuthBridge();
+  const userWalletAddress = stewardAuthSession?.user?.walletAddress ?? null;
+
   const {
     walletConfig,
     walletAddresses,
@@ -757,6 +761,32 @@ export function InventoryView() {
                 void (inventoryView === "tokens" ? loadBalances() : loadNfts())
               }
             />
+
+            {/* Your Wallet — shown when user is authenticated via Steward */}
+            {userWalletAddress ? (
+              <div>
+                <SidebarContent.SectionLabel>
+                  {t("wallet.yourWallet", { defaultValue: "Your Wallet" })}
+                </SidebarContent.SectionLabel>
+                <div className="mt-2 flex items-center justify-between gap-2 rounded-xl border border-border/50 bg-bg/40 px-3 py-2.5">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[11px] font-medium text-muted">EVM</div>
+                    <div className="mt-0.5 truncate font-mono text-xs text-txt">
+                      {userWalletAddress}
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 shrink-0 text-muted hover:text-txt"
+                    onClick={() => void navigator.clipboard.writeText(userWalletAddress)}
+                    aria-label={t("wallet.copyAddress", { defaultValue: "Copy address" })}
+                  >
+                    <Copy className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </div>
+            ) : null}
 
             <div>
               <SidebarContent.SectionLabel>

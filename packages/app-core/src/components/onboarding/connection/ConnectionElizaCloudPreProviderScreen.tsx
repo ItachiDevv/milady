@@ -1,9 +1,11 @@
 import { Button, Input } from "@miladyai/ui";
 import type { ChangeEvent } from "react";
+import { StewardLogin } from "@stwd/react";
 import { useBranding } from "../../../config";
 import type { ConnectionEvent } from "../../../onboarding/connection-flow";
 import { useApp } from "../../../state";
 import { openExternalUrl } from "../../../utils";
+import { useStewardAuthBridge } from "../../StewardAuthBridge";
 import { OnboardingTabs } from "../OnboardingTabs";
 import {
   OnboardingField,
@@ -45,8 +47,12 @@ export function ConnectionElizaCloudPreProviderScreen({
     setState,
   } = useApp();
 
+  const { isConfigured: stewardConfigured, session: stewardSession } =
+    useStewardAuthBridge();
+
   const elizaCloudReady =
     elizaCloudConnected ||
+    Boolean(stewardSession) ||
     (onboardingRunMode === "cloud" &&
       onboardingCloudProvider === "elizacloud" &&
       onboardingApiKey.trim().length > 0);
@@ -76,7 +82,40 @@ export function ConnectionElizaCloudPreProviderScreen({
           onChange={(tab) => dispatch({ type: "setElizaCloudTab", tab })}
         />
 
-        {onboardingElizaCloudTab === "login" ? (
+        {/* Steward auth: shown instead of ElizaCloud OAuth when STEWARD_API_URL is configured */}
+        {onboardingElizaCloudTab === "login" && stewardConfigured ? (
+          <div className={onboardingCenteredStackClassName}>
+            {stewardSession || elizaCloudConnected ? (
+              <OnboardingStatusBanner tone="success">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <title>{t("onboarding.connected")}</title>
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                {t("onboarding.connected")}
+              </OnboardingStatusBanner>
+            ) : (
+              <StewardLogin
+                showPasskey
+                showEmail
+                onSuccess={() => {
+                  // Session handled by StewardAuthBridgeProvider via onSessionChange
+                }}
+                onError={(err) => {
+                  console.error("[steward-auth] login error:", err);
+                }}
+              />
+            )}
+          </div>
+        ) : onboardingElizaCloudTab === "login" ? (
           <div className={onboardingCenteredStackClassName}>
             {elizaCloudConnected ? (
               <OnboardingStatusBanner tone="success">
