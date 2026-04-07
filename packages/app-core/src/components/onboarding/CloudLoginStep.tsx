@@ -1,8 +1,10 @@
 import { useApp } from "@miladyai/app-core/state";
+import { StewardLogin } from "@stwd/react";
 import { Button, Spinner } from "@miladyai/ui";
 import { useEffect, useRef } from "react";
 import { useBranding } from "../../config";
 import { openExternalUrl } from "../../utils";
+import { useStewardAuth } from "../steward/StewardAuthBridge";
 import {
   OnboardingStepHeader,
   onboardingBodyTextShadowStyle,
@@ -35,6 +37,7 @@ export function CloudLoginStep() {
     handleOnboardingBack,
     t,
   } = useApp();
+  const steward = useStewardAuth();
 
   const advancedRef = useRef(false);
   useEffect(() => {
@@ -43,6 +46,46 @@ export function CloudLoginStep() {
       void handleOnboardingNext();
     }
   }, [elizaCloudConnected, handleOnboardingNext]);
+
+  // When steward is configured, advance onboarding if the user authenticates
+  useEffect(() => {
+    if (steward.stewardConfigured && steward.isAuthenticated && !advancedRef.current) {
+      advancedRef.current = true;
+      void handleOnboardingNext();
+    }
+  }, [steward.stewardConfigured, steward.isAuthenticated, handleOnboardingNext]);
+
+  // If steward is configured and not yet loading, show StewardLogin instead
+  if (steward.stewardConfigured && !steward.loading) {
+    return (
+      <>
+        <OnboardingStepHeader
+          eyebrow={t("onboarding.cloudLoginTitle")}
+          description={t("onboarding.cloudLoginDesc")}
+          descriptionClassName="mx-auto mt-1 max-w-[34ch] text-balance"
+        />
+        <div className="mx-auto mt-4 w-full max-w-[25rem]">
+          <StewardLogin
+            onSuccess={() => {
+              /* StewardAuthBridge handles token sync and onboarding advance via effect above */
+            }}
+            showSIWE={false}
+          />
+        </div>
+        <div className={onboardingFooterClass}>
+          <Button
+            variant="ghost"
+            className={onboardingSecondaryActionClass}
+            style={onboardingSecondaryActionTextShadowStyle}
+            onClick={() => handleOnboardingNext()}
+            type="button"
+          >
+            {t("onboarding.skip")}
+          </Button>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

@@ -2,6 +2,7 @@
  * Pairing view component — simple pairing screen for authentication.
  */
 
+import { StewardLogin } from "@stwd/react";
 import {
   Button,
   Card,
@@ -14,6 +15,7 @@ import {
 } from "@miladyai/ui";
 import { appNameInterpolationVars, useBranding } from "../../config/branding";
 import { useApp } from "../../state";
+import { useStewardAuth } from "../steward/StewardAuthBridge";
 
 const SCREEN_SHELL_CLASS =
   "relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-bg px-4 py-6 font-body text-txt sm:px-6";
@@ -34,7 +36,13 @@ export function PairingView() {
     t,
   } = useApp();
   const branding = useBranding();
+  const steward = useStewardAuth();
   const pairingCode = pairingCodeInput.trim();
+
+  // If user authenticated via Steward, reload to let the app detect the session
+  if (steward.stewardConfigured && steward.isAuthenticated) {
+    window.location.reload();
+  }
 
   function formatExpiry(timestamp: number | null): string {
     if (!timestamp) return "";
@@ -92,6 +100,33 @@ export function PairingView() {
         </CardHeader>
 
         <CardContent className="pt-6">
+          {/* Steward sign-in — shown only when steward is running locally */}
+          {steward.stewardConfigured && !steward.loading && (
+            <div className="mb-6">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="h-px flex-1 bg-border/60" />
+                <span className="text-xs font-medium text-muted">
+                  Sign in with Steward
+                </span>
+                <div className="h-px flex-1 bg-border/60" />
+              </div>
+              <StewardLogin
+                showSIWE={false}
+                onSuccess={() => {
+                  /* StewardAuthBridge handles token sync; reload effect above
+                     will trigger once isAuthenticated becomes true */
+                }}
+              />
+              {pairingEnabled && (
+                <div className="mt-4 flex items-center gap-3">
+                  <div className="h-px flex-1 bg-border/60" />
+                  <span className="text-xs font-medium text-muted">or use pairing code</span>
+                  <div className="h-px flex-1 bg-border/60" />
+                </div>
+              )}
+            </div>
+          )}
+
           {pairingEnabled ? (
             <form
               onSubmit={handleSubmit}
