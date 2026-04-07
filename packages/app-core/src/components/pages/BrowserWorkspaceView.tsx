@@ -142,17 +142,45 @@ function resolveBrowserWorkspaceTargetOrigin(url: string): string {
   }
 }
 
-/** @internal Exported for testing only. */
+/**
+ * Verify the postMessage origin against the tab's known URL and return a safe
+ * targetOrigin for the response. Returns null if the origin cannot be verified.
+ *
+ * With `allow-same-origin` in the iframe sandbox, a malicious page could
+ * present the parent's origin. We mitigate this by checking that the message
+ * origin matches the origin derived from the tab's URL — the URL the user or
+ * agent explicitly navigated to.
+ *
+ * @internal Exported for testing only.
+ */
 export function resolveBrowserWorkspaceMessageOrigin(
   origin: string,
+  tabUrl?: string,
 ): string | null {
-  if (origin && origin !== "null") {
-    return origin;
+  if (!origin || origin === "null") {
+    return null;
   }
-  // Null-origin frames (sandboxed, file://, cross-origin navigations) cannot
-  // be verified. Even "getState" exposes wallet addresses, so no method is
-  // safe to broadcast with "*" targetOrigin — refuse to respond entirely.
-  return null;
+
+  // If we know the tab's URL, verify the message origin matches.
+  // This prevents a page loaded via allow-same-origin from spoofing
+  // the parent origin to access wallet signing.
+  if (tabUrl) {
+    try {
+      const expectedOrigin = new URL(tabUrl).origin;
+      if (
+        expectedOrigin &&
+        expectedOrigin !== "null" &&
+        origin !== expectedOrigin
+      ) {
+        return null;
+      }
+    } catch {
+      // Malformed tab URL — reject.
+      return null;
+    }
+  }
+
+  return origin;
 }
 
 function resolveBrowserWorkspaceSelection(
@@ -218,7 +246,7 @@ function normalizeBrowserWorkspaceTxRequest(
       : typeof value.value === "number"
         ? String(value.value)
         : "";
-  if (!to || !amount || !chainId) {
+  if (!to || !amount || !chainId || !Number.isFinite(chainId)) {
     return null;
   }
   return {
@@ -617,9 +645,12 @@ export function BrowserWorkspaceView(): JSX.Element {
         return;
       }
 
-      const targetOrigin = resolveBrowserWorkspaceMessageOrigin(event.origin);
+      const targetOrigin = resolveBrowserWorkspaceMessageOrigin(
+        event.origin,
+        sourceTab.url,
+      );
       if (targetOrigin === null) {
-        // Refuse to respond — origin cannot be verified (null-origin frame).
+        // Refuse to respond — origin cannot be verified or doesn't match tab URL.
         return;
       }
       const respond = (response: BrowserWorkspaceWalletResponse) => {
