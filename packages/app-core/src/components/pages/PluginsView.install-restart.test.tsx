@@ -1,6 +1,7 @@
 import React from "react";
 import TestRenderer, { act } from "react-test-renderer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { AgentStatus } from "../../api";
 
 const mockUseApp = vi.fn();
 const mockOnWsEvent = vi.fn(() => () => {});
@@ -35,6 +36,16 @@ vi.mock("../../runtime/plugin-manager-guard", () => ({
 
 import { client } from "../../api";
 import { PluginsView } from "./PluginsView";
+
+function mockAgentStatus(state: AgentStatus["state"]): AgentStatus {
+  return {
+    state,
+    agentName: "Test Agent",
+    model: "test-model",
+    uptime: 1,
+    startedAt: 1,
+  };
+}
 
 function baseContext() {
   return {
@@ -108,12 +119,9 @@ describe("PluginsView plugin install restart flow", () => {
       alphaVersion: "2.0.0-alpha.2",
       message: "@elizaos/plugin-test installed. Restart required to activate.",
     } as Awaited<ReturnType<typeof client.installRegistryPlugin>>);
-    vi.mocked(client.restartAndWait).mockResolvedValue({
-      state: "running",
-      startupPhase: "running",
-      status: "running",
-      healthy: true,
-    } as Awaited<ReturnType<typeof client.restartAndWait>>);
+    vi.mocked(client.restartAndWait).mockResolvedValue(
+      mockAgentStatus("running"),
+    );
 
     let tree: TestRenderer.ReactTestRenderer;
     await act(async () => {
@@ -168,12 +176,9 @@ describe("PluginsView plugin install restart flow", () => {
       alphaVersion: "2.0.0-alpha.2",
       message: "@elizaos/plugin-test installed. Restart required to activate.",
     } as Awaited<ReturnType<typeof client.installRegistryPlugin>>);
-    vi.mocked(client.restartAndWait).mockResolvedValue({
-      state: "stopped",
-      startupPhase: "stopped",
-      status: "stopped",
-      healthy: false,
-    } as Awaited<ReturnType<typeof client.restartAndWait>>);
+    vi.mocked(client.restartAndWait).mockResolvedValue(
+      mockAgentStatus("stopped"),
+    );
 
     let tree: TestRenderer.ReactTestRenderer;
     await act(async () => {

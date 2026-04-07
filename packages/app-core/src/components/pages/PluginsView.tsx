@@ -463,6 +463,15 @@ function PluginListView({
     [],
   );
 
+  const clearPluginReleaseStream = useCallback((pluginId: string) => {
+    setPluginReleaseStreams((prev) => {
+      if (!(pluginId in prev)) return prev;
+      const next = { ...prev };
+      delete next[pluginId];
+      return next;
+    });
+  }, []);
+
   const runWithPluginManager = useCallback(
     async (
       _pluginName: string,
@@ -717,7 +726,10 @@ function PluginListView({
               "{{plugin}} uninstalled, but the agent did not come back online (status: {{status}}).",
           }),
         });
-        if (!restarted) return;
+        if (!restarted) {
+          clearPluginReleaseStream(pluginId);
+          return;
+        }
       } else {
         await loadPlugins();
         setActionNotice(
@@ -729,12 +741,7 @@ function PluginListView({
           "success",
         );
       }
-      setPluginReleaseStreams((prev) => {
-        if (!(pluginId in prev)) return prev;
-        const next = { ...prev };
-        delete next[pluginId];
-        return next;
-      });
+      clearPluginReleaseStream(pluginId);
     } catch (err) {
       setActionNotice(
         t("pluginsview.PluginUninstallFailed", {
