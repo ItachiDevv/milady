@@ -133,17 +133,16 @@ export async function routeAutonomyTextToUser(
 
   const messageId = crypto.randomUUID() as UUID;
 
-  const agentMessage = createMessageMemory({
-    id: messageId,
-    entityId: runtime.agentId,
-    roomId: conv.roomId,
-    content: {
-      text: normalizedText,
-      source,
-    },
-  });
-
   if (!ephemeralSources.has(source)) {
+    const agentMessage = createMessageMemory({
+      id: messageId,
+      entityId: runtime.agentId,
+      roomId: conv.roomId,
+      content: {
+        text: normalizedText,
+        source,
+      },
+    });
     await runtime.createMemory(agentMessage, "messages");
   }
   conv.updatedAt = new Date().toISOString();
@@ -160,27 +159,6 @@ export async function routeAutonomyTextToUser(
       source,
     },
   });
-
-  // Route to connector (Discord, Telegram, etc.) via registered send handler.
-  // The send handler delivers the message on the user's platform.
-  if (!ephemeralSources.has(source)) {
-    try {
-      const room = await runtime.getRoom(conv.roomId);
-      if (room?.source && room.serverId) {
-        await runtime.sendMessageToTarget(
-          {
-            source: room.source,
-            roomId: conv.roomId,
-            channelId: room.channelId ?? conv.roomId,
-            serverId: room.serverId,
-          },
-          { text: normalizedText, source },
-        );
-      }
-    } catch {
-      // Send handler not available — WS broadcast was already done above
-    }
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -213,7 +191,6 @@ export function getCoordinatorFromRuntime(runtime: AgentRuntime): {
       errored: number;
     }) => Promise<void>,
   ) => void;
-  getConnectorCallback?: () => ((content: { text: string }) => Promise<unknown[]>) | null;
 } | null {
   const coordinator = runtime.getService("SWARM_COORDINATOR");
   if (coordinator) {
@@ -346,65 +323,29 @@ export async function handleSwarmSynthesis(
     `If any tasks failed or stopped, mention what went wrong. ` +
     `Keep your personality — be warm and helpful but brief.`;
 
-  // Build a concise result message
-  const resultParts = payload.tasks.map((t) => {
-    const status = t.status === "stopped" ? "done" : t.status;
-    return `${t.completionSummary || t.originalTask} (${status})`;
-  });
-  const resultText = resultParts.length === 1
-    ? `done — ${resultParts[0]}`
-    : `done — ${payload.total} tasks:\n${resultParts.map((r) => `• ${r}`).join("\n")}`;
+  try {
+    const synthesis = await runtime.useModel(ModelType.TEXT_SMALL, {
+      prompt,
+      maxTokens: 2048,
+      temperature: 0.7,
+    });
 
-  logger.info("[swarm-synthesis] Synthesis generated, routing to user");
-  await routeMessage(resultText, "swarm_synthesis");
-
-  // Send synthesis to Discord via REST API.
-  // The action handler's callback is gone by the time synthesis runs,
-  // so we send directly using the bot token and the channel ID from
-  // the original message's room metadata.
-  const discordToken = runtime.getSetting("DISCORD_API_TOKEN") as string | undefined;
-  logger.info(`[swarm-synthesis] Discord token available: ${!!discordToken}`);
-  if (discordToken) {
-    // Find the Discord channel from the original task's room
-    const originalRoomId = payload.tasks[0]?.sessionId
-      ? undefined // sessionId is PTY, not room — need to find room differently
-      : undefined;
-
-    // Search recent messages to find the Discord channel
-    try {
-      const memories = await runtime.getMemories({
-        tableName: "messages",
-        count: 50,
-      });
-      logger.info(`[swarm-synthesis] Searching ${memories.length} memories for Discord room`);
-      for (const mem of memories) {
-        if (mem.content?.source === "discord" && mem.roomId) {
-          const room = await runtime.getRoom(mem.roomId);
-          logger.info(`[swarm-synthesis] Found Discord memory, room=${mem.roomId}, channelId=${room?.channelId}, source=${room?.source}`);
-          if (room?.channelId) {
-            const res = await fetch(
-              `https://discord.com/api/v10/channels/${room.channelId}/messages`,
-              {
-                method: "POST",
-                headers: {
-                  Authorization: `Bot ${discordToken}`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ content: resultText }),
-              },
-            );
-            if (res.ok) {
-              logger.info(`[swarm-synthesis] Sent to Discord channel ${room.channelId}`);
-            } else {
-              logger.warn(`[swarm-synthesis] Discord API ${res.status}: ${await res.text()}`);
-            }
-            break;
-          }
-        }
-      }
-    } catch (err) {
-      logger.warn(`[swarm-synthesis] Discord routing failed: ${err}`);
+    if (synthesis?.trim()) {
+      logger.info("[swarm-synthesis] Synthesis generated, routing to user");
+      await routeMessage(synthesis.trim(), "swarm_synthesis");
+    } else {
+      logger.warn("[swarm-synthesis] LLM returned empty synthesis");
     }
+  } catch (err) {
+    logger.error(`[swarm-synthesis] LLM call failed: ${err}`);
+    const parts: string[] = [];
+    if (payload.completed > 0) parts.push(`${payload.completed} completed`);
+    if (payload.stopped > 0) parts.push(`${payload.stopped} stopped`);
+    if (payload.errored > 0) parts.push(`${payload.errored} errored`);
+    await routeMessage(
+      `All ${payload.total} task agents finished (${parts.join(", ")}). Review their work when you're ready.`,
+      "coding-agent",
+    );
   }
 }
 
