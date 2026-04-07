@@ -16,6 +16,7 @@ import type {
   State,
 } from "@elizaos/core";
 import * as baseModule from "@elizaos/plugin-agent-orchestrator";
+import { installTaskProgressStreamer } from "./task-progress-streamer";
 
 type AdapterId = "claude" | "codex" | "gemini" | "aider";
 type FrameworkId = AdapterId | "pi";
@@ -993,6 +994,11 @@ function injectDefaultMemoryContent(action: Action | undefined): void {
     options?: HandlerOptions,
     callback?: HandlerCallback,
   ): Promise<ActionResult | undefined> => {
+    // Lazy install: the streamer needs a live runtime + ptyService to wire
+    // up sendMessageToTarget callbacks, neither of which exist at module
+    // load time. First task spawn is the earliest both are guaranteed.
+    installTaskProgressStreamer(runtime, getPtyService(runtime));
+
     const parameters =
       (options?.parameters as Record<string, unknown> | undefined) ?? {};
     const existing =
