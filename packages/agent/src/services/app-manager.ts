@@ -1342,12 +1342,16 @@ async function resolveLaunchSession(
 ): Promise<AppSessionState | null> {
   const routeModule = await importAppRouteModule(appInfo.name);
   if (typeof routeModule?.resolveLaunchSession === "function") {
-    return routeModule.resolveLaunchSession({
+    const session = await routeModule.resolveLaunchSession({
       appName: appInfo.name,
       launchUrl,
       runtime,
       viewer,
     });
+    // If the route module resolved a live session, use it. If it returned null
+    // (e.g. API unavailable, no configured URL), fall through to the generic
+    // connecting-state session so callers always get usable session metadata.
+    if (session !== null) return session;
   }
 
   return buildAppSession(appInfo, viewer?.authMessage, runtime);
