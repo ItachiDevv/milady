@@ -16,6 +16,7 @@ import type {
   State,
 } from "@elizaos/core";
 import * as baseModule from "@elizaos/plugin-agent-orchestrator";
+import { realtimeDataProvider } from "./realtime-data-provider";
 import { installTaskProgressStreamer } from "./task-progress-streamer";
 
 type AdapterId = "claude" | "codex" | "gemini" | "aider";
@@ -1287,6 +1288,7 @@ function patchPluginSurface(): void {
   basePlugin.providers = [
     createActiveWorkspaceContextProvider(),
     createTaskAgentExamplesProvider(),
+    realtimeDataProvider,
   ];
 }
 

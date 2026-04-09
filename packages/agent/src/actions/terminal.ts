@@ -4,10 +4,12 @@
  * @module actions/terminal
  */
 
+import { execSync } from "node:child_process";
 import type { Action, HandlerOptions, Memory } from "@elizaos/core";
 
-const API_PORT = process.env.API_PORT || process.env.SERVER_PORT || "2138";
 const FAIL = { success: false, text: "" } as const;
+const MAX_OUTPUT_CHARS = 1800; // leave room for wrapper text within discord's 2000 char limit
+const EXEC_TIMEOUT_MS = 15_000;
 
 /**
  * Extract a command from handler options and message text.
@@ -80,9 +82,11 @@ export const terminalAction: Action = {
   ],
 
   description:
-    "Run a single explicit shell command that the user provided directly. " +
-    "Only use when the user gives a specific command like 'run ls -la' or 'execute npm install'. " +
-    "Do NOT use for building projects, creating websites, or multi-step work — use CREATE_TASK instead.",
+    "Run a shell command and return its output. Use for quick lookups: " +
+    "checking prices (curl an API), disk usage (df -h), reading short files (head/tail), " +
+    "process status (ps), network checks (curl -s URL), or any single command where " +
+    "the user needs the RESULT, not just confirmation it ran. " +
+    "Do NOT use for multi-step builds or projects — use CREATE_TASK instead.",
 
   validate: async () => true,
 
@@ -96,30 +100,41 @@ export const terminalAction: Action = {
       return FAIL;
     }
 
+    // Run synchronously and capture output so discord (and any non-dashboard
+    // connector) gets the actual result in the reply, not just "Running...".
+    // The old path sent the command to the terminal API which streamed output
+    // via WebSocket to the web dashboard — invisible to discord users.
     try {
-      const response = await fetch(
-        `http://localhost:${API_PORT}/api/terminal/run`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            command,
-            clientId: "runtime-terminal-action",
-          }),
-        },
-      );
-
-      if (!response.ok) {
-        return FAIL;
-      }
-
+      const raw = execSync(command, {
+        timeout: EXEC_TIMEOUT_MS,
+        maxBuffer: 1024 * 1024,
+        encoding: "utf-8",
+        cwd: process.env.HOME,
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+      const output = raw.trim();
+      const truncated =
+        output.length > MAX_OUTPUT_CHARS
+          ? `${output.slice(0, MAX_OUTPUT_CHARS)}...(truncated)`
+          : output;
       return {
-        text: `Running in terminal: \`${command}\``,
+        text: truncated || "(no output)",
         success: true,
-        data: { command },
+        data: { command, output: truncated },
       };
-    } catch {
-      return FAIL;
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? err.message : String(err);
+      const stderr =
+        (err as { stderr?: string })?.stderr?.trim() ?? "";
+      const summary = stderr
+        ? stderr.slice(0, MAX_OUTPUT_CHARS)
+        : msg.slice(0, MAX_OUTPUT_CHARS);
+      return {
+        text: `command failed: ${summary}`,
+        success: false,
+        data: { command, error: summary },
+      };
     }
   },
 
