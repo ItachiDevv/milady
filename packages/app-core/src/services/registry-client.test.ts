@@ -302,9 +302,14 @@ beforeEach(async () => {
     // The upstream autonomous package uses ELIZA_* env vars
     ELIZA_STATE_DIR: process.env.ELIZA_STATE_DIR,
     ELIZA_WORKSPACE_ROOT: process.env.ELIZA_WORKSPACE_ROOT,
+    // MILADY_STATE_DIR takes priority over ELIZA_STATE_DIR in resolveStateDir.
+    // Must be saved and overridden so each test gets a truly isolated file cache.
+    MILADY_STATE_DIR: process.env.MILADY_STATE_DIR,
   };
-  // Point the file cache at our temp dir (set both eliza and eliza variants
-  // so tests pass regardless of which source is resolved via vitest aliases)
+  // Point the file cache at our temp dir. Set MILADY_STATE_DIR (highest
+  // priority) and ELIZA_STATE_DIR so the correct path is used regardless
+  // of which env var the resolved module version reads first.
+  process.env.MILADY_STATE_DIR = tmpDir;
   process.env.ELIZA_STATE_DIR = tmpDir;
   const isolatedWorkspaceRoot = path.join(tmpDir, "workspace-empty");
   await fs.mkdir(isolatedWorkspaceRoot, { recursive: true });
@@ -316,8 +321,11 @@ beforeEach(async () => {
 
 afterEach(async () => {
   vi.unstubAllGlobals();
-  process.env.ELIZA_STATE_DIR = savedEnv.ELIZA_STATE_DIR;
-  process.env.ELIZA_WORKSPACE_ROOT = savedEnv.ELIZA_WORKSPACE_ROOT;
+  if (savedEnv.MILADY_STATE_DIR !== undefined) {
+    process.env.MILADY_STATE_DIR = savedEnv.MILADY_STATE_DIR;
+  } else {
+    delete process.env.MILADY_STATE_DIR;
+  }
   process.env.ELIZA_STATE_DIR = savedEnv.ELIZA_STATE_DIR;
   process.env.ELIZA_WORKSPACE_ROOT = savedEnv.ELIZA_WORKSPACE_ROOT;
   await removeDirWithRetries(tmpDir);
@@ -957,9 +965,9 @@ describe("registry-client", () => {
 
       const { listApps, getPluginInfo } = await loadModule();
       const apps = await listApps();
-      expect(apps.some((app) => app.name === "@hyperscape/plugin-hyperscape")).toBe(
-        true,
-      );
+      expect(
+        apps.some((app) => app.name === "@hyperscape/plugin-hyperscape"),
+      ).toBe(true);
 
       const hyperscape = apps.find(
         (app) => app.name === "@hyperscape/plugin-hyperscape",

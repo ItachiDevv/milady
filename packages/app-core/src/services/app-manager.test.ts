@@ -546,9 +546,7 @@ describe("Hyperscape Auto-Provisioning", () => {
           "raw.githubusercontent.com/elizaos-plugins/registry/next/generated-registry.json",
         )
       ) {
-        return Promise.resolve(
-          jsonResponse(createHyperscapeRegistryPayload()),
-        );
+        return Promise.resolve(jsonResponse(createHyperscapeRegistryPayload()));
       }
       if (
         url.includes(
@@ -608,7 +606,9 @@ describe("Hyperscape Auto-Provisioning", () => {
   it("launches without Hyperscape iframe auth when no credentials or wallet are available", async () => {
     process.env.HYPERSCAPE_API_URL = "http://localhost:3333";
     process.env.HYPERSCAPE_CLIENT_URL = "http://localhost:3333";
-    const fetchMock = createHyperscapeLaunchFetchMock({ rejectWalletAuth: true });
+    const fetchMock = createHyperscapeLaunchFetchMock({
+      rejectWalletAuth: true,
+    });
     global.fetch = fetchMock;
 
     // Mock listInstalledPlugins to report the plugin as already installed
@@ -631,7 +631,9 @@ describe("Hyperscape Auto-Provisioning", () => {
     process.env.HYPERSCAPE_CLIENT_URL = "http://localhost:3333";
     process.env.HYPERSCAPE_CHARACTER_ID = "test-char-id";
     process.env.HYPERSCAPE_AUTH_TOKEN = "test-auth-token";
-    const fetchMock = createHyperscapeLaunchFetchMock({ rejectWalletAuth: true });
+    const fetchMock = createHyperscapeLaunchFetchMock({
+      rejectWalletAuth: true,
+    });
     global.fetch = fetchMock;
 
     // Mock listInstalledPlugins to report the plugin as already installed
@@ -639,7 +641,12 @@ describe("Hyperscape Auto-Provisioning", () => {
       { name: HYPERSCAPE_PLUGIN_NAME, version: "1.0.0" },
     ]);
 
-    const result = await appManager.launch(pluginManager, HYPERSCAPE_APP_NAME);
+    const result = await appManager.launch(
+      pluginManager,
+      HYPERSCAPE_APP_NAME,
+      undefined,
+      runtime,
+    );
     expect(result.pluginInstalled).toBe(true);
     expect(result.viewer?.authMessage).toEqual(
       expect.objectContaining({
@@ -659,7 +666,9 @@ describe("Hyperscape Auto-Provisioning", () => {
     process.env.HYPERSCAPE_CLIENT_URL = "http://localhost:3333";
     process.env.HYPERSCAPE_CHARACTER_ID = "existing-char-id";
     process.env.HYPERSCAPE_AUTH_TOKEN = "existing-auth-token";
-    const fetchMock = createHyperscapeLaunchFetchMock({ rejectWalletAuth: true });
+    const fetchMock = createHyperscapeLaunchFetchMock({
+      rejectWalletAuth: true,
+    });
     global.fetch = fetchMock;
 
     // Mock listInstalledPlugins to report the plugin as already installed
@@ -977,7 +986,9 @@ describe("App session launch metadata", () => {
         );
       }
       if (
-        url.includes("/api/agents/11111111-1111-1111-1111-111111111111/thoughts")
+        url.includes(
+          "/api/agents/11111111-1111-1111-1111-111111111111/thoughts",
+        )
       ) {
         return Promise.resolve(
           jsonResponse(
@@ -1111,7 +1122,9 @@ describe("App session launch metadata", () => {
         );
       }
       if (
-        url.includes("/api/agents/22222222-2222-2222-2222-222222222222/thoughts")
+        url.includes(
+          "/api/agents/22222222-2222-2222-2222-222222222222/thoughts",
+        )
       ) {
         return Promise.resolve(
           jsonResponse(
