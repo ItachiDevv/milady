@@ -137,3 +137,6 @@
 [submodule "plugins/plugin-imessage"]
 	path = plugins/plugin-imessage
 	url = https://github.com/elizaOS-plugins/plugin-imessage.git
+[submodule "plugins/plugin-knowledge"]
+	path = plugins/plugin-knowledge
+	url = https://github.com/elizaos-plugins/plugin-knowledge.git
