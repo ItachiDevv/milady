@@ -21,6 +21,7 @@ WORKDIR /src
 
 # Copy only the manifests Bun needs to resolve the production dependency graph.
 COPY package.json bun.lock ./
+COPY patches/ ./patches/
 COPY patches ./patches
 COPY packages/agent/package.json ./packages/agent/package.json
 COPY packages/app-core/package.json ./packages/app-core/package.json
@@ -28,6 +29,9 @@ COPY packages/plugin-selfcontrol/package.json ./packages/plugin-selfcontrol/pack
 COPY packages/shared/package.json ./packages/shared/package.json
 COPY packages/ui/package.json ./packages/ui/package.json
 COPY packages/vrm-utils/package.json ./packages/vrm-utils/package.json
+COPY packages/plugin-music-library/package.json ./packages/plugin-music-library/package.json
+COPY packages/plugin-music-player/package.json ./packages/plugin-music-player/package.json
+COPY packages/plugin-shopify/package.json ./packages/plugin-shopify/package.json
 COPY apps/app/package.json ./apps/app/package.json
 COPY apps/app/electrobun/package.json ./apps/app/electrobun/package.json
 COPY apps/app/plugins/agent/package.json ./apps/app/plugins/agent/package.json
