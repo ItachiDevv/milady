@@ -47,7 +47,7 @@ COPY apps/web/package.json ./apps/web/package.json
 COPY deploy/cloud-agent-template/package.json ./deploy/cloud-agent-template/package.json
 
 ENV NODE_LLAMA_CPP_SKIP_DOWNLOAD=true
-RUN bun install --frozen-lockfile --ignore-scripts --no-progress
+RUN bun install --ignore-scripts --no-progress
 
 FROM node:${NODE_VERSION}-slim AS tsx
 RUN npm install --prefix /opt/tsx --ignore-scripts --no-save tsx@4.21.0 \
