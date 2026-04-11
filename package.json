@@ -313,6 +313,7 @@
     "@elizaos/plugin-anthropic": "2.0.0-alpha.13",
     "@elizaos/plugin-cli": "2.0.0-alpha.9",
     "@elizaos/plugin-discord": "workspace:*",
+    "@elizaos/plugin-knowledge": "workspace:*",
     "@elizaos/plugin-sql": "workspace:*",
     "@elizaos/plugin-telegram": "2.0.0-alpha.12",
     "@elizaos/config": "1.7.3-alpha.4",
