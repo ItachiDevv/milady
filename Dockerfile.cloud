@@ -136,7 +136,7 @@ COPY eliza/packages/skills/package.json ./eliza/packages/skills/package.json
 COPY eliza/packages/typescript/package.json ./eliza/packages/typescript/package.json
 
 ENV NODE_LLAMA_CPP_SKIP_DOWNLOAD=true
-RUN bun install --frozen-lockfile --ignore-scripts --no-progress
+RUN bun install --ignore-scripts --no-progress
 
 FROM node:${NODE_VERSION}-slim AS tsx
 RUN npm install --prefix /opt/tsx --ignore-scripts --no-save tsx@4.21.0 \
