@@ -29,7 +29,8 @@ COPY packages/shared/package.json ./packages/shared/package.json
 COPY packages/ui/package.json ./packages/ui/package.json
 COPY packages/vrm-utils/package.json ./packages/vrm-utils/package.json
 COPY apps/app/package.json ./apps/app/package.json
-COPY apps/app/electrobun/package.json ./apps/app/electrobun/package.json
+# apps/app/electrobun is in .dockerignore, create stub for workspace resolution
+RUN mkdir -p apps/app/electrobun && echo '{"name":"@miladyai/electrobun","private":true,"version":"0.0.0"}' > apps/app/electrobun/package.json
 COPY apps/app/plugins/agent/package.json ./apps/app/plugins/agent/package.json
 COPY apps/app/plugins/camera/package.json ./apps/app/plugins/camera/package.json
 COPY apps/app/plugins/canvas/package.json ./apps/app/plugins/canvas/package.json
@@ -39,8 +40,100 @@ COPY apps/app/plugins/location/package.json ./apps/app/plugins/location/package.
 COPY apps/app/plugins/screencapture/package.json ./apps/app/plugins/screencapture/package.json
 COPY apps/app/plugins/swabble/package.json ./apps/app/plugins/swabble/package.json
 COPY apps/app/plugins/talkmode/package.json ./apps/app/plugins/talkmode/package.json
+COPY apps/app/plugins/mobile-signals/package.json ./apps/app/plugins/mobile-signals/package.json
+COPY apps/app/plugins/websiteblocker/package.json ./apps/app/plugins/websiteblocker/package.json
 COPY apps/web/package.json ./apps/web/package.json
 COPY deploy/cloud-agent-template/package.json ./deploy/cloud-agent-template/package.json
+
+# Additional workspace packages (plugins, eliza core, etc.)
+COPY packages/plugin-music-library/package.json ./packages/plugin-music-library/package.json
+COPY packages/plugin-music-player/package.json ./packages/plugin-music-player/package.json
+COPY packages/plugin-shopify/package.json ./packages/plugin-shopify/package.json
+
+# plugins/* (root package.json files for workspace resolution)
+COPY plugins/app-babylon/package.json ./plugins/app-babylon/package.json
+COPY plugins/app-defense-of-the-agents/package.json ./plugins/app-defense-of-the-agents/package.json
+COPY plugins/app-scape/package.json ./plugins/app-scape/package.json
+COPY plugins/client-telegram-account/package.json ./plugins/client-telegram-account/package.json
+COPY plugins/plugin-2004scape/package.json ./plugins/plugin-2004scape/package.json
+COPY plugins/plugin-agent-orchestrator/package.json ./plugins/plugin-agent-orchestrator/package.json
+COPY plugins/plugin-agent-skills/package.json ./plugins/plugin-agent-skills/package.json
+COPY plugins/plugin-anthropic/package.json ./plugins/plugin-anthropic/package.json
+COPY plugins/plugin-coding-agent/package.json ./plugins/plugin-coding-agent/package.json
+COPY plugins/plugin-commands/package.json ./plugins/plugin-commands/package.json
+COPY plugins/plugin-cron/package.json ./plugins/plugin-cron/package.json
+COPY plugins/plugin-discord/package.json ./plugins/plugin-discord/package.json
+COPY plugins/plugin-edge-tts/package.json ./plugins/plugin-edge-tts/package.json
+COPY plugins/plugin-elizacloud/package.json ./plugins/plugin-elizacloud/package.json
+COPY plugins/plugin-evm/package.json ./plugins/plugin-evm/package.json
+COPY plugins/plugin-experience/package.json ./plugins/plugin-experience/package.json
+COPY plugins/plugin-form/package.json ./plugins/plugin-form/package.json
+COPY plugins/plugin-google-genai/package.json ./plugins/plugin-google-genai/package.json
+COPY plugins/plugin-knowledge/package.json ./plugins/plugin-knowledge/package.json
+COPY plugins/plugin-lifeops-browser/package.json ./plugins/plugin-lifeops-browser/package.json
+COPY plugins/plugin-local-embedding/package.json ./plugins/plugin-local-embedding/package.json
+COPY plugins/plugin-milady-browser/package.json ./plugins/plugin-milady-browser/package.json
+COPY plugins/plugin-ollama/package.json ./plugins/plugin-ollama/package.json
+COPY plugins/plugin-openai/package.json ./plugins/plugin-openai/package.json
+COPY plugins/plugin-openrouter/package.json ./plugins/plugin-openrouter/package.json
+COPY plugins/plugin-pdf/package.json ./plugins/plugin-pdf/package.json
+COPY plugins/plugin-personality/package.json ./plugins/plugin-personality/package.json
+COPY plugins/plugin-pi-ai/package.json ./plugins/plugin-pi-ai/package.json
+COPY plugins/plugin-plugin-manager/package.json ./plugins/plugin-plugin-manager/package.json
+COPY plugins/plugin-rolodex/package.json ./plugins/plugin-rolodex/package.json
+COPY plugins/plugin-scratchpad/package.json ./plugins/plugin-scratchpad/package.json
+COPY plugins/plugin-secrets-manager/package.json ./plugins/plugin-secrets-manager/package.json
+COPY plugins/plugin-shell/package.json ./plugins/plugin-shell/package.json
+COPY plugins/plugin-solana/package.json ./plugins/plugin-solana/package.json
+COPY plugins/plugin-sql/package.json ./plugins/plugin-sql/package.json
+COPY plugins/plugin-telegram/package.json ./plugins/plugin-telegram/package.json
+COPY plugins/plugin-trajectory-logger/package.json ./plugins/plugin-trajectory-logger/package.json
+COPY plugins/plugin-trust/package.json ./plugins/plugin-trust/package.json
+COPY plugins/plugin-whatsapp/package.json ./plugins/plugin-whatsapp/package.json
+
+# plugins/plugin-*/typescript/ (actual workspace packages)
+COPY plugins/plugin-agent-skills/typescript/package.json ./plugins/plugin-agent-skills/typescript/package.json
+COPY plugins/plugin-anthropic/typescript/package.json ./plugins/plugin-anthropic/typescript/package.json
+COPY plugins/plugin-bluebubbles/typescript/package.json ./plugins/plugin-bluebubbles/typescript/package.json
+COPY plugins/plugin-commands/typescript/package.json ./plugins/plugin-commands/typescript/package.json
+COPY plugins/plugin-cron/typescript/package.json ./plugins/plugin-cron/typescript/package.json
+COPY plugins/plugin-discord/typescript/package.json ./plugins/plugin-discord/typescript/package.json
+COPY plugins/plugin-edge-tts/typescript/package.json ./plugins/plugin-edge-tts/typescript/package.json
+COPY plugins/plugin-elizacloud/typescript/package.json ./plugins/plugin-elizacloud/typescript/package.json
+COPY plugins/plugin-evm/typescript/package.json ./plugins/plugin-evm/typescript/package.json
+COPY plugins/plugin-experience/typescript/package.json ./plugins/plugin-experience/typescript/package.json
+COPY plugins/plugin-form/typescript/package.json ./plugins/plugin-form/typescript/package.json
+COPY plugins/plugin-google-genai/typescript/package.json ./plugins/plugin-google-genai/typescript/package.json
+COPY plugins/plugin-knowledge/typescript/package.json ./plugins/plugin-knowledge/typescript/package.json
+COPY plugins/plugin-local-embedding/typescript/package.json ./plugins/plugin-local-embedding/typescript/package.json
+COPY plugins/plugin-ollama/typescript/package.json ./plugins/plugin-ollama/typescript/package.json
+COPY plugins/plugin-openai/typescript/package.json ./plugins/plugin-openai/typescript/package.json
+COPY plugins/plugin-openrouter/typescript/package.json ./plugins/plugin-openrouter/typescript/package.json
+COPY plugins/plugin-pdf/typescript/package.json ./plugins/plugin-pdf/typescript/package.json
+COPY plugins/plugin-personality/typescript/package.json ./plugins/plugin-personality/typescript/package.json
+COPY plugins/plugin-plugin-manager/typescript/package.json ./plugins/plugin-plugin-manager/typescript/package.json
+COPY plugins/plugin-rolodex/typescript/package.json ./plugins/plugin-rolodex/typescript/package.json
+COPY plugins/plugin-scratchpad/typescript/package.json ./plugins/plugin-scratchpad/typescript/package.json
+COPY plugins/plugin-secrets-manager/typescript/package.json ./plugins/plugin-secrets-manager/typescript/package.json
+COPY plugins/plugin-shell/typescript/package.json ./plugins/plugin-shell/typescript/package.json
+COPY plugins/plugin-signal/typescript/package.json ./plugins/plugin-signal/typescript/package.json
+COPY plugins/plugin-solana/typescript/package.json ./plugins/plugin-solana/typescript/package.json
+COPY plugins/plugin-sql/typescript/package.json ./plugins/plugin-sql/typescript/package.json
+COPY plugins/plugin-trajectory-logger/typescript/package.json ./plugins/plugin-trajectory-logger/typescript/package.json
+COPY plugins/plugin-trust/typescript/package.json ./plugins/plugin-trust/typescript/package.json
+COPY plugins/plugin-whatsapp/typescript/package.json ./plugins/plugin-whatsapp/typescript/package.json
+
+# eliza/packages/* (core framework workspace packages)
+COPY eliza/packages/daemon/package.json ./eliza/packages/daemon/package.json
+COPY eliza/packages/docs/package.json ./eliza/packages/docs/package.json
+COPY eliza/packages/elizaos/package.json ./eliza/packages/elizaos/package.json
+COPY eliza/packages/interop/package.json ./eliza/packages/interop/package.json
+COPY eliza/packages/prompts/package.json ./eliza/packages/prompts/package.json
+COPY eliza/packages/python/package.json ./eliza/packages/python/package.json
+COPY eliza/packages/rust/package.json ./eliza/packages/rust/package.json
+COPY eliza/packages/schemas/package.json ./eliza/packages/schemas/package.json
+COPY eliza/packages/skills/package.json ./eliza/packages/skills/package.json
+COPY eliza/packages/typescript/package.json ./eliza/packages/typescript/package.json
 
 ENV NODE_LLAMA_CPP_SKIP_DOWNLOAD=true
 RUN bun install --frozen-lockfile --ignore-scripts --no-progress
