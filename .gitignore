@@ -296,4 +296,5 @@ test-results/
 # training/scripts/push_pipeline_to_hf.py (pipeline source).
 training/
 .milady/
-eliza-beta-prep/
+eliza-beta-prep/CLAUDE.md
+.claude/
